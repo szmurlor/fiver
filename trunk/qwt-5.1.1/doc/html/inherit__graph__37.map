@@ -1,0 +1,5 @@
+base referer
+rect $class_qwt_text_engine.html 7,55 119,79
+rect $class_qwt_math_m_l_text_engine.html 167,7 327,31
+rect $class_qwt_plain_text_engine.html 176,55 317,79
+rect $class_qwt_rich_text_engine.html 177,103 316,127
