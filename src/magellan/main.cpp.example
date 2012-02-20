@@ -1,0 +1,58 @@
+#include <QApplication>
+#include <QLabel>
+#include <QtDebug>
+#include <QAbstractEventDispatcher>
+#include <X11/Xlib.h>
+#include <QX11Info>
+#include "xdrvlib.h"
+
+class MyApplication : public QApplication
+{
+
+	public:
+		Display * display;
+
+		MyApplication(int argc, char ** argv) : QApplication(argc,argv)
+		{
+			display = 0;
+			setApplicationName("Magellan Window");
+			qDebug() << "Created appliaction";
+		}	
+		
+		virtual bool x11EventFilter( XEvent * event ) {
+
+			qDebug() << "eventFilter: " << event->type;
+			if (event->type == ClientMessage) {
+				MagellanFloatEvent MagellanEvent;
+				if (display != 0) {
+					MagellanTranslateEvent (display, event, &MagellanEvent, 1.0, 1.0);
+	                        	qDebug() << "x = " << MagellanEvent.MagellanData[MagellanX] <<
+        	                	"y = " << MagellanEvent.MagellanData[MagellanY] <<
+                	        	"z = " << MagellanEvent.MagellanData[MagellanZ] <<
+                        		"A = " << MagellanEvent.MagellanData[MagellanA] <<
+	                        	"B = " << MagellanEvent.MagellanData[MagellanB] <<
+        	                	"C = " << MagellanEvent.MagellanData[MagellanC];
+				}
+				return true;
+			}
+			return false;
+		}
+
+};
+
+int main(int argc, char ** argv)
+{
+	MyApplication mapp(argc,argv);
+	QLabel *l = new QLabel("Lipa");
+	l->show();
+			Display * display;
+			Window window;
+			
+			display = l->x11Info().display();
+			mapp.display = display;
+			window = (Window) l->x11Info().appRootWindow();
+			window = (Window) l->x11PictureHandle();
+			MagellanInit(display,window);
+
+	return mapp.exec();
+}

@@ -1,0 +1,4 @@
+base referer
+rect $class_qwt_plot_item.html 43,85 139,109
+rect $class_qwt_legend_item_manager.html 7,8 175,32
+rect $class_qwt_data.html 163,85 237,109
