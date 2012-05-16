@@ -298,7 +298,7 @@ void CFieldEnergy::calculate3D(Grid *g, SimpleField *f1, SimpleField *f2, Simple
 				sum += tvol * (v-p_avg)*(v-p_avg);
 			}
 			sum = sqrt( sum / evol );
-			printf("Standard deviation (EX) in total model  = %g\n", sub_idx[i], sum);
+			printf("Standard deviation (EX) in total model %d = %g\n", sub_idx[i], sum);
 		} else {
 		// calculating standard deviation in selected subdomains
 			for (i=0; i < sub_idx.size(); i++) {

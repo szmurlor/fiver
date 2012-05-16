@@ -4,7 +4,7 @@ TARGET_MAN=/usr/local/man/man1/
 CXXF=-I../../coremesh2/src -I../../meshreader2
 
 all: main.o fieldenergy.o
-	g++ -o $(TARGET) main.o fieldenergy.o -L/usr/local/lib -lmeshreader2 -lcoremesh2 -L../../meshreader2 -L../../coremesh2/lib
+	g++ -o $(TARGET) main.o fieldenergy.o -L/usr/local/lib -L../../bin -lmeshreader2 -lcoremesh2
 
 main.o: main.cpp
 	g++ -c main.cpp -I. $(CXXF)

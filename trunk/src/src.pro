@@ -3,10 +3,12 @@
 # Podkatalog wzgl?dem g?�wnego katalogu projektu: ./src
 # Cel to program:  ../bin/fivermain
 
+! include(../common.pri) {
+	error( common.pri file does not exist!);
+}
+
 DEFINES *= NO_QCONSOLE
 
-INSTALLS += target 
-target.path = /usr/local/bin 
 HEADERS += fviewer.h \
            fvlist.h \
            fivermain.h \
@@ -119,7 +121,7 @@ SOURCES += main.cpp \
     fvopenerFiverProj.cpp \
     fvBoxExporter.cpp \
     fvBoxImporter.cpp
-INCLUDEPATH += . ../libQGLViewer-2.2.6-1 ./boxmgr ./attr ./coremesh2/src ./meshreader2 ./meshjoiner ./fiverinjector ./tetgen \
+INCLUDEPATH += . ./boxmgr ./attr ./coremesh2/src ./meshreader2 ./meshjoiner ./fiverinjector ./tetgen \
         ../QConsole/QConsole \
         ../QConsole/Console \
         /usr/include/python2.6 \
@@ -131,8 +133,7 @@ CONFIG(debug) {
     win32 { LIBS += -lQGLViewer2 -lboxmgr -lfvattr -lcoremesh2 -lmeshreader2 -L./bin }
 }
 !win32 {
-    LIBS += -lQGLViewer -L../libQGLViewer-2.2.6-1/QGLViewer -lboxmgr -Lboxmgr -lfvattr -Lattr -lcoremesh2 -lmeshreader2 -ltrivlog -L./bin  \
-						-lmeshjoiner -L./tetgen -ltet
+    LIBS += -l$$QGLVIEWER_LIB -lboxmgr -Lboxmgr -lfvattr -Lattr -lcoremesh2 -lmeshreader2 -ltrivlog -L./bin -lmeshjoiner -L./tetgen -ltet
 #            -lQConsole -L../QConsole/QConsole \
 #            -lConsole -L../QConsole/Console \
 #            -lfiverinjector
@@ -148,7 +149,8 @@ qt #\
 
 TARGET = fivermain
 DESTDIR=bin
-
+INSTALLS += target 
+target.path = $$INSTALL_ROOT/bin
 # DEFINES += ENABLE_MAGELLAN
 
 

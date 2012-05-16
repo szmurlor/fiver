@@ -1,6 +1,6 @@
 CXXF=-I../../coremesh2/src -I../../meshreader2
 all: main.o
-	g++ -g -o gridscale main.o -lcoremesh2 -lmeshreader2 -L../../coremesh2/lib -L../../meshreader2
+	g++ -g -o gridscale main.o -L../../bin -lcoremesh2 -lmeshreader2
 
 main.o: main.cpp
 	g++ -g -c main.cpp -I. $(CXXF)

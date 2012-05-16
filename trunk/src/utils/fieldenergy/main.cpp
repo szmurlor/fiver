@@ -9,6 +9,8 @@
 #include <diffreader.h>
 #include <iostream>
 #include <vector>
+#include <cstdlib>
+#include <cstring>
 
 #define ENERGY 1
 #define POWER 2

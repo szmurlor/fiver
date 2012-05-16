@@ -7,7 +7,6 @@ if [ ! -d $DIR/bin ] ; then
 fi
 
 cp src/bin/fivermain $DIR/bin/fivermain
-cp libQGLViewer-2.2.6-1/QGLViewer/libQGLViewer.so* $DIR/bin/
 cp QConsole/Console/*.so* $DIR/bin/
 cp QConsole/QConsole/*.so* $DIR/bin/
 cp src/bin/*.so* $DIR/bin/

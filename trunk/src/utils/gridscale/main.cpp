@@ -4,6 +4,8 @@
 #include <diffreader.h>
 #include <diffsimu.h>
 #include <stdio.h>
+#include <cstdlib>
+#include <cstring>
 #include <vector>
 #include <geom.h>
 #include <math.h>
