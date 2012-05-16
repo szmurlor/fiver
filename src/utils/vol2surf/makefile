@@ -5,7 +5,7 @@ INCPATH=-I. -I../../coremesh2/src -I../../meshreader2
 INSTALL=/usr/bin/install
 
 $(TARGET): $(OBJECTS)
-	g++ -o $(TARGET) $(OBJECTS) -L../../coremesh2/lib -L../../meshreader2/lib -lmeshreader2 -lcoremesh2
+	g++ -o $(TARGET) $(OBJECTS) -L../../bin -lmeshreader2 -lcoremesh2
 
 $(OBJECTS):%.o:%.cpp
 	g++ -c $(INCPATH) $<

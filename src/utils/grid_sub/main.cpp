@@ -2,6 +2,7 @@
 #include <grid.h>
 #include <diffreader.h>
 #include <unistd.h>
+#include <cstdlib>
 
 using namespace std;
 #define O_SWAP 0
