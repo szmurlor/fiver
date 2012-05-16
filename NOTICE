@@ -1,0 +1,19 @@
+Fiver
+Copyright (C) 2005-2012 Robert Szmurlo <robert@iem.pw.edu.pl>
+
+-----------------------------
+src/log/logger_t.cpp
+src/log/logger_t.h
+
+Copyright (C) 2005, 2006 Seweryn Habdank-Wojewodzki
+
+-----------------------------
+src/log/nullstream.h
+
+Copyright Maciej Sobczak, 2002
+
+-----------------------------
+TetGen
+
+Copyright (C) 2002-2011 Hang Si
+For details see src/tetgen/LICENSE
