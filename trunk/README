@@ -1,0 +1,33 @@
+                         Fiver
+                        -------
+
+* Introduction
+--------------
+    The goal of the project is to develop an easy to install and use,
+    and powerful application for scientific visualisation of simulation
+    results obtained from FEM/BEM methods.
+
+    The project is internally developed by the Division of Theory of
+    Electrical Engineering and Information Systems at
+    the Warsaw University of Technology, Poland.
+
+* Installation
+--------------
+    Installation instructions are available in INSTALL file.
+
+* License
+---------
+    License notice is available in COPYING and NOTICE files.
+    You should be aware of licenses of included and linked software.
+
+* Quick Start
+-------------
+    Run program fivermain (or start script if Fiver is not installed).
+    Open example grid /usr/share/fiver/examples/cube.grid
+    Right-click on element in Navigator and click Draw.
+
+* Contact
+---------
+    The Author: Robert Szmurlo <robert@iem.pw.edu.pl>
+    Packaging & Building: Maciej Rumianowski <rumianom@ee.pw.edu.pl>
+    Fiver project page: http://code.google.com/p/fiver/
