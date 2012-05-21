@@ -133,7 +133,7 @@ CONFIG(debug) {
     win32 { LIBS += -lQGLViewer2 -lboxmgr -lfvattr -lcoremesh2 -lmeshreader2 -L./bin }
 }
 !win32 {
-    LIBS += -l$$QGLVIEWER_LIB -lboxmgr -Lboxmgr -lfvattr -Lattr -lcoremesh2 -lmeshreader2 -ltrivlog -L./bin -lmeshjoiner -L./tetgen -ltet
+    LIBS += -l$$QGLVIEWER_LIB -lboxmgr -Lboxmgr -lfvattr -Lattr -lcoremesh2 -lmeshreader2 -ltrivlog -L./bin -lmeshjoiner -L./tetgen -ltet -lGLU
 #            -lQConsole -L../QConsole/QConsole \
 #            -lConsole -L../QConsole/Console \
 #            -lfiverinjector
