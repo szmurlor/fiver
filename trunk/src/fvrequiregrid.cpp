@@ -44,4 +44,20 @@ Grid * FVRequireGrid::getGrid( FVObject * fvo, FVObject * alternateObject )
 	}
 }
 
+dolfin::Mesh * FVRequireGrid::getMesh( FVObject * fvo, FVObject * alternateObject )
+{
+        FVGridInterface * fvi = 0;
+        if (fvo != 0)
+                fvi = (FVGridInterface*) fvo->getInterface( QString("FVGridInterface") );
+        else {
+                if (alternateObject != 0)
+                        fvi = (FVGridInterface*) alternateObject->getInterface( QString("FVGridInterface") );
+        }
 
+        if (fvi != 0)
+                return fvi->getMesh();
+        else {
+                qDebug() << "FVRequireGrid: Unable to get grid from " << fvo->classType() << "!";
+                return 0;
+        }
+}

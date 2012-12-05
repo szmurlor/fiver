@@ -23,6 +23,7 @@
 #include <fvobject.h>
 #include <fvgridinterface.h>
 #include <grid.h>
+#include <dolfin/mesh/Mesh.h>
 
 /**
 	@author Robert Szmurlo <robert@iem.pw.edu.pl>
@@ -33,6 +34,7 @@ public:
 	~FVRequireGrid();
 
 	Grid * getGrid( FVObject * fvo, FVObject * alternateObject = 0 );
+        dolfin::Mesh * getMesh( FVObject * fvo, FVObject * alternateObject = 0 );
 };
 
 #endif

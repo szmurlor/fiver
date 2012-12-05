@@ -64,7 +64,11 @@ HEADERS += fviewer.h \
     xmlExporter.h \
     fvopenerFiverProj.h \
     fvBoxExporter.h \
-    fvBoxImporter.h
+    fvBoxImporter.h \
+    fvopenerXmlFile.h \
+    fvboxXml.h \
+    fvboxmesh.h \
+    fvmeshdraw.h
 SOURCES += main.cpp \
            fviewer.cpp \
            fvlist.cpp \
@@ -120,8 +124,12 @@ SOURCES += main.cpp \
     xmlExporter.cpp \
     fvopenerFiverProj.cpp \
     fvBoxExporter.cpp \
-    fvBoxImporter.cpp
-INCLUDEPATH += . ./boxmgr ./attr ./coremesh2/src ./meshreader2 ./meshjoiner ./fiverinjector ./tetgen \
+    fvBoxImporter.cpp \
+    fvopenerXmlFile.cpp \
+    fvboxXml.cpp \
+    fvboxmesh.cpp \
+    fvmeshdraw.cpp
+INCLUDEPATH += . ./boxmgr ./attr ./coremesh2/src ./meshreader2 ./meshjoiner ./fiverinjector ./tetgen ./dolfin \
         ../QConsole/QConsole \
         ../QConsole/Console \
         /usr/include/python2.6 \
@@ -133,7 +141,7 @@ CONFIG(debug) {
     win32 { LIBS += -lQGLViewer2 -lboxmgr -lfvattr -lcoremesh2 -lmeshreader2 -L./bin }
 }
 !win32 {
-    LIBS += -l$$QGLVIEWER_LIB -lboxmgr -Lboxmgr -lfvattr -Lattr -lcoremesh2 -lmeshreader2 -ltrivlog -L./bin -lmeshjoiner -L./tetgen -ltet -lGLU
+    LIBS += -l$$QGLVIEWER_LIB -lboxmgr -Lboxmgr -lfvattr -Lattr -lcoremesh2 -lmeshreader2 -ltrivlog -L./bin -lmeshjoiner -L./tetgen -ltet -lGLU -ldolfin
 #            -lQConsole -L../QConsole/QConsole \
 #            -lConsole -L../QConsole/Console \
 #            -lfiverinjector
@@ -152,6 +160,16 @@ DESTDIR=bin
 INSTALLS += target 
 target.path = $$INSTALL_ROOT/bin
 # DEFINES += ENABLE_MAGELLAN
+
+
+
+
+
+
+
+
+
+
 
 
 
