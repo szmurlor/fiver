@@ -1,5 +1,5 @@
 /*****************************************************************************
- *   Copyright (C) 2006 Robert Szmurlo <robert@iem.pw.edu.pl>                *
+ *   Copyright (C) 2011 Robert Szmurlo <robert@iem.pw.edu.pl>                *
  *                                                                           *
  *   Licensed under the Apache License, Version 2.0 (the "License");         *
  *   you may not use this file except in compliance with the License.        *
@@ -14,31 +14,46 @@
  *   limitations under the License.                                          *
  *****************************************************************************/
 
-#include "fvgridinterface.h"
-#include <QString>
+#include "fvopenerXmlFile.h"
 #include <QtDebug>
+#include <stlfile.h>
+#include <fvboxmgr.h>
+#include <grid.h>
+#include <boxbox.h>
+#include <fvboxgrid.h>
+#include <fvboxXml.h>
+#include <fvboxstl.h>
+#include <dolfin/mesh/Mesh.h>
 
-FVGridInterface::FVGridInterface( Grid ** gridPtr)
-{
-	gp = gridPtr;
-}
-
-FVGridInterface::FVGridInterface( dolfin::Mesh ** meshPtr)
-{
-        mp = meshPtr;
-}
-
-
-FVGridInterface::~FVGridInterface()
+FVOpenerXmlFile::FVOpenerXmlFile( )
+    : FVOpener(0)
 {
 }
 
-Grid * FVGridInterface::getGrid( )
+FVOpenerXmlFile::FVOpenerXmlFile(QObject * parent)
+    : FVOpener(parent)
 {
-	return *gp;
 }
 
-dolfin::Mesh * FVGridInterface::getMesh( )
+
+FVOpenerXmlFile::~FVOpenerXmlFile()
 {
-        return *mp;
 }
+
+FVObject* FVOpenerXmlFile::open( FVBoxMgr * bm,  QString fname, int  )
+{
+    qDebug() << "Opening XML File: " << fname;
+    dolfin::Mesh mesh(fname.toStdString());
+
+//    std::cout << "geometry" << mesh.geometry().str(true) << std::endl;
+//    std::cout << "topology" << mesh.topology().str(true) << std::endl;
+//    std::cout << "data" << mesh.data().str(true) << std::endl;
+
+
+    FVBoxXml * boxXML =  bm->addBoxXml(0, &mesh, fname, tr("XMLGrid") );
+
+    return boxXML;
+}
+
+
+

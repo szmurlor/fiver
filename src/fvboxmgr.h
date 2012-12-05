@@ -36,6 +36,9 @@ class FVBoxCoil;
 class FVBoxSTL;
 class FVGridToSTLExtractor;
 class FVMeshJoiner;
+class FVBoxXml;
+//class Mesh;
+#include <dolfin/mesh/Mesh.h>
 
 
 
@@ -62,6 +65,7 @@ public:
     FVBoxSphere * addBoxSphere( QString type );
     FVBoxCoil * addBoxCoil( QString type );
     FVBoxSTL * addBoxSTL(FVObject * parent, Grid *g, QString filename, QString type );
+    FVBoxXml * addBoxXml( FVObject * parent, dolfin::Mesh *m, QString filename, QString type );
     FVMeshJoiner * addMeshJoiner( QString type );
     FVGridToSTLExtractor * addGridToSTLExtractor(FVBoxGrid *parentBoxGrid);
 
