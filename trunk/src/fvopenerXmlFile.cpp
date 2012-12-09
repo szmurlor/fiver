@@ -43,14 +43,14 @@ FVOpenerXmlFile::~FVOpenerXmlFile()
 FVObject* FVOpenerXmlFile::open( FVBoxMgr * bm,  QString fname, int  )
 {
     qDebug() << "Opening XML File: " << fname;
-    dolfin::Mesh mesh(fname.toStdString());
+    dolfin::Mesh *m =  new dolfin::Mesh(fname.toStdString());
 
 //    std::cout << "geometry" << mesh.geometry().str(true) << std::endl;
 //    std::cout << "topology" << mesh.topology().str(true) << std::endl;
 //    std::cout << "data" << mesh.data().str(true) << std::endl;
 
 
-    FVBoxXml * boxXML =  bm->addBoxXml(0, &mesh, fname, tr("XMLGrid") );
+    FVBoxXml * boxXML =  bm->addBoxXml(0, m, fname, tr("XMLGrid") );
 
     return boxXML;
 }
