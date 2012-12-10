@@ -30,7 +30,7 @@
 class FVGridInterface : public FVInterface {
 public:
 	FVGridInterface( Grid ** gridPtr);
-        FVGridInterface( dolfin::Mesh ** meshPtr);
+        FVGridInterface( dolfin::Mesh * meshPtr);
 	virtual ~FVGridInterface();
 	
 	virtual Grid * getGrid();
@@ -39,7 +39,7 @@ public:
 private:
 	// Pointer to the pointer
 	Grid **gp;
-        dolfin::Mesh ** mp;
+  dolfin::Mesh * mp;
 	
 };
 

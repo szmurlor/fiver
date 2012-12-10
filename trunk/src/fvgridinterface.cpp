@@ -21,11 +21,13 @@
 FVGridInterface::FVGridInterface( Grid ** gridPtr)
 {
 	gp = gridPtr;
+	mp = 0;
 }
 
-FVGridInterface::FVGridInterface( dolfin::Mesh ** meshPtr)
+FVGridInterface::FVGridInterface( dolfin::Mesh * meshPtr)
 {
-        mp = meshPtr;
+  mp = meshPtr;
+	gp = 0;
 }
 
 
@@ -40,5 +42,5 @@ Grid * FVGridInterface::getGrid( )
 
 dolfin::Mesh * FVGridInterface::getMesh( )
 {
-        return *mp;
+  return mp;
 }
