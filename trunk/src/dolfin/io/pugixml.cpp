@@ -11,6 +11,7 @@
  * Copyright (C) 2003, by Kristen Wegner (kristen@tima.net)
  */
 
+#include <iostream>
 #include "pugixml.hpp"
 
 #include <stdlib.h>
@@ -3381,11 +3382,12 @@ namespace pugi
 
 	double xml_attribute::as_double() const
 	{
-		if (!_attr || !_attr->value) return 0;
+                if (!_attr || !_attr->value) return 0;
 
 	#ifdef PUGIXML_WCHAR_MODE
 		return wcstod(_attr->value, 0);
 	#else
+                std::cout<<"konwertujemy " << _attr->value << " na " << strtod(_attr->value, 0)<< " ; ";
 		return strtod(_attr->value, 0);
 	#endif
 	}

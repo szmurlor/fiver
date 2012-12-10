@@ -45,8 +45,6 @@ void FVMeshDraw::paintGL()
         qDebug() << "Drawing..." << endl;
 
         mesh = reqGrid.getMesh( parentObject(), parent );
-        std::cout << "w paintGL mamy tyle wierzchołków" << mesh->num_vertices() << std::endl;
-
 
         if (mesh == 0) {
                 qDebug() << classType() << ": Trying to draw mesh while getMesh() returned 0." << endl;
@@ -96,9 +94,9 @@ void FVMeshDraw::paintGL()
                         dShrink = a->toDouble();
 
                 QString paintMode = getAttrValue( tr("Solid/Wire") );
-//                if ( (paintMode == "Solid") || (paintMode == "Wireframe") || (paintMode == "Elements") ) {
-//                        drawNormal(paintMode, dShrink);
-//                }
+                if ( (paintMode == "Solid") || (paintMode == "Wireframe") || (paintMode == "Elements") ) {
+                        drawNormal(paintMode, dShrink);
+                }
                 if ( paintMode == "Vertices" )
                         drawVertices();
 
@@ -294,29 +292,77 @@ void FVMeshDraw::drawSubdomainWireframe()
 
 void FVMeshDraw::drawNormal(QString & paintMode, double dShrink)
 {
-//        bool bDraw;
-//        bool bElements = false;
-//        int i,j,k;
-//        QColor cl;
-//        GLfloat fTransparency = 0;
-//        fTransparency = getAttrValue( tr("Transparency Ratio") ).toFloat();
-//        SetOfInt visEle( getAttrValue(tr("Interesting Elements")), 1, grid->_elems.size() );
+        bool bDraw;
+        bool bElements = false;
+        int i,j,k;
+        QColor cl;
+        GLfloat fTransparency = 0;
+        fTransparency = getAttrValue( tr("Transparency Ratio") ).toFloat();
+        SetOfInt visEle( getAttrValue(tr("Interesting Elements")), 1, mesh->num_faces() );
 
-//        if ((paintMode == "Solid") || (paintMode == "Elements")) {
-//                if (paintMode == "Elements") bElements = true;
-//                glShadeModel(GL_SMOOTH);
-//                glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-//                glBegin( GL_TRIANGLES );
-//        }
-//        if (paintMode == "Wireframe") {
-//                glDisable(GL_BLEND);
-//                glDisable(GL_LIGHTING);
-//                glLineWidth( getLineWidth() );
-//                glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-//                glBegin( GL_TRIANGLES );
-//                //glBegin( GL_LINES );
-//        }
-//        for (i = 0; i < (int) grid->_elems.size(); i++) {
+        if ((paintMode == "Solid") || (paintMode == "Elements")) {
+                if (paintMode == "Elements") bElements = true;
+                glShadeModel(GL_SMOOTH);
+                glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+                glBegin( GL_TRIANGLES );
+        }
+        if (paintMode == "Wireframe") {
+                glDisable(GL_BLEND);
+                glDisable(GL_LIGHTING);
+                glLineWidth( getLineWidth() );
+                glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+                glBegin( GL_TRIANGLES );
+        }
+
+        dolfin::MeshConnectivity con = mesh->topology()(2,0);
+//        std::cout << std::endl << con.str(true) << std::endl;
+//        std::cout << std::endl << mesh->topology()(3,0).str(true) << std::endl;
+        const uint* connList = con();
+
+        for (i = 0; i < (int) con.size(); i+=3) {
+//            std::cout << connList[i] << " ";
+            dolfin::Point points[3];
+
+            points[0] = mesh->geometry().point(connList[i]);
+            points[1] = mesh->geometry().point(connList[i+1]);
+            points[2] = mesh->geometry().point(connList[i+2]);
+
+            double Ax = points[0].x() - points[1].x();
+            double Ay = points[0].y() - points[1].y();
+            double Az = points[0].z() - points[1].z();
+
+            double Bx = points[2].x() - points[1].x();
+            double By = points[2].y() - points[1].y();
+            double Bz = points[2].z() - points[1].z();
+
+            double Nx = Ay*Bz - By*Az;
+            double Ny = Bx*Az - Ax*Bz;
+            double Nz = Ax*By - Bx*Ay;
+
+            glColor4f((GLfloat) 85/255,
+                      (GLfloat) 170/255,
+                      (GLfloat) 255/255,
+                      fTransparency);
+
+            glNormal3f( Nx, Ny, Nz );
+            glVertex3f( points[0].x(), points[0].y(), points[0].z() );
+            glVertex3f( points[1].x(), points[1].y(), points[1].z() );
+            glVertex3f( points[2].x(), points[2].y(), points[2].z() );
+
+
+//////////////////////////////////////
+//            for (uint e = 0; e < con.num_entities; e++)
+//            {
+//              s << "  " << e << ":";
+//              for (uint i = con.offsets[e]; i < con.offsets[e + 1]; i++)
+//                s << " " << con.connections[i];
+//              s << std::endl;
+//            }
+
+
+//            std::cout << i << std::endl;
+//////////////////////////////////////
+
 //                Elem * e;
 //                        //Node * n;
 //                int ie;
@@ -372,8 +418,8 @@ void FVMeshDraw::drawNormal(QString & paintMode, double dShrink)
 //                                }
 //                        }
 //                }
-//        }
-//        glEnd();
+        }
+        glEnd();
 }
 
 void FVMeshDraw::drawVertices( )
@@ -395,17 +441,14 @@ void FVMeshDraw::drawVertices( )
         glBegin(GL_POINTS);
         glColor4f(0.0f, 0.0f, 0.0f, 1.0);
         dolfin::Point p;
-        std::cout << "mamy tyle wierzchołków w meshDraw drawVertices " << mesh->num_vertices() << std::endl;
-//        std::cout << "geometry" << mesh->geometry().str(true) << std::endl;
 
-//        for (int i = 0; (unsigned int) i < mesh->num_vertices(); i++) {
+        for (int i = 0; (unsigned int) i < mesh->num_vertices(); i++) {
 //                if (visVert.find( i+1 )){
-//                    p = mesh->geometry().point(i);
-                    p = mesh->geometry().point(0);
+                    p = mesh->geometry().point(i);
                     glVertex3f( p.x(), p.y(), p.z() );
                     std::cout << p.x() << " " <<p.y() << " " <<p.z() << " \n";
 //                }
-//        }
+        }
         glEnd();
         glDisable(GL_POINT_SMOOTH);
 }
