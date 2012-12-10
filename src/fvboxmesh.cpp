@@ -28,17 +28,11 @@ FVBoxMesh::FVBoxMesh( FVBoxMgr * manager,  dolfin::Mesh * m, int x, int y )
 {
         fvGridInterface = new FVGridInterface( m);
         mesh = m;
-        std::cout <<"wierzchołki w konstruktorze : " <<  m->num_vertices() << std::endl;
-        std::cout <<"wierzchołki w konstruktorze2: " <<  mesh->num_vertices() << std::endl;
 
         cColor = fvsettings.value( classType() + "_DefaultColor", FV_DEFAULT_BOX_COLOR_GRID ).value<QColor>();
 
         setupAttributes();
         setupMenu();
-        std::cout <<"wierzchołki w konstruktorze3: " <<  mesh->num_vertices() << std::endl;
-        std::cout <<"a mesh wskazuje na adres: " << mesh << std::endl;
-
-        std::cout << m->geometry().str(true) << std::endl;
 
         rRect.setWidth( 150 );
 }
@@ -60,17 +54,17 @@ void FVBoxMesh::setupAttributes( )
 
         a = am->addAttr( tr("No. Nodes"), QString("%1").arg( mesh->num_vertices() ) , QString("text") );
         a->setEditable(false);
-//        a = am->addAttr( tr("No. Elems"), QString("%1").arg( grid->getNoElems() ), QString("text") );
-//        a->setEditable(false);
+        a = am->addAttr( tr("No. Elems"), QString("%1").arg( mesh->num_faces() ), QString("text") );
+        a->setEditable(false);
         a = am->addAttr( tr("No. of Space Dim."), QString("%1").arg( mesh->geometry().dim() ), QString("text") );
         a->setEditable(false);
 }
 
 void FVBoxMesh::slotDraw( )
 {
-//        FVMeshDraw * gd = new FVMeshDraw( manager, this );
-//        addChild( gd );
-//        gd->update();
+        FVMeshDraw * md = new FVMeshDraw( manager, this );
+        addChild( md );
+        md->update();
     std::cout << "FVBoxMesh::slotDraw: mesh->geometry().size(): " << mesh->geometry().size() <<  std::endl;
     std::cout << "FVBoxMesh::slotDraw: mesh->num_vertices(): " << mesh->num_vertices() <<  std::endl;
     std::cout << "FVBoxMesh::slotDraw: fvGridInterface->getMesh()->str(false)" << fvGridInterface->getMesh()->str(false) << std::endl;
@@ -84,18 +78,18 @@ void FVBoxMesh::slotDraw( )
 
 void FVBoxMesh::slotDrawSolid()
 {
-//        FVGridDraw * gd = new FVGridDraw( manager, this );
-//        addChild( gd );
-//        gd->setAttrValue( tr("Solid/Wire"), tr("Solid") );
-//        gd->update();
+        FVMeshDraw * md = new FVMeshDraw( manager, this );
+        addChild( md );
+        md->setAttrValue( tr("Solid/Wire"), tr("Solid") );
+        md->update();
 }
 
 void FVBoxMesh::slotDrawWireframe()
 {
-//        FVGridDraw * gd = new FVGridDraw( manager, this );
-//        addChild( gd );
-//        gd->setAttrValue( tr("Solid/Wire"), tr("Wireframe") );
-//        gd->update();
+        FVMeshDraw * md = new FVMeshDraw( manager, this );
+        addChild( md );
+        md->setAttrValue( tr("Solid/Wire"), tr("Wireframe") );
+        md->update();
 }
 
 void FVBoxMesh::slotDrawElements()
@@ -240,8 +234,8 @@ void FVBoxMesh::setupMenu( )
 //    aMenu->addAction( tr("Re&move"), this, SLOT( slotRemoveManipulator() ));
 
     contextMenuObj->addAction(tr("&Draw"), this, SLOT( slotDraw() ) );
-//    contextMenuObj->addAction(tr("&Draw Solid"), this, SLOT( slotDrawSolid() ) );
-//    contextMenuObj->addAction(tr("&Draw Wireframe"), this, SLOT( slotDrawWireframe() ) );
+    contextMenuObj->addAction(tr("&Draw Solid"), this, SLOT( slotDrawSolid() ) );
+    contextMenuObj->addAction(tr("&Draw Wireframe"), this, SLOT( slotDrawWireframe() ) );
 //    contextMenuObj->addAction(tr("&Draw Elements"), this, SLOT( slotDrawElements() ) );
     contextMenuObj->addAction(tr("&Draw Vertices"), this, SLOT( slotDrawVertices() ) );
 //    contextMenuObj->addAction(tr("&Draw Subdomain wireframe"), this, SLOT( slotDrawSubdomainWireframe() ) );
