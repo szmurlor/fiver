@@ -44,6 +44,8 @@ Grid * ObjFile::loadFromFile( string fileName )
     while (!file.eof() && getline(file,line))
     {
         int type=getDataType(line);
+	
+				//cout << "Line type: " << type << endl;
 
         if(type!=lastType)
         {
@@ -76,6 +78,7 @@ Grid * ObjFile::loadFromFile( string fileName )
                 try
                 {
                     loadNodeVerts(line, n);
+										//cout<<"Read vertex " << line << endl;
                 }
                 catch(string e)
                 {
@@ -127,7 +130,7 @@ Grid * ObjFile::loadFromFile( string fileName )
 
     file.close();
 
-    optimalize();
+    //optimalize();
 
     grid->_elems.resize( indices.size()/3 );
 

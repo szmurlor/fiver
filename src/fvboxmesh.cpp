@@ -26,7 +26,7 @@
 FVBoxMesh::FVBoxMesh( FVBoxMgr * manager,  dolfin::Mesh * m, int x, int y )
 : FVObject(manager,x,y)
 {
-        fvGridInterface = new FVGridInterface( &m);
+        fvGridInterface = new FVGridInterface( m);
         mesh = m;
         std::cout <<"wierzchołki w konstruktorze : " <<  m->num_vertices() << std::endl;
         std::cout <<"wierzchołki w konstruktorze2: " <<  mesh->num_vertices() << std::endl;
@@ -71,10 +71,11 @@ void FVBoxMesh::slotDraw( )
 //        FVMeshDraw * gd = new FVMeshDraw( manager, this );
 //        addChild( gd );
 //        gd->update();
-    std::cout << "mamy tyle wierzchołków poza konstruktorem w slotDraw: " << mesh->geometry().size() <<  std::endl;
-    std::cout << "mamy tyle wierzchołków poza konstruktorem w slotDraw: " << fvGridInterface->getMesh()->geometry().size() <<  std::endl;
-    std::cout << "mamy tyle wierzchołków poza konstruktorem w slotDraw: " << mesh->num_vertices() <<  std::endl;
-    std::cout << "mamy tyle wierzchołków poza konstruktorem w slotDraw: " << fvGridInterface->getMesh()->num_vertices() <<  std::endl;
+    std::cout << "FVBoxMesh::slotDraw: mesh->geometry().size(): " << mesh->geometry().size() <<  std::endl;
+    std::cout << "FVBoxMesh::slotDraw: mesh->num_vertices(): " << mesh->num_vertices() <<  std::endl;
+    std::cout << "FVBoxMesh::slotDraw: fvGridInterface->getMesh()->str(false)" << fvGridInterface->getMesh()->str(false) << std::endl;
+    std::cout << "FVBoxMesh::slotDraw: fvGridInterface->getMesh()->geometry().size(): " << fvGridInterface->getMesh()->geometry().size() <<  std::endl;
+    std::cout << "FVBoxMesh::slotDraw: fvGridInterface->getMesh()->num_vertices(): " << fvGridInterface->getMesh()->num_vertices() <<  std::endl;
     std::cout <<"a mesh wskazuje na adres: " << mesh << std::endl;
 //    std::cout << "geometry" << mesh->geometry().str(true) << std::endl;
 //    std::cout << "topology" << mesh->topology().str(true) << std::endl;
