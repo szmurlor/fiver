@@ -1,5 +1,5 @@
 //
-// C++ Implementation: fvboxgrid
+// C++ Implementation: fvboxmesh
 //
 // Description:
 //
@@ -9,8 +9,6 @@
 //
 #include "fvboxmesh.h"
 #include "fvmeshdraw.h"
-#include "fvboundbox.h"
-#include "fvgridbnd.h"
 #include <fivermain.h>
 #include <main.h>
 #include <QMenu>
@@ -18,10 +16,11 @@
 #include <QFileDialog>
 #include <QtDebug>
 #include <fvgridinterface.h>
-#include <fvopenertextfield.h>
-#include <fvhelpers.h>
-#include <fvharmonicfieldbox.h>
-#include <diffreader.h>
+#include <fvboxmeshfunction.h>
+#include <mesh/MeshData.h>
+#include <mesh/MeshFunction.h>
+
+typedef std::map<std::string, dolfin::MeshFunction<uint>* >::const_iterator mf_const_iterator;
 
 FVBoxMesh::FVBoxMesh( FVBoxMgr * manager,  dolfin::Mesh * m, int x, int y )
 : FVObject(manager,x,y)
@@ -35,6 +34,17 @@ FVBoxMesh::FVBoxMesh( FVBoxMgr * manager,  dolfin::Mesh * m, int x, int y )
         setupMenu();
 
         rRect.setWidth( 150 );
+
+//        std::cout << mesh->data().str(true) <<std::endl;
+        std::map<std::string, dolfin::MeshFunction<uint>* > mf = mesh->data().getMeshFunctions();
+
+        std::cout << std::endl;
+        for (mf_const_iterator it = mf.begin(); it != mf.end(); ++it){
+            std::cout << it->first << " (size = " << it->second->size() << ")" << std::endl;
+            FVBoxMeshFunction * mf = new FVBoxMeshFunction( manager, this, it->first );
+            addChild( mf );
+            mf->update();
+        }
 }
 
 
@@ -65,12 +75,12 @@ void FVBoxMesh::slotDraw( )
         FVMeshDraw * md = new FVMeshDraw( manager, this );
         addChild( md );
         md->update();
-    std::cout << "FVBoxMesh::slotDraw: mesh->geometry().size(): " << mesh->geometry().size() <<  std::endl;
-    std::cout << "FVBoxMesh::slotDraw: mesh->num_vertices(): " << mesh->num_vertices() <<  std::endl;
-    std::cout << "FVBoxMesh::slotDraw: fvGridInterface->getMesh()->str(false)" << fvGridInterface->getMesh()->str(false) << std::endl;
-    std::cout << "FVBoxMesh::slotDraw: fvGridInterface->getMesh()->geometry().size(): " << fvGridInterface->getMesh()->geometry().size() <<  std::endl;
-    std::cout << "FVBoxMesh::slotDraw: fvGridInterface->getMesh()->num_vertices(): " << fvGridInterface->getMesh()->num_vertices() <<  std::endl;
-    std::cout <<"a mesh wskazuje na adres: " << mesh << std::endl;
+//    std::cout << "FVBoxMesh::slotDraw: mesh->geometry().size(): " << mesh->geometry().size() <<  std::endl;
+//    std::cout << "FVBoxMesh::slotDraw: mesh->num_vertices(): " << mesh->num_vertices() <<  std::endl;
+//    std::cout << "FVBoxMesh::slotDraw: fvGridInterface->getMesh()->str(false)" << fvGridInterface->getMesh()->str(false) << std::endl;
+//    std::cout << "FVBoxMesh::slotDraw: fvGridInterface->getMesh()->geometry().size(): " << fvGridInterface->getMesh()->geometry().size() <<  std::endl;
+//    std::cout << "FVBoxMesh::slotDraw: fvGridInterface->getMesh()->num_vertices(): " << fvGridInterface->getMesh()->num_vertices() <<  std::endl;
+//    std::cout <<"a mesh wskazuje na adres: " << mesh << std::endl;
 //    std::cout << "geometry" << mesh->geometry().str(true) << std::endl;
 //    std::cout << "topology" << mesh->topology().str(true) << std::endl;
 //    std::cout << "data" << mesh->data().str(true) << std::endl;
