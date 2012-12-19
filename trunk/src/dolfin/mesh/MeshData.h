@@ -158,6 +158,10 @@ namespace dolfin
 //    boost::shared_ptr<std::vector<uint> > array(const std::string name) const;
     std::vector<uint>* array(const std::string name) const;
 
+    std::map<std::string, MeshFunction<uint>* > getMeshFunctions(){
+        return mesh_functions;
+    }
+
     //--- Removal of data ---
 
     /// Erase MeshFunction with given name

@@ -16,13 +16,9 @@
 
 #include "fvopenerXmlFile.h"
 #include <QtDebug>
-#include <stlfile.h>
 #include <fvboxmgr.h>
-#include <grid.h>
 #include <boxbox.h>
-#include <fvboxgrid.h>
 #include <fvboxXml.h>
-#include <fvboxstl.h>
 #include <dolfin/mesh/Mesh.h>
 
 FVOpenerXmlFile::FVOpenerXmlFile( )
@@ -51,7 +47,6 @@ FVObject* FVOpenerXmlFile::open( FVBoxMgr * bm,  QString fname, int  )
 
 
     FVBoxXml * boxXML =  bm->addBoxXml(0, m, fname, tr("XMLGrid") );
-
     return boxXML;
 }
 

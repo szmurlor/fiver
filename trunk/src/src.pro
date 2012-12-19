@@ -68,7 +68,8 @@ HEADERS += fviewer.h \
     fvopenerXmlFile.h \
     fvboxXml.h \
     fvboxmesh.h \
-    fvmeshdraw.h
+    fvmeshdraw.h \
+    fvboxmeshfunction.h
 SOURCES += main.cpp \
            fviewer.cpp \
            fvlist.cpp \
@@ -128,7 +129,8 @@ SOURCES += main.cpp \
     fvopenerXmlFile.cpp \
     fvboxXml.cpp \
     fvboxmesh.cpp \
-    fvmeshdraw.cpp
+    fvmeshdraw.cpp \
+    fvboxmeshfunction.cpp
 INCLUDEPATH += . ./boxmgr ./attr ./coremesh2/src ./meshreader2 ./meshjoiner ./fiverinjector ./tetgen ./dolfin \
         ../QConsole/QConsole \
         ../QConsole/Console \
@@ -160,6 +162,8 @@ DESTDIR=bin
 INSTALLS += target 
 target.path = $$INSTALL_ROOT/bin
 # DEFINES += ENABLE_MAGELLAN
+
+
 
 
 
