@@ -3387,7 +3387,6 @@ namespace pugi
 	#ifdef PUGIXML_WCHAR_MODE
 		return wcstod(_attr->value, 0);
 	#else
-//                std::cout<<"konwertujemy " << _attr->value << " na " << strtod(_attr->value, 0)<< " ; ";
 		return strtod(_attr->value, 0);
 	#endif
 	}

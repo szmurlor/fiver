@@ -35,7 +35,6 @@ FVBoxMesh::FVBoxMesh( FVBoxMgr * manager,  dolfin::Mesh * m, int x, int y )
 
         rRect.setWidth( 150 );
 
-//        std::cout << mesh->data().str(true) <<std::endl;
         std::map<std::string, dolfin::MeshFunction<uint>* > mf = mesh->data().getMeshFunctions();
 
         std::cout << std::endl;
@@ -64,7 +63,7 @@ void FVBoxMesh::setupAttributes( )
 
         a = am->addAttr( tr("No. Nodes"), QString("%1").arg( mesh->num_vertices() ) , QString("text") );
         a->setEditable(false);
-        a = am->addAttr( tr("No. Elems"), QString("%1").arg( mesh->num_faces() ), QString("text") );
+        a = am->addAttr( tr("No. Elems"), QString("%1").arg( mesh->num_entities(3) ), QString("text") );
         a->setEditable(false);
         a = am->addAttr( tr("No. of Space Dim."), QString("%1").arg( mesh->geometry().dim() ), QString("text") );
         a->setEditable(false);

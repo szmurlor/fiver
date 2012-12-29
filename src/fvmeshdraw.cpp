@@ -287,7 +287,7 @@ void FVMeshDraw::drawNormal(QString & paintMode, double dShrink)
         QColor cl;
         GLfloat fTransparency = 0;
         fTransparency = getAttrValue( tr("Transparency Ratio") ).toFloat();
-        SetOfInt visEle( getAttrValue(tr("Interesting Elements")), 1, mesh->num_faces() );
+        SetOfInt visEle( getAttrValue(tr("Interesting Elements")), 1, mesh->num_entities(3) );
 
         if ((paintMode == "Solid") || (paintMode == "Elements")) {
                 if (paintMode == "Elements") bElements = true;
