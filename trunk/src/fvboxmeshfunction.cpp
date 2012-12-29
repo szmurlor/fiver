@@ -18,7 +18,7 @@ FVBoxMeshFunction::FVBoxMeshFunction(FVBoxMgr * manager, FVObject * parent, std:
     mesh = 0;
     this->parent = parent;
     this->name = name;
-    initDrawable("MeshFun", QString::fromStdString(name));
+    initDrawable(QString::fromStdString(name), "MeshFun");
 }
 
 FVBoxMeshFunction::~FVBoxMeshFunction()
