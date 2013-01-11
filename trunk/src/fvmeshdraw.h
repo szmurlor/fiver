@@ -51,7 +51,7 @@ protected:
 
         FVRequireGrid reqGrid;
 
-        QColor getColor(int isub);
+        QColor getColor();
         int getVertexSize();
         float getLineWidth();
         void initSubColors();

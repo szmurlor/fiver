@@ -16,6 +16,7 @@ FVBoxMeshFunction::FVBoxMeshFunction(FVBoxMgr * manager, FVObject * parent, std:
  : FVObject(manager, x,y)
 {
     mesh = 0;
+    mf = 0;
     this->parent = parent;
     this->name = name;
     initDrawable(QString::fromStdString(name), "MeshFun");
@@ -31,91 +32,103 @@ void FVBoxMeshFunction::updateAttributes( )
     manager->sendMessage(QString("update"), this, true );
 }
 
-//void FVBoxMeshFunction::paintGL()
-//{
-//        qDebug() << "Drawing..." << endl;
+uint FVBoxMeshFunction::findMax( )
+{
+    uint max = 0;
+    uint* vals = mf->values();
+    if ( mf != 0 )
+        for (int i = 0; i < mf->size() ; i++ ){
+            if ( vals[i] > max){
+                max = vals[i];
+            }
+        }
+    return max;
+}
 
-//        mesh = reqGrid.getMesh( parentObject(), parent );
+uint FVBoxMeshFunction::findMin( )
+{
+    uint min = 99999999;
+    uint* vals = mf->values();
+    if ( mf != 0 )
+        for (int i = 0; i < mf->size() ; i++ )
+            if ( vals[i] < min)
+                min = vals[i];
+    return min;
+}
 
-//        if (mesh == 0) {
-//                qDebug() << classType() << ": Trying to draw mesh while getMesh() returned 0." << endl;
-//                return;
-//        }
-
-//        if (fvlist == 0) {
-//                qDebug() << classType() << ":fvlist == 0. Probably You have not set that this class is drawable. Please use setDrawable(true) method in the constructor." << endl;
-//                return;
-//        }
-
-//        fvlist->start();
-
-////    GLfloat tx=0,ty=0,tz=0;
-////                printf("%lf, %lf, %lf\n",tx,ty,tz);
-////        if (isFirstShow()) {
-////                double pmin[3], pmax[3], td;
-////                grid->getBBox( pmin, pmax );
-
-////                printf("Pmin = %lf, %lf, %lf\n",pmin[0],pmin[1],pmin[2]);
-////                printf("Pmax = %lf, %lf, %lf\n",pmax[0],pmax[1],pmax[2]);
-////                tx = (pmax[0] - pmin[0]);
-////                ty = (pmax[1] - pmin[1]);
-////                tz = (pmax[2] - pmin[2]);
-////                printf("%lf, %lf, %lf\n",tx,ty,tz);
-////                qDebug() << tx << ", " << ty << ", " << tz << endl;
-////                td = sqrt(tx*tx + ty*ty + tz*tz);
-////                if ((td > 1e-10 ) && (td < 1e10)) {
-////                    getCurrentViewer()->setSceneRadius( td );
-////                }
-////        }
-//        if (getAttrValue( tr("Transparent") ) == tr("Yes") ) {
-//                glEnable( GL_BLEND );
-//                glEnable( GL_ALPHA_TEST );
-//                //glDisable(GL_DEPTH_TEST);
-//                glAlphaFunc( GL_LESS, 1.f );
-//                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-//        }
-
-//        if (mesh != 0) {
-//                initSubColors();
-//                initSubVisibility();
-
-//                double dShrink = 1.0;
-//                Attr * a = getAttr( tr("Shrink Elems") );
-//                if (a != 0)
-//                        dShrink = a->toDouble();
-
-//                QString paintMode = getAttrValue( tr("Solid/Wire") );
-//                if ( (paintMode == "Solid") || (paintMode == "Wireframe") || (paintMode == "Elements") ) {
-//                        drawNormal(paintMode, dShrink);
-//                }
-//                if ( paintMode == "Vertices" )
-//                        drawVertices();
+void FVBoxMeshFunction::paintGL()
+{
 
 
-////                if ( paintMode == "Subdomain wireframe" )
-////                        drawSubdomainWireframe();
+    qDebug() << "Drawing..." << endl;
 
-//                glDisable(GL_BLEND);
-//                glDisable(GL_LIGHTING);
+    //        mesh = reqGrid.getMesh( parentObject(), parent );
 
-//                glColor4f(0.0f, 0.0f,0.0f,1.0f);
-//                glDisable(GL_DEPTH_TEST);
-//                if ( getAttrValue(tr("Show Elems Nums")) == "Yes" ) {
-//                        paintElemsNums();
-//                }
-//                if ( getAttrValue(tr("Show Verts Nums")) == "Yes" ) {
-//                        paintVertsNums();
-//                }
-//        }
+    if (mesh == 0) {
+        qDebug() << classType() << ": Trying to draw mesh while getMesh() returned 0." << endl;
+        return;
+    }
+
+    if (fvlist == 0) {
+        qDebug() << classType() << ":fvlist == 0. Probably You have not set that this class is drawable. Please use setDrawable(true) method in the constructor." << endl;
+        return;
+    }
+
+    fvlist->start();
+
+    if (getAttrValue( tr("Visible") ) == tr("Yes")) {
+        if (getAttrValue( tr("Transparent") ) == tr("Yes") ) {
+            glEnable( GL_BLEND );
+            glEnable( GL_ALPHA_TEST );
+            //glDisable(GL_DEPTH_TEST);
+            glAlphaFunc( GL_LESS, 1.f );
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        }
+
+        if (mf != 0) {
+            if ( mf->dim() == 3 )
+                draw3();
+            if ( mf->dim() == 2 )
+                draw2();
+            //                double dShrink = 1.0;
+            //                Attr * a = getAttr( tr("Shrink Elems") );
+            //                if (a != 0)
+            //                        dShrink = a->toDouble();
+
+            //                QString paintMode = getAttrValue( tr("Solid/Wire") );
+            //                if ( (paintMode == "Solid") || (paintMode == "Wireframe") || (paintMode == "Elements") ) {
+            //                        drawNormal(paintMode, dShrink);
+            //                }
+            //                if ( paintMode == "Vertices" )
+            //                        drawVertices();
 
 
-//        glEnable(GL_DEPTH_TEST);
-//        glDisable( GL_ALPHA_TEST );
-//        glDisable(GL_BLEND);
-//        glEnable(GL_LIGHTING);
+            ////                if ( paintMode == "Subdomain wireframe" )
+            ////                        drawSubdomainWireframe();
 
-//        fvlist->end();
-//}
+            //                glDisable(GL_BLEND);
+            //                glDisable(GL_LIGHTING);
+
+            //                glColor4f(0.0f, 0.0f,0.0f,1.0f);
+            //                glDisable(GL_DEPTH_TEST);
+            //                if ( getAttrValue(tr("Show Elems Nums")) == "Yes" ) {
+            //                        paintElemsNums();
+            //                }
+            //                if ( getAttrValue(tr("Show Verts Nums")) == "Yes" ) {
+            //                        paintVertsNums();
+            //                }
+        }
+
+
+        glEnable(GL_DEPTH_TEST);
+        glDisable( GL_ALPHA_TEST );
+        glDisable(GL_BLEND);
+        glEnable(GL_LIGHTING);
+
+    } else
+        qDebug() << "Not Drawing..." << endl;
+    fvlist->end();
+}
 
 //void FVBoxMeshFunction::paintElemsNums( )
 //{
@@ -147,15 +160,24 @@ void FVBoxMeshFunction::updateAttributes( )
 //}
 
 
+QColor FVBoxMeshFunction::getColor()
+{
+            Attr * a;
+                    a = getAttr( tr("Color") );
+                    if (a != 0)
+                            return a->color();
+            return QColor(200,200,200);
+}
+
 QColor FVBoxMeshFunction::getColor( int isub )
 {
         Attr * a;
         if ( getAttrValue( tr("Sub.Color Policy") ) == "Single Color" ) {
-                a = getAttr( tr("Single Color") );
+                a = getAttr( tr("Color") );
                 if (a != 0)
                         return a->color();
         } else {
-                a = getAttr( tr("Subdomain %1").arg( isub ) );
+                a = getAttr( tr("Function Value %1").arg( isub ) );
                 if (a != 0)
                         return a->color();
         }
@@ -280,39 +302,54 @@ void FVBoxMeshFunction::drawSubdomainWireframe()
 //        glEnd();
 }
 
-void FVBoxMeshFunction::drawNormal(QString & paintMode, double dShrink)
+void FVBoxMeshFunction::draw3(/*QString & paintMode, double dShrink*/)
 {
-        bool bDraw;
-        bool bElements = false;
-        int i,j,k;
-        QColor cl;
-        GLfloat fTransparency = 0;
-        fTransparency = getAttrValue( tr("Transparency Ratio") ).toFloat();
-        SetOfInt visEle( getAttrValue(tr("Interesting Elements")), 1, mesh->num_faces() );
+    int i,j,k;
+    GLfloat fTransparency = 0;
 
-        if ((paintMode == "Solid") || (paintMode == "Elements")) {
-                if (paintMode == "Elements") bElements = true;
-                glShadeModel(GL_SMOOTH);
-                glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-                glBegin( GL_TRIANGLES );
-        }
-        if (paintMode == "Wireframe") {
-                glDisable(GL_BLEND);
-                glDisable(GL_LIGHTING);
-                glLineWidth( getLineWidth() );
-                glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-                glBegin( GL_TRIANGLES );
-        }
+    uint min = findMin();
+    uint max = findMax();
+    uint value = 0;
+    uint* vals = mf->values();
 
-        dolfin::MeshConnectivity con = mesh->topology()(3,0);
+    fTransparency = getAttrValue( tr("Transparency Ratio") ).toFloat();
+    SetOfInt visEle( getAttrValue(tr("Interesting Elements")), 1, mesh->num_entities(mf->dim()) );
+    SetOfInt visSub( getAttrValue(tr("Visible values")), min, max );
+
+//    if ((paintMode == "Solid") || (paintMode == "Elements")) {
+//            if (paintMode == "Elements") bElements = true;
+            glShadeModel(GL_SMOOTH);
+            glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+            glBegin( GL_TRIANGLES );
+//    }
+//    if (paintMode == "Wireframe") {
+//            glDisable(GL_BLEND);
+//            glDisable(GL_LIGHTING);
+//            glLineWidth( getLineWidth() );
+//            glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+//            glBegin( GL_TRIANGLES );
+//    }
+    dolfin::MeshConnectivity con = mesh->topology()(3,0);
 //        std::cout << std::endl << con.str(true) << std::endl;
 //        std::cout << std::endl << mesh->topology()(3,0).str(true) << std::endl;
-        const uint* connList = con();
+    const uint* connList = con();
 
-        for (i = 0; i < (int) con.size(); i+=4) {
-            if (visEle.find(i/4 + 1)){
-                //ustawienie koloru wyświetlania
-                glColor4f((GLfloat) 85/255, (GLfloat) 170/255, (GLfloat) 255/255, fTransparency);
+
+    for (i = 0; i < (int) con.size(); i+=4) {
+        if (visEle.find(i/4 + 1)){
+            //ustawienie koloru wyświetlania
+//            QColor cl = getColor();
+            value = vals[i/4];
+            if (visSub.find(value)){
+                QColor cl = getColor(value);
+                glColor4f((GLfloat) cl.red()/255,
+                                   (GLfloat) cl.green()/255,
+                                   (GLfloat) cl.blue()/255,
+                                   fTransparency);
+//                glColor4f((GLfloat) (min*value)/max,
+//                          (GLfloat) (min*value)/max,
+//                          (GLfloat) (min*value)/max,
+//                          fTransparency);
                 //pobranie punktów czworościanu
                 dolfin::Point points[4];
                 double n[3];
@@ -322,62 +359,117 @@ void FVBoxMeshFunction::drawNormal(QString & paintMode, double dShrink)
                 points[3] = mesh->geometry().point(connList[i+3]);
 
                 //wyświetlanie każdej ze ścian
-                        normalny4p(points[0].coordinates(), points[1].coordinates(), points[2].coordinates(), points[3].coordinates(), n);
-                        glNormal3f( n[0], n[1], n[2] );
-                        glVertex3f( points[0].x(), points[0].y(), points[0].z() );
-                        glVertex3f( points[1].x(), points[1].y(), points[1].z() );
-                        glVertex3f( points[2].x(), points[2].y(), points[2].z() );
+                normalny4p(points[0].coordinates(), points[1].coordinates(), points[2].coordinates(), points[3].coordinates(), n);
+                glNormal3f( n[0], n[1], n[2] );
+                glVertex3f( points[0].x(), points[0].y(), points[0].z() );
+                glVertex3f( points[1].x(), points[1].y(), points[1].z() );
+                glVertex3f( points[2].x(), points[2].y(), points[2].z() );
 
-                        normalny4p(points[1].coordinates(), points[2].coordinates(), points[3].coordinates(), points[0].coordinates(), n);
-                        glNormal3f( n[0], n[1], n[2] );
-                        glVertex3f( points[1].x(), points[1].y(), points[1].z() );
-                        glVertex3f( points[2].x(), points[2].y(), points[2].z() );
-                        glVertex3f( points[3].x(), points[3].y(), points[3].z() );
+                normalny4p(points[1].coordinates(), points[2].coordinates(), points[3].coordinates(), points[0].coordinates(), n);
+                glNormal3f( n[0], n[1], n[2] );
+                glVertex3f( points[1].x(), points[1].y(), points[1].z() );
+                glVertex3f( points[2].x(), points[2].y(), points[2].z() );
+                glVertex3f( points[3].x(), points[3].y(), points[3].z() );
 
-                        normalny4p(points[2].coordinates(), points[3].coordinates(), points[0].coordinates(), points[1].coordinates(), n);
-                        glNormal3f( n[0], n[1], n[2] );
-                        glVertex3f( points[2].x(), points[2].y(), points[2].z() );
-                        glVertex3f( points[3].x(), points[3].y(), points[3].z() );
-                        glVertex3f( points[0].x(), points[0].y(), points[0].z() );
+                normalny4p(points[2].coordinates(), points[3].coordinates(), points[0].coordinates(), points[1].coordinates(), n);
+                glNormal3f( n[0], n[1], n[2] );
+                glVertex3f( points[2].x(), points[2].y(), points[2].z() );
+                glVertex3f( points[3].x(), points[3].y(), points[3].z() );
+                glVertex3f( points[0].x(), points[0].y(), points[0].z() );
 
-                        normalny4p(points[3].coordinates(), points[0].coordinates(), points[1].coordinates(), points[2].coordinates(), n);
-                        glNormal3f( n[0], n[1], n[2] );
-                        glVertex3f( points[3].x(), points[3].y(), points[3].z() );
-                        glVertex3f( points[0].x(), points[0].y(), points[0].z() );
-                        glVertex3f( points[1].x(), points[1].y(), points[1].z() );
+                normalny4p(points[3].coordinates(), points[0].coordinates(), points[1].coordinates(), points[2].coordinates(), n);
+                glNormal3f( n[0], n[1], n[2] );
+                glVertex3f( points[3].x(), points[3].y(), points[3].z() );
+                glVertex3f( points[0].x(), points[0].y(), points[0].z() );
+                glVertex3f( points[1].x(), points[1].y(), points[1].z() );
             }
         }
-        glEnd();
+    }
+    glEnd();
 }
 
-void FVBoxMeshFunction::drawVertices( )
+void FVBoxMeshFunction::draw2( )
 {
-        SetOfInt visVert( getAttrValue(tr("Interesting Vertices")), 1, mesh->num_vertices() );
-        float fPointSize = getVertexSize();
+    int i,j,k;
+    GLfloat fTransparency = 0;
+
+    uint min = findMin();
+    uint max = findMax();
+    uint value = 0;
+    uint* vals = mf->values();
+
+    fTransparency = getAttrValue( tr("Transparency Ratio") ).toFloat();
+    SetOfInt visEle( getAttrValue(tr("Interesting Elements")), 1, mesh->num_entities(mf->dim()) );
+    SetOfInt visSub( getAttrValue(tr("Visible values")), min, max );
+
+    glShadeModel(GL_SMOOTH);
+    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    glBegin( GL_TRIANGLES );
+
+    //trójkąty
+    dolfin::MeshConnectivity con = mesh->topology()(2,0);
+//            std::cout << std::endl << con.str(true) << std::endl;
+//        std::cout << std::endl << mesh->topology()(3,0).str(true) << std::endl;
+    const uint* connList = con();
+
+    //trójkąty tworzące czworościany
+    dolfin::MeshConnectivity con32 = mesh->topology()(3,2);
+    const uint* connList32 = con32();
+    //punkty tworzące czworościany
+    dolfin::MeshConnectivity con30 = mesh->topology()(3,0);
+    const uint* connList30 = con30();
 
 
-        if (visVert.sum() > 1000) {
-            if (QMessageBox::question( 0, tr("To many objects warning."), tr("You are trying to draw over 1000 vertices numbers. This process may take a long time. Do you want to continue?"), QMessageBox::Yes | QMessageBox::No ) == QMessageBox::No) {
-                setAttrValue(tr("Show Verts Nums"), "No" );
-                return;
+    for (i = 0; i < (int) con.size(); i+=3) {
+        if (visEle.find(i/3 + 1)){
+            //i/3 to numer trójkąta
+            //numery punktów stanowiących trójkąt
+            int pp[3];
+            pp[0] = connList[i];
+            pp[1] = connList[i+1];
+            pp[2] = connList[i+2];
+            //tetrahedron - szukamy czworościanu z trójkątem który rozważamy
+            int tetrahedron=0;
+            for (int j=0; j < con32.size(); j++)
+                if (connList32[j] == i/3 ){
+                    tetrahedron = (int)(j/4);
+                    break;
+                }
+            // fourthP - szukamy czwartego punktu tworzącego czworościan do liczenia wektora normalnego
+            int fourthP = 0;
+            for (int j=0; j<4 ; j++)
+                    if ( connList30[4*tetrahedron+j] != pp[0] && connList30[4*tetrahedron+j] != pp[1] && connList30[4*tetrahedron+j] != pp[2]){
+                        fourthP = connList30[4*tetrahedron+j];
+                        break;
+                    }
+
+            value = vals[i/3];
+            if (visSub.find(value)){
+                //ustawienie koloru wyświetlania
+                QColor cl = getColor(value);
+                glColor4f((GLfloat) cl.red()/255,
+                                   (GLfloat) cl.green()/255,
+                                   (GLfloat) cl.blue()/255,
+                                   fTransparency);
+                //pobranie punktów trójkąta
+                dolfin::Point points[4];
+                double n[3];
+                points[0] = mesh->geometry().point(connList[i]);
+                points[1] = mesh->geometry().point(connList[i+1]);
+                points[2] = mesh->geometry().point(connList[i+2]);
+                //czwarty znaleziony punkt
+                points[3] = mesh->geometry().point(fourthP);
+
+                //wyświetlanie trójkąta
+                normalny4p(points[0].coordinates(), points[1].coordinates(), points[2].coordinates(), points[3].coordinates(), n);
+                glNormal3f( n[0], n[1], n[2] );
+                glVertex3f( points[0].x(), points[0].y(), points[0].z() );
+                glVertex3f( points[1].x(), points[1].y(), points[1].z() );
+                glVertex3f( points[2].x(), points[2].y(), points[2].z() );
             }
         }
-
-        glEnable(GL_POINT_SMOOTH);
-        glPointSize( fPointSize );
-        glBegin(GL_POINTS);
-        glColor4f(0.0f, 0.0f, 0.0f, 1.0);
-        dolfin::Point p;
-
-        for (int i = 0; (unsigned int) i < mesh->num_vertices(); i++) {
-                if (visVert.find( i+1 )){
-                    p = mesh->geometry().point(i);
-                    glVertex3f( p.x(), p.y(), p.z() );
-                    std::cout << p.x() << " " <<p.y() << " " <<p.z() << " \n";
-                }
-        }
-        glEnd();
-        glDisable(GL_POINT_SMOOTH);
+    }
+    glEnd();
 }
 
 float FVBoxMeshFunction::getLineWidth()
@@ -418,48 +510,68 @@ void FVBoxMeshFunction::paintVertsNums( )
 void FVBoxMeshFunction::setupAttributes( )
 {
         mesh = reqGrid.getMesh(parentObject(), parent );
+        mf = mesh->data().mesh_function(name);
 
         qDebug() << "Setting up attributes for " << classType();
         // Here add the attributes
         Attr * a;
-
-        a = am->addSection( tr("Viewing") );
-        a = am->addAttr( tr("Solid/Wire"), QString("Solid"), "textlist" );
         QStringList lst;
-        lst.append("Solid");
-        lst.append("Wireframe");
-        lst.append("Elements");
-        lst.append("Vertices");
-//        lst.append("Subdomain wireframe");
-        a->setList( lst );
+        a = am->addSection( tr("Viewing") );
+        a = am->addAttr(tr("Visible"), QString("No"), "textlist");
+        lst.append("No");
+        lst.append("Yes");
+        a->setList(lst);
 
-        a = am->addAttr( tr("Shrink Elems"), QString("1.0"), "text" );
+        if (mf != 0 ){
+            a = am->addAttr( tr("name"), QString("name"), QString("text") );
+            a->setEditable(false);
+            a = am->addAttr( tr("Size"), QString("%1").arg( mf->size() ) , QString("text") );
+            a->setEditable(false);
+            a = am->addAttr( tr("Dimension"), QString("%1").arg( mf->dim() ), QString("text") );
+            a->setEditable(false);
+        }
+//        a = am->addAttr( tr("Solid/Wire"), QString("Solid"), "textlist" );
+//        QStringList lst;
+//        lst.append("Solid");
+//        lst.append("Wireframe");
+//        lst.append("Elements");
+//        lst.append("Vertices");
+//        lst.append("Subdomain wireframe");
+//        a->setList( lst );
+
+//        a = am->addAttr( tr("Shrink Elems"), QString("1.0"), "text" );
         a = am->addAttr( tr("Vertex Size"), QString("4"), "text" );
         a = am->addAttr( tr("Line width"), QString("1.0"), "text" );
 
         a = am->addAttr( tr("Transparent"), QString("No"), "boolean" );
         a = am->addAttr( tr("Transparency Ratio"), fvsettings.value("/RSoft/FViewer/DefTransparencyRatio","0.4").toString(), "text" );
 
-//        a = am->addSection( tr("Colors") );
-////        a = am->addAttr( tr("Sub.Color Policy"), QString("Single Color"), "textlist" );
-////        lst.clear();
-////        lst.append("Single Color");
-////        lst.append("Individual Colors");
-////        a->setList( lst );
+        a = am->addSection( tr("Colors") );
+        a = am->addAttr( tr("Sub.Color Policy"), QString("Individual Color"), "textlist" );
+        lst.clear();
+        lst.append("Individual Colors");
+        lst.append("Single Color");
+        a->setList( lst );
 
-////        QVariant v;
-////        QColor defColor;
-////        v = fvsettings.value( QString("/RSoft/FViewer/SingleColor"), QVariant(QColor(200,200,200)) );
-////        defColor = v.value<QColor>();
-////        a = am->addAttr( tr("Single Color"), defColor, "color" );
+        QVariant v;
+        QColor defColor;
+        v = fvsettings.value( QString("/RSoft/FViewer/SingleColor"), QVariant(QColor(200,200,200)) );
+        defColor = v.value<QColor>();
+        a = am->addAttr( tr("Color"), defColor, "color" );
 
         if (mesh != 0) {
+                for (unsigned int i = findMin(); i <= findMax(); i++) {
+                    v = fvsettings.value( QString("/RSoft/FViewer/Color%1").arg(i+1), QVariant(QColor(100,100,100)) );
+                    defColor = v.value<QColor>();
+                    a = am->addAttr( tr("Function Value %1").arg(i), defColor, "color" );
+                }
+
                 a = am->addSection( tr("Visibility") );
-//                a = am->addAttr( tr("Visible Subdomains"), tr("%1-%2").arg(1).arg(grid->_subdomains.size()), "text" );
-                a = am->addAttr( tr("Show Elems Nums"), QString("No"), "boolean" );
-                a = am->addAttr( tr("Interesting Elements"), tr("%1-%2").arg(1).arg(mesh->num_entities(3)), "text" );
-                a = am->addAttr( tr("Show Verts Nums"), QString("No"), "boolean" );
-                a = am->addAttr( tr("Interesting Vertices"), tr("%1-%2").arg(1).arg(mesh->num_vertices()), "text" );
+                a = am->addAttr( tr("Visible values"), tr("%1-%2").arg(findMin()).arg(findMax()), "text" );
+//                a = am->addAttr( tr("Show Elems Nums"), QString("No"), "boolean" );
+                a = am->addAttr( tr("Interesting Elements"), tr("%1-%2").arg(1).arg(mesh->num_entities(mf->dim())), "text" );
+//                a = am->addAttr( tr("Show Verts Nums"), QString("No"), "boolean" );
+//                a = am->addAttr( tr("Interesting Vertices"), tr("%1-%2").arg(1).arg(mesh->num_vertices()), "text" );
         }
 }
 
@@ -477,18 +589,18 @@ void FVBoxMeshFunction::setupMenu( )
         contextMenuObj->addAction(tr("&Connect interaction"), this, SLOT( slotConnect() ) );
         contextMenuObj->addAction(tr("&Disconnect interaction"), this, SLOT(  slotDisconnect() ) );
         */
-        contextMenuObj->addSeparator();
-        contextMenuObj->addAction(tr("&Draw"),this, SLOT(slotDraw()) );
+//        contextMenuObj->addSeparator();
+//        contextMenuObj->addAction(tr("&Draw"),this, SLOT(slotDraw()) );
 //        contextMenuObj->addAction(tr("De&lete"),(QWidget*) manager, SLOT(slotDelete()) );
 
 }
 
 void FVBoxMeshFunction::slotDraw( )
 {
-    mesh = reqGrid.getMesh( parentObject(), parent );
-    mf = mesh->data().mesh_function(name);
-    std::cout << "MESH FUNCTION name:  " << name << std::endl;
-    std::cout << mf->str(true) << std::endl;
+//    mesh = reqGrid.getMesh( parentObject(), parent );
+//    mf = mesh->data().mesh_function(name);
+//    std::cout << "MESH FUNCTION name:  " << name << std::endl;
+//    std::cout << mf->str(true) << std::endl;
 }
 
 

@@ -24,7 +24,7 @@ public:
         virtual ~FVBoxMeshFunction();
         virtual QString classType() { return QString("FVMeshDraw"); }
 
-//        virtual void paintGL();
+        virtual void paintGL();
     virtual void updateAttributes();
 
 public slots:
@@ -47,6 +47,7 @@ protected:
 
         FVRequireGrid reqGrid;
 
+        QColor getColor();
         QColor getColor(int isub);
         int getVertexSize();
         float getLineWidth();
@@ -55,12 +56,14 @@ protected:
         virtual void setupAttributes();
         virtual void setupMenu( );
 
+
         void paintElemsNums();
         void paintVertsNums();
-        void drawNormal(QString & paintMode, double dShrink);
-        void drawVertices();
+        void draw3(/*QString & paintMode, double dShrink*/);
+        void draw2();
         void drawSubdomainWireframe();
-
+        uint findMax();
+        uint findMin();
 
 };
 
