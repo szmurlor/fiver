@@ -146,19 +146,12 @@ void FVMeshDraw::paintElemsNums( )
 }
 
 
-QColor FVMeshDraw::getColor( int isub )
+QColor FVMeshDraw::getColor()
 {
         Attr * a;
-        if ( getAttrValue( tr("Sub.Color Policy") ) == "Single Color" ) {
-                a = getAttr( tr("Single Color") );
+                a = getAttr( tr("Color") );
                 if (a != 0)
                         return a->color();
-        } else {
-                a = getAttr( tr("Subdomain %1").arg( isub ) );
-                if (a != 0)
-                        return a->color();
-        }
-
         return QColor(200,200,200);
 }
 
@@ -281,10 +274,8 @@ void FVMeshDraw::drawSubdomainWireframe()
 
 void FVMeshDraw::drawNormal(QString & paintMode, double dShrink)
 {
-        bool bDraw;
         bool bElements = false;
         int i,j,k;
-        QColor cl;
         GLfloat fTransparency = 0;
         fTransparency = getAttrValue( tr("Transparency Ratio") ).toFloat();
         SetOfInt visEle( getAttrValue(tr("Interesting Elements")), 1, mesh->num_entities(3) );
@@ -311,7 +302,12 @@ void FVMeshDraw::drawNormal(QString & paintMode, double dShrink)
         for (i = 0; i < (int) con.size(); i+=4) {
             if (visEle.find(i/4 + 1)){
                 //ustawienie koloru wyświetlania
-                glColor4f((GLfloat) 85/255, (GLfloat) 170/255, (GLfloat) 255/255, fTransparency);
+                QColor cl = getColor();
+                glColor4f((GLfloat) cl.red()/255,
+                                   (GLfloat) cl.green()/255,
+                                   (GLfloat) cl.blue()/255,
+                                   fTransparency);
+//                glColor4f((GLfloat) 85/255, (GLfloat) 170/255, (GLfloat) 255/255, fTransparency);
                 //pobranie punktów czworościanu
                 dolfin::Point points[4];
                 double n[3];
@@ -439,18 +435,18 @@ void FVMeshDraw::setupAttributes( )
         a = am->addAttr( tr("Transparent"), QString("No"), "boolean" );
         a = am->addAttr( tr("Transparency Ratio"), fvsettings.value("/RSoft/FViewer/DefTransparencyRatio","0.4").toString(), "text" );
 
-//        a = am->addSection( tr("Colors") );
-////        a = am->addAttr( tr("Sub.Color Policy"), QString("Single Color"), "textlist" );
-////        lst.clear();
-////        lst.append("Single Color");
-////        lst.append("Individual Colors");
-////        a->setList( lst );
+        a = am->addSection( tr("Colors") );
+//        a = am->addAttr( tr("Sub.Color Policy"), QString("Single Color"), "textlist" );
+//        lst.clear();
+//        lst.append("Single Color");
+//        lst.append("Individual Colors");
+//        a->setList( lst );
 
-////        QVariant v;
-////        QColor defColor;
-////        v = fvsettings.value( QString("/RSoft/FViewer/SingleColor"), QVariant(QColor(200,200,200)) );
-////        defColor = v.value<QColor>();
-////        a = am->addAttr( tr("Single Color"), defColor, "color" );
+        QVariant v;
+        QColor defColor;
+        v = fvsettings.value( QString("/RSoft/FViewer/SingleColor"), QVariant(QColor(200,200,200)) );
+        defColor = v.value<QColor>();
+        a = am->addAttr( tr("Color"), defColor, "color" );
 
         if (mesh != 0) {
                 a = am->addSection( tr("Visibility") );
