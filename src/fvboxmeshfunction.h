@@ -61,6 +61,7 @@ protected:
         void paintVertsNums();
         void draw3(/*QString & paintMode, double dShrink*/);
         void draw2();
+        void draw2b();
         void drawSubdomainWireframe();
         uint findMax();
         uint findMin();
