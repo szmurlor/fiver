@@ -12,6 +12,9 @@
 #include <QStringList>
 #include <QMessageBox>
 
+#include <ctime>
+#include <set>
+
 FVBoxMeshFunction::FVBoxMeshFunction(FVBoxMgr * manager, FVObject * parent, std::string name, int x, int y)
  : FVObject(manager, x,y)
 {
@@ -28,7 +31,7 @@ FVBoxMeshFunction::~FVBoxMeshFunction()
 
 void FVBoxMeshFunction::updateAttributes( )
 {
-    FVObject::update();
+//    FVObject::update();
     manager->sendMessage(QString("update"), this, true );
 }
 
@@ -58,12 +61,9 @@ uint FVBoxMeshFunction::findMin( )
 
 void FVBoxMeshFunction::paintGL()
 {
+    time_t tstart, tend;
 
-
-    qDebug() << "Drawing..." << endl;
-
-    //        mesh = reqGrid.getMesh( parentObject(), parent );
-
+    tstart = time(0);
     if (mesh == 0) {
         qDebug() << classType() << ": Trying to draw mesh while getMesh() returned 0." << endl;
         return;
@@ -77,6 +77,7 @@ void FVBoxMeshFunction::paintGL()
     fvlist->start();
 
     if (getAttrValue( tr("Visible") ) == tr("Yes")) {
+        qDebug() << "Drawing..." << endl;
         if (getAttrValue( tr("Transparent") ) == tr("Yes") ) {
             glEnable( GL_BLEND );
             glEnable( GL_ALPHA_TEST );
@@ -89,34 +90,7 @@ void FVBoxMeshFunction::paintGL()
             if ( mf->dim() == 3 )
                 draw3();
             if ( mf->dim() == 2 )
-                draw2();
-            //                double dShrink = 1.0;
-            //                Attr * a = getAttr( tr("Shrink Elems") );
-            //                if (a != 0)
-            //                        dShrink = a->toDouble();
-
-            //                QString paintMode = getAttrValue( tr("Solid/Wire") );
-            //                if ( (paintMode == "Solid") || (paintMode == "Wireframe") || (paintMode == "Elements") ) {
-            //                        drawNormal(paintMode, dShrink);
-            //                }
-            //                if ( paintMode == "Vertices" )
-            //                        drawVertices();
-
-
-            ////                if ( paintMode == "Subdomain wireframe" )
-            ////                        drawSubdomainWireframe();
-
-            //                glDisable(GL_BLEND);
-            //                glDisable(GL_LIGHTING);
-
-            //                glColor4f(0.0f, 0.0f,0.0f,1.0f);
-            //                glDisable(GL_DEPTH_TEST);
-            //                if ( getAttrValue(tr("Show Elems Nums")) == "Yes" ) {
-            //                        paintElemsNums();
-            //                }
-            //                if ( getAttrValue(tr("Show Verts Nums")) == "Yes" ) {
-            //                        paintVertsNums();
-            //                }
+                draw2b();
         }
 
 
@@ -128,36 +102,9 @@ void FVBoxMeshFunction::paintGL()
     } else
         qDebug() << "Not Drawing..." << endl;
     fvlist->end();
+    tend = time(0);
+    qDebug() << "Drawing took " << tend- tstart << " second(s)." << endl;
 }
-
-//void FVBoxMeshFunction::paintElemsNums( )
-//{
-//        SetOfInt visEle( getAttrValue(tr("Interesting Elements")), 1, mesh->num_entities(3) );
-
-//        if (visEle.sum() > 1000) {
-//            if (QMessageBox::question( 0, tr("To many objects warning."), tr("You are trying to draw over 1000 element numbers. This process may take a long time. Do you want to continue?"), QMessageBox::Yes | QMessageBox::No ) == QMessageBox::No) {
-//                setAttrValue(tr("Show Elems Nums"), "No" );
-//                return;
-//            }
-//        }
-//        dolfin::MeshConnectivity con = mesh->topology()(3,0);
-//        const uint* connList = con();
-//        for ( int e = 0; e < con.size(); e+=4 ) {
-//                if( ! visEle.find(e/4+1) )
-//                        continue;
-//                float ec[3];
-//                ec[0]= ec[1]= ec[2]= 0.0;
-//                int nNodes= 4;
-//                for ( int n=0; n < nNodes; n++) {
-//                        int v= connList[e+n];
-//                        for( int d= 0; d < 3; d++ )
-//                            ec[d] += mesh->geometry().point(v).coordinates()[d];
-//                }
-//                for( int d= 0; d < 3; d++ )
-//                        ec[d] /= nNodes;
-//                getCurrentViewer()->fvRenderText(ec[0], ec[1], ec[2], QString::number( e/4+1 ) );
-//        }
-//}
 
 
 QColor FVBoxMeshFunction::getColor()
@@ -428,6 +375,9 @@ void FVBoxMeshFunction::draw2( )
             pp[0] = connList[i];
             pp[1] = connList[i+1];
             pp[2] = connList[i+2];
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
             //tetrahedron - szukamy czworościanu z trójkątem który rozważamy
             int tetrahedron=0;
             for (int j=0; j < con32.size(); j++)
@@ -435,6 +385,8 @@ void FVBoxMeshFunction::draw2( )
                     tetrahedron = (int)(j/4);
                     break;
                 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // fourthP - szukamy czwartego punktu tworzącego czworościan do liczenia wektora normalnego
             int fourthP = 0;
             for (int j=0; j<4 ; j++)
@@ -471,6 +423,105 @@ void FVBoxMeshFunction::draw2( )
     }
     glEnd();
 }
+
+void FVBoxMeshFunction::draw2b( )
+{
+    int i,j,k;
+    GLfloat fTransparency = 0;
+
+    uint min = findMin();
+    uint max = findMax();
+    uint value = 0;
+    uint* vals = mf->values();
+
+    fTransparency = getAttrValue( tr("Transparency Ratio") ).toFloat();
+    SetOfInt visEle( getAttrValue(tr("Interesting Elements")), 1, mesh->num_entities(mf->dim()) );
+    SetOfInt visSub( getAttrValue(tr("Visible values")), min, max );
+    std::set<int> drawed;
+
+    glShadeModel(GL_SMOOTH);
+    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    glBegin( GL_TRIANGLES );
+
+    //trójkąty
+    dolfin::MeshConnectivity con20 = mesh->topology()(2,0);
+    const uint* connList20 = con20();
+    //trójkąty tworzące czworościany
+    dolfin::MeshConnectivity con32 = mesh->topology()(3,2);
+    const uint* connList32 = con32();
+    //punkty tworzące czworościany
+    dolfin::MeshConnectivity con30 = mesh->topology()(3,0);
+    const uint* connList30 = con30();
+
+
+    //iterowanie po czworościanach
+    for (i = 0; i < (int) con32.size(); i+=4) {
+        //numery trójkątów w czworościanie
+        int tri[4];
+        tri[0] = connList32[i];
+        tri[1] = connList32[i+1];
+        tri[2] = connList32[i+2];
+        tri[3] = connList32[i+3];
+
+        //numery punktów stanowiących czworościan
+        int pp[4];
+        pp[0] = connList30[i];
+        pp[1] = connList30[i+1];
+        pp[2] = connList30[i+2];
+        pp[3] = connList30[i+3];
+
+        //iteracja po trójkątach w czworościanie
+        for ( k=0; k < 4 ; k++ ){
+            //czy trójkąt jest widoczny i nie został narysowany
+            if (visEle.find(tri[k]+1) /*&& drawed.find(tri[k]+1) == drawed.end()*/){
+                //czy wartość meshfunction mu odpowiadająca nas interesuje
+                value = vals[tri[k]];
+                if (visSub.find(value)){
+                    //numery punktów stanowiących trójkąt
+                    int tri_points[3];
+                    tri_points[0] = connList20[3*tri[k]];
+                    tri_points[1] = connList20[3*tri[k]+1];
+                    tri_points[2] = connList20[3*tri[k]+2];
+
+                    // fourthP - szukamy czwartego punktu tworzącego czworościan do liczenia wektora normalnego
+                    int fourthP = 0;
+                    for (int j=0; j<4 ; j++)
+                        if ( pp[j] != tri_points[0] && pp[j] != tri_points[1] && pp[j] != tri_points[2]){
+                            fourthP = pp[j];
+                            break;
+                        }
+
+                    //ustawienie koloru
+                    QColor cl = getColor(value);
+                    glColor4f((GLfloat) cl.red()/255,
+                              (GLfloat) cl.green()/255,
+                              (GLfloat) cl.blue()/255,
+                              fTransparency);
+                    //pobranie punktów trójkąta
+                    dolfin::Point points[4];
+                    double n[3];
+                    points[0] = mesh->geometry().point(tri_points[0]);
+                    points[1] = mesh->geometry().point(tri_points[1]);
+                    points[2] = mesh->geometry().point(tri_points[2]);
+                    //czwarty znaleziony punkt
+                    points[3] = mesh->geometry().point(fourthP);
+
+                    //wyświetlanie trójkąta
+                    normalny4p(points[0].coordinates(), points[1].coordinates(), points[2].coordinates(), points[3].coordinates(), n);
+                    glNormal3f( n[0], n[1], n[2] );
+                    glVertex3f( points[0].x(), points[0].y(), points[0].z() );
+                    glVertex3f( points[1].x(), points[1].y(), points[1].z() );
+                    glVertex3f( points[2].x(), points[2].y(), points[2].z() );
+
+                    drawed.insert(tri[k]+1);
+                }
+            }
+        }
+
+    }
+    glEnd();
+}
+
 
 float FVBoxMeshFunction::getLineWidth()
 {
