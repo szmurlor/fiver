@@ -473,7 +473,7 @@ void FVBoxMeshFunction::draw2b( )
         //iteracja po trójkątach w czworościanie
         for ( k=0; k < 4 ; k++ ){
             //czy trójkąt jest widoczny i nie został narysowany
-            if (visEle.find(tri[k]+1) /*&& drawed.find(tri[k]+1) == drawed.end()*/){
+            if (visEle.find(tri[k]+1) && drawed.find(tri[k]+1) == drawed.end()){
                 //czy wartość meshfunction mu odpowiadająca nas interesuje
                 value = vals[tri[k]];
                 if (visSub.find(value)){
