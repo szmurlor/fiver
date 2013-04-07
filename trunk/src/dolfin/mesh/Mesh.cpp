@@ -450,3 +450,48 @@ std::string Mesh::str(bool verbose) const
   return s.str();
 }
 //-----------------------------------------------------------------------------
+
+
+void Mesh::getBBox(double minP[3], double maxP[3])
+{
+        unsigned int in;
+//        Node *n;
+//        Point p;
+        minP[0]=minP[1]=minP[2]=1e20;
+        maxP[0]=maxP[1]=maxP[2]=-1e20;
+
+        for (in=0; in < geometry().dim() * num_cells(); in++) {
+//                n = &_nodes[in];
+            Point p(coordinates()[3*in],coordinates()[3*in+1],coordinates()[3*in+2]);
+
+                if (p.coordinates()[0] < minP[0]) minP[0] = p.coordinates()[0];
+                if (p.coordinates()[1] < minP[1]) minP[1] = p.coordinates()[1];
+                if (p.coordinates()[2] < minP[2]) minP[2] = p.coordinates()[2];
+                if (p.coordinates()[0] > maxP[0]) maxP[0] = p.coordinates()[0];
+                if (p.coordinates()[1] > maxP[1]) maxP[1] = p.coordinates()[1];
+                if (p.coordinates()[2] > maxP[2]) maxP[2] = p.coordinates()[2];
+        //printf("min = %lf,%lf,%lf\n",minP[0], minP[1], minP[2]);
+        //printf("max = %lf,%lf,%lf\n",maxP[0], maxP[1], maxP[2]);
+        }
+
+//        SET(bb_min, minP);
+//        SET(bb_max, maxP);
+        //printf("min = %lf,%lf,%lf\n",minP[0], minP[1], minP[2]);
+        //printf("max = %lf,%lf,%lf\n",maxP[0], maxP[1], maxP[2]);
+}
+
+void Mesh::getCenter( double P[3] )
+{
+    unsigned int ie,ic;
+    double cc[3];
+    cc[0] = cc[1] = cc[2] = 0;
+//    vector< double > c;
+
+    for (ie = 0; ie < num_cells(); ie++) {
+        for (ic=0; ic < geometry().dim(); ic++)
+            cc[ic] += coordinates()[geometry().dim()*ie+ic];
+    }
+    P[0] = cc[0] / (double) num_cells();
+    P[1] = cc[1] / (double) num_cells();
+    P[2] = cc[2] / (double) num_cells();
+}

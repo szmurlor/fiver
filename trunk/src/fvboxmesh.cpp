@@ -280,11 +280,11 @@ void FVBoxMesh::slotRotateManipulator( )
 //            delete fvinteraction;
 //    }
 //    double p[3];
-//    getGrid()->getCenter(p);
+//    getMesh()->getCenter(p);
 //    double length, size;
 //    double bb[3],b1[3],b2[3];
-//    getGrid()->getBBox(b1,b2);
-//    getGrid()->getCenter(p);
+//    getMesh()->getBBox(b1,b2);
+//    getMesh()->getCenter(p);
 //    SUB(bb,b2,b1);
 //    size = bb[0];
 //    size = size > bb[1] ? size : bb[1];
@@ -315,8 +315,8 @@ void FVBoxMesh::slotTranslateManipulator( )
 //        double length, size, w, h;
 //        double bb[3],b1[3],b2[3];
 //        double p[3], n[3], u[3], v[3];
-//        getGrid()->getBBox(b1,b2);
-//        getGrid()->getCenter(p);
+//        getMesh()->getBBox(b1,b2);
+//        getMesh()->getCenter(p);
 //        SUB(bb,b2,b1);
 
 //        ZERO(n);

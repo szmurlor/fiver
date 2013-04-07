@@ -64,10 +64,10 @@ public slots:
 protected:
     dolfin::Mesh * mesh;
 
-//    double P[3];
-//    double N[3];
-//    FVInteractionTranslation * fit;
-//    FVInteractionRotation * fir;
+    double P[3];
+    double N[3];
+    FVInteractionTranslation * fit;
+    FVInteractionRotation * fir;
 
 
 

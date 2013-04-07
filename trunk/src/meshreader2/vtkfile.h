@@ -14,6 +14,7 @@ class VTKFile : public Simu {
 
 protected:
     void readVTKDataSet( QString fileName, string name );
+    vector<dolfin::Mesh*> meshes;
 
 public:
 
@@ -26,7 +27,9 @@ public:
     virtual void loadFromFile( string fileName );
 
     virtual void saveSimu( char * fileName );
-
+    dolfin::Mesh* newMesh();
+    dolfin::Mesh* getMesh(int idx = 0);
+    vector<dolfin::Mesh*> getMeshes();
 
 };
 
