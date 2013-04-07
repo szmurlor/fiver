@@ -612,6 +612,10 @@ namespace dolfin
     ///         No example code available for this function.
     std::string str(bool verbose) const;
 
+    /** bounding box of grid */
+    void getBBox(double minP[3], double maxP[3]);
+    void getCenter( double P[3] );
+
   private:
 
     // Friends

@@ -8,6 +8,7 @@
 #include <QDomDocument>
 #include <QtDebug>
 #include <iostream>
+#include <mesh/MeshEditor.h>
 
 using namespace std;
 
@@ -25,7 +26,8 @@ VTKFile::~VTKFile()
 }
 
 void VTKFile::readVTKDataSet( QString fileName, string name ){
-    Grid * grid;
+    Grid * grid;//////////////
+    dolfin::Mesh* mesh;
     Field * field;
     char line[1024];
     int lineno;
@@ -64,12 +66,18 @@ void VTKFile::readVTKDataSet( QString fileName, string name ){
         || lineno++, fgets(line,1024,in) == NULL // <DataArray  type="Float32"  NumberOfComponents="3"  format="ascii">
         )
         goto ERR;
-    grid= newGrid();
-    grid->setGridName("Grid");
-    grid->NumberOfSpaceDim = 3;
-    grid->_nodes.resize( np );
-    grid->_elems.resize( ne );
-    grid->attr["etype"] = "T4n3D";
+//////////////////////////////////////////////////////////////////////////////////////
+    grid= newGrid();////////////////
+    mesh= newMesh();
+    grid->setGridName("Grid");////////////////
+    grid->NumberOfSpaceDim = 3;////////////////
+    dolfin::MeshEditor editor;
+    editor.open(*mesh,3,3);
+    grid->_nodes.resize( np );////////////////
+    grid->_elems.resize( ne );////////////////
+    editor.init_vertices(np);
+    editor.init_cells(ne);
+    grid->attr["etype"] = "T4n3D";////////////////
     double x,y,z;
     cerr << "Reading nodes...";
     for( int i= 0; i < np; i++ ) {
@@ -79,11 +87,12 @@ void VTKFile::readVTKDataSet( QString fileName, string name ){
         int tmp;
         x= y= z= 0;
         if( (tmp=sscanf( line, "%lf %lf %lf", &x, &y, &z )) == 3 ) {
-            grid->_nodes[i].nr = i+1;
-            grid->_nodes[i]._parent = grid;
-            grid->_nodes[i][0] = x;
-            grid->_nodes[i][1] = y;
-            grid->_nodes[i][2] = z;
+            grid->_nodes[i].nr = i+1;////////////////
+            grid->_nodes[i]._parent = grid;////////////////
+            grid->_nodes[i][0] = x;////////////////
+            grid->_nodes[i][1] = y;////////////////
+            grid->_nodes[i][2] = z;////////////////
+            editor.add_vertex(i,x,y,z);
             //cerr << i << " ";
         } else {
             cerr << "\"" << line << "\" -> " << tmp << ": x=" << x << " y=" << y <<" z=" << z << endl;
@@ -99,7 +108,7 @@ void VTKFile::readVTKDataSet( QString fileName, string name ){
         goto ERR;
     int n[4];
     cerr << "Reading " << ne << " elements ..." << endl;
-    Elem *e= 0;
+    Elem *e= 0;//
     for( int i= 0; i < ne; i++ ) {
         // cerr << "Reading element " << i << endl;
         int nn;
@@ -107,18 +116,21 @@ void VTKFile::readVTKDataSet( QString fileName, string name ){
         if( fgets(line,1024,in) == NULL )
             goto ERR;
         if( (nn= sscanf(line,"%d %d %d %d", &n[0],&n[1],&n[2], &n[3])) == 4 ) {
-            e = new ElemT4n3D( grid );
-            ((ElemT4n3D*)e)->setNodes( n[0] + 1, n[1] + 1, n[2] + 1, n[3] + 1 ); // FIVER starts numbering nodes with 1 and FENICS starts with 0
-        } else if( nn == 3 ) {
-            e = new ElemT3n2D( grid );
-            ((ElemT3n2D*)e)->setNodes( n[0] + 1, n[1] + 1, n[2] + 1 ); // FIVER starts numbering nodes with 1 and FENICS starts with 0
+            e = new ElemT4n3D( grid );/////////////
+            ((ElemT4n3D*)e)->setNodes( n[0] + 1, n[1] + 1, n[2] + 1, n[3] + 1 ); //////////// FIVER starts numbering nodes with 1 and FENICS starts with 0
+            editor.add_cell(i,n[0],n[1],n[2],n[3]);
+//        } else if( nn == 3 ) {
+//            e = new ElemT3n2D( grid );
+//            ((ElemT3n2D*)e)->setNodes( n[0] + 1, n[1] + 1, n[2] + 1 ); // FIVER starts numbering nodes with 1 and FENICS starts with 0
         } else {
             cerr << "Unknown element type in line " << lineno << " # of nodes in elememnt = " << nn << endl;
         }
-        grid->_elems[ i ] = e;
-        e->nr = i+1;
-        grid->addElemToSubdomain(i+1,1);
+        grid->_elems[ i ] = e;  //////////////
+        e->nr = i+1;//////////////
+        grid->addElemToSubdomain(i+1,1);//////////////
     }
+    editor.close();
+    std::cout << mesh->str(false);
     cerr << "got all." << endl;
     if( lineno++, fgets(line,1024,in) == NULL // </DataArray>
         || lineno++, fgets(line,1024,in) == NULL // <DataArray  type="UInt32"  Name="offsets"  format="ascii">
@@ -142,14 +154,21 @@ void VTKFile::readVTKDataSet( QString fileName, string name ){
         || lineno++, fgets(line,1024,in) == NULL // </Cells">
         )
         goto ERR;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
     if( lineno++, fgets(line,1024,in) == NULL ) // <?Data  Vectors="u">
         goto ERR;
     char dataType[32], fieldType[32];
     sscanf( line, "<%s %s",  dataType, fieldType);
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
     if( lineno++, fgets(line,1024,in) == NULL // <DataArray  type="Float32"  Name="u"  NumberOfComponents="3"  format="ascii">
         )
         goto ERR;
     cerr << "Data type=\"" << dataType << "\" FieldType=\"" << fieldType << "\"" << endl;
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
     field = newField();
     SimpleField * sfield = new SimpleField();
     int nvals = ( strcmp(dataType,"CellData") == 0 ? ne : np);
@@ -212,7 +231,8 @@ void VTKFile::loadFromFile( string fileName )
         qWarning() << "Error while reading VTKFile: " << qfn << " line=" << errline << ", column=" << errcol << " Error=\"" << errmsg << "\"";
     }
     file.close();
-    cerr << "Got " << grids.size() << " grid(s) and " << fields.size() << " field(s)." << endl;
+//    cerr << "Got " << grids.size() << " grid(s) and " << fields.size() << " field(s)." << endl;
+    cerr << "Got " << meshes.size() << " mesh(es) and " << fields.size() << " field(s)." << endl;
 }
 
 void VTKFile::loadFromArgv( int argc, char ** argv )
@@ -226,4 +246,22 @@ void VTKFile::loadFromArgv( int argc, char ** argv )
 
 void VTKFile::saveSimu( char * simName )
 {
+}
+
+dolfin::Mesh* VTKFile::newMesh(){
+        meshes.push_back( new dolfin::Mesh() );
+        return meshes.back();
+}
+
+dolfin::Mesh* VTKFile::getMesh(int idx)
+{
+        if (meshes.size() > (unsigned int) idx)
+                return meshes[idx];
+        else
+                return 0;
+}
+
+vector< dolfin::Mesh * > VTKFile::getMeshes( )
+{
+        return meshes;
 }
