@@ -9,6 +9,7 @@
 #include <QtDebug>
 #include <iostream>
 #include <mesh/MeshEditor.h>
+#include <mesh/MeshFunction.h>
 
 using namespace std;
 
@@ -169,11 +170,18 @@ void VTKFile::readVTKDataSet( QString fileName, string name ){
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-    field = newField();
-    SimpleField * sfield = new SimpleField();
-    int nvals = ( strcmp(dataType,"CellData") == 0 ? ne : np);
-    if( strstr(fieldType,"Vectors") == fieldType ) {
+    field = newField();    ////////////////////////
+    SimpleField * sfield = new SimpleField();   ////////////////////////
+    int nvals = ( strcmp(dataType,"CellData") == 0 ? ne : np);          //typ danych (CellData || PointData) albo na komórkach albo na punktach
+    int dim = ( strcmp(dataType,"CellData") == 0 ? 3 : 0);
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    dolfin::MeshFunction<unsigned int>* mf = mesh->data().create_mesh_function(fieldType);
+    mf->init(dim, nvals);
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    if( strstr(fieldType,"Vectors") == fieldType ) {            //typ pola (Vectors || Scalars)
         sfield->dim(3);
+
         for( int i= 0; i < nvals; i++ ) {
             lineno++;
             if( fgets(line,1024,in) == NULL )
@@ -181,6 +189,11 @@ void VTKFile::readVTKDataSet( QString fileName, string name ){
             int tmp;
             x= y= z= 0;
             if( (tmp=sscanf( line, "%lf %lf %lf", &x, &y, &z )) == 3 ) {
+                ///////////////////////////
+                dolfin::Point p(x,y,z);
+                //mf->set_value(i,p);
+                mf->set_value(i,x+y+z);
+                ///////////////////////////
                 sfield->set(0,i,x);
                 sfield->set(1,i,y);
                 sfield->set(2,i,z);
@@ -198,6 +211,8 @@ void VTKFile::readVTKDataSet( QString fileName, string name ){
             int tmp;
             x= 0;
             if( (tmp=sscanf( line, "%lf", &x )) == 1 ) {
+                std::cout << "wpisujemy " << x << " na pozycję " << i << std::endl;
+                mf->set_value(i,x);
                 sfield->set(i,x);
             } else {
                 cerr << "\"" << line << "\" -> " << tmp << ": x=" << x <<  endl;
@@ -208,6 +223,7 @@ void VTKFile::readVTKDataSet( QString fileName, string name ){
     field->add( sfield, 0 );
     field->setAttr("gridRefNum", "1");
     field->setAttr("name", name);
+
     fclose(in);
 }
 

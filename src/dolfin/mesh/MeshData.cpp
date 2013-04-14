@@ -175,10 +175,10 @@ MeshData::mesh_function(const std::string name) const
   mf_const_iterator it = mesh_functions.find(name);
   if (it == mesh_functions.end()){
 //	  TODO tworzenie data.
-//	  MeshFunction<unsigned int> newFunction = MeshFunction<unsigned int>();
-//	  return &newFunction;
+//          MeshFunction<unsigned int> newFunction = MeshFunction<unsigned int>();
+//          return &newFunction;
 
-	  return NULL;
+          return NULL;
 //      return boost::shared_ptr<MeshFunction<unsigned int> >();
   }
 
