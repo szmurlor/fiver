@@ -58,16 +58,16 @@ FVObject* FVOpenerVTKFile::open( FVBoxMgr * bm,  QString fname, int  )
     vector< FVBoxXml* > boxMeshes;
 
     for (i = 0; i < grids.size(); i++) {
-//        boxGrids.push_back( bm->addBoxGrid( bs, grids[i], fname, tr("VTKGrid") ) );
+        boxGrids.push_back( bm->addBoxGrid( bs, grids[i], fname, tr("VTKGrid") ) );
         boxMeshes.push_back( bm->addBoxXml(bs, meshes[i], fname, tr("DolfinVTKGrid") ));
     }
 
     for (i = 0; i < fields.size(); i++) {
         QString sGridRefNum = fields[i]->getAttr("gridRefNum").c_str();
-//        bg = boxGrids[sGridRefNum.toInt()-1];
-        bxml = boxMeshes[sGridRefNum.toInt()-1];
-//        bm->addBoxField( (FVObject*)bg, fields[i], QString("%1").arg(fields[i]->getAttr("name").c_str()), QString("VTKField") );
-        bm->addBoxField( (FVObject*)bxml, fields[i], QString("%1").arg(fields[i]->getAttr("name").c_str()), QString("DolfinVTKField") );
+        bg = boxGrids[sGridRefNum.toInt()-1];
+//        bxml = boxMeshes[sGridRefNum.toInt()-1];
+        bm->addBoxField( (FVObject*)bg, fields[i], QString("%1").arg(fields[i]->getAttr("name").c_str()), QString("VTKField") );
+//        bm->addBoxField( (FVObject*)bxml, fields[i], QString("%1").arg(fields[i]->getAttr("name").c_str()), QString("DolfinVTKField") );
     }
 
     bm->autoArrangeChildren( bs );

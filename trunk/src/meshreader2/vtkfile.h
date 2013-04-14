@@ -7,6 +7,8 @@
 #include <field.h>
 #include <simu.h>
 
+#include <mesh/Mesh.h>
+
 #include "vtkreader.h"
 
 
