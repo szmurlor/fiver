@@ -166,8 +166,11 @@ void VTKFile::readVTKDataSet( QString fileName, string name ){
     if( lineno++, fgets(line,1024,in) == NULL // <DataArray  type="Float32"  Name="u"  NumberOfComponents="3"  format="ascii">
         )
         goto ERR;
-    cerr << "Data type=\"" << dataType << "\" FieldType=\"" << fieldType << "\"" << endl;
 
+    char* fieldName = new char[strchr(fieldType,'>')-fieldType];
+    strncpy ( fieldName, fieldType, strchr(fieldType,'>')-fieldType-1 );
+
+    cerr << "Data type=\"" << dataType << "\" FieldType=\"" << fieldType << "\"" << endl;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
     field = newField();    ////////////////////////
@@ -175,11 +178,14 @@ void VTKFile::readVTKDataSet( QString fileName, string name ){
     int nvals = ( strcmp(dataType,"CellData") == 0 ? ne : np);          //typ danych (CellData || PointData) albo na komórkach albo na punktach
     int dim = ( strcmp(dataType,"CellData") == 0 ? 3 : 0);
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    dolfin::MeshFunction<unsigned int>* mf = mesh->data().create_mesh_function(fieldType);
-    mf->init(dim, nvals);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     if( strstr(fieldType,"Vectors") == fieldType ) {            //typ pola (Vectors || Scalars)
+        dolfin::MeshFunction<unsigned int>* mf = mesh->data().create_mesh_function(fieldName);
+        mf->setVector(true);
+        mf->init(dim, 3*nvals);
+
+
         sfield->dim(3);
 
         for( int i= 0; i < nvals; i++ ) {
@@ -190,9 +196,9 @@ void VTKFile::readVTKDataSet( QString fileName, string name ){
             x= y= z= 0;
             if( (tmp=sscanf( line, "%lf %lf %lf", &x, &y, &z )) == 3 ) {
                 ///////////////////////////
-                dolfin::Point p(x,y,z);
-                //mf->set_value(i,p);
-                mf->set_value(i,x+y+z);
+                mf->set_value(3*i,x);
+                mf->set_value(3*i+1,y);
+                mf->set_value(3*i+2,z);
                 ///////////////////////////
                 sfield->set(0,i,x);
                 sfield->set(1,i,y);
@@ -203,16 +209,22 @@ void VTKFile::readVTKDataSet( QString fileName, string name ){
             }
         }
     } else {
+        dolfin::MeshFunction<unsigned int>* mf = mesh->data().create_mesh_function(fieldName);
+        mf->init(dim, nvals);
+
+        std::cout << "mesh funciton -- dim " << mf->dim() << " size " << mf->size() << std::endl;
+
         sfield->dim(1);
-        for( int i= 0; i < nvals; i++ ) {
+        for( uint i= 0; i < nvals; i++ ) {
             lineno++;
             if( fgets(line,1024,in) == NULL )
                 goto ERR;
             int tmp;
             x= 0;
             if( (tmp=sscanf( line, "%lf", &x )) == 1 ) {
-                std::cout << "wpisujemy " << x << " na pozycję " << i << std::endl;
-                mf->set_value(i,x);
+//                mf->set_value(i,x);
+                mf->values()[i] = x;
+                std::cout<< "wstawiam ----" << x << " , a jest -----" << mf->values()[i] << std::endl;
                 sfield->set(i,x);
             } else {
                 cerr << "\"" << line << "\" -> " << tmp << ": x=" << x <<  endl;
@@ -224,6 +236,7 @@ void VTKFile::readVTKDataSet( QString fileName, string name ){
     field->setAttr("gridRefNum", "1");
     field->setAttr("name", name);
 
+    std::cout << "koniec czytania pliku vtk" << std::endl;
     fclose(in);
 }
 

@@ -30,6 +30,7 @@
 #include <fvgridinterface.h>
 #include <fvfieldlegend.h>
 #include <main.h>
+#include <fvboxmeshfunction.h>
 
 #include <GL/glu.h>
 
@@ -38,21 +39,31 @@ FVFieldDraw::FVFieldDraw(FVBoxMgr * manager, FVObject * boxField, int x, int y)
 {
 	this->boxField = boxField;
 
+    if (reqField.getField(boxField) != 0){
         minValue= reqField.getField(boxField)->min();
-	maxValue= reqField.getField(boxField)->max();
-	
-	minSub = 1;
-	Grid * g = reqGrid.getGrid(boxField);
-	if (g != 0) {
-		maxSub = g->_subdomains.size();
-	} else {
-		maxSub = 1;
-	}
+        maxValue= reqField.getField(boxField)->max();
+        Grid * g = reqGrid.getGrid(boxField);
 
-	modelBaseLength = 0;
-	baseLength = 0;
+        if (g != 0) {
+                maxSub = g->_subdomains.size();
+        } else {
+                maxSub = 1;
+        }
+    } else if (reqField.getMeshFun(boxField) != 0 ){
+        std::cout << "jest funkcja" << std::endl;
+        minValue= reqField.getMeshFun(boxField)->min();
+        maxValue= reqField.getMeshFun(boxField)->max();
+        dolfin::Mesh*  m = reqGrid.getMesh(boxField);
+        maxSub = 1;
+    } else
+        qDebug() << "FVFieldDraw: Unable to get mesh from " << boxField->classType() << "!" ;
+
+        minSub = 1;
+
+        modelBaseLength = 0;
+        baseLength = 0;
 	
-	initDrawable( "DrawField", "Draw" );
+        initDrawable( "DrawField", "Draw" );
 }
 
 void FVFieldDraw::updateAttributes( )
@@ -74,9 +85,6 @@ void FVFieldDraw::updateAttributes( )
 
 FVInterface * FVFieldDraw::getInterface( QString interfaceName )
 {
-//    if (interfaceName == QString("FVFieldInterface"))
-//        return fvFieldInterface;
-
     return parentInterface(interfaceName);
 }
 
@@ -355,116 +363,122 @@ void FVFieldDraw::drawVectorNode( int in )
 
 void FVFieldDraw::paintGL( )
 {
-	int ie, in;
-	int iFace;
-	Elem * el;
-	CFace face;
-	GLfloat tx,ty,tz;
+//	int ie, in;
+//	int iFace;
+//	Elem * el;
+//	CFace face;
+//	GLfloat tx,ty,tz;
 
-        qDebug("FVFieldDraw::paintGL started");
+//        qDebug("FVFieldDraw::paintGL started");
 	
-	field = reqField.getField(parentObject());
-	grid = reqGrid.getGrid(parentObject());
+//	field = reqField.getField(parentObject());
+//        mf = reqField.getMeshFun(parentObject());
+//	grid = reqGrid.getGrid(parentObject());
+//        mesh = reqGrid.getMesh(parentObject());
 	
-	if (grid == 0) {
-		qWarning() << "FVFieldDraw: Grid pointer for " << sName << " is NULL. Unable to draw field.";
-		return;
-	}
+//	if (grid == 0) {
+//		qWarning() << "FVFieldDraw: Grid pointer for " << sName << " is NULL. Unable to draw field.";
+//		return;
+//	}
+//        if (mesh == 0) {
+//                qWarning() << "FVFieldDraw: Mesh pointer for " << sName << " is NULL. Unable to draw field.";
+//                return;
+//        }
 
-	readAttributes();
+//	readAttributes();
 
-	if (isFirstShow()) {
-		double pmin[3], pmax[3];
-		grid->getBBox( pmin, pmax );
-		tx = (pmax[0] - pmin[0]) ;
-		ty = (pmax[1] - pmin[1]) ;
-		tz = (pmax[2] - pmin[2]) ;
+//	if (isFirstShow()) {
+//		double pmin[3], pmax[3];
+//		grid->getBBox( pmin, pmax );
+//		tx = (pmax[0] - pmin[0]) ;
+//		ty = (pmax[1] - pmin[1]) ;
+//		tz = (pmax[2] - pmin[2]) ;
 		
-        double td = sqrt(tx*tx + ty*ty + tz*tz);
-        if ((td > 1e-10 ) && (td < 1e10)) {
-            getCurrentViewer()->setSceneRadius( td );
-            modelBaseLength = td;
-        }
-	}
+//        double td = sqrt(tx*tx + ty*ty + tz*tz);
+//        if ((td > 1e-10 ) && (td < 1e10)) {
+//            getCurrentViewer()->setSceneRadius( td );
+//            modelBaseLength = td;
+//        }
+//	}
     
     // Poinformuj wszystkie dzieci o aktualnej skali,
     // która zostanie przekazana  do ColorMapy
-    QList<QString> args;
-    args.append(QString("min_max_field"));
-    args.append(QString::number(minValue));
-    args.append(QString::number(maxValue));
-    manager->sendMessageToChildrenOf( args, this );
-    ///////////////////////////////////////////////
+//    QList<QString> args;
+//    args.append(QString("min_max_field"));
+//    args.append(QString::number(minValue));
+//    args.append(QString::number(maxValue));
+//    manager->sendMessageToChildrenOf( args, this );
+//    ///////////////////////////////////////////////
 
-    fvlist->start();
-    if (drawMode == "colormap" ) {
-		cm.setDoGLInit(false);
-		cm.setMinMax(minValue,maxValue,logScale);
-		cm.init( colormapType );
+//    fvlist->start();
+//    if (drawMode == "colormap" ) {
+//		cm.setDoGLInit(false);
+//		cm.setMinMax(minValue,maxValue,logScale);
+//		cm.init( colormapType );
 		
-		glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-		glBegin(GL_TRIANGLES);
-	}
-	if (drawMode == "isolines") {
-		cm.setDoGLInit(true);
-		iso.isolines_no = isolines_no;
-		iso.setWidth(isolinesWidth);
-		iso.setMinMax(minValue,maxValue,logScale);
-		glDisable(GL_LIGHTING);
-	}
+//		glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+//		glBegin(GL_TRIANGLES);
+//	}
+//	if (drawMode == "isolines") {
+//		cm.setDoGLInit(true);
+//		iso.isolines_no = isolines_no;
+//		iso.setWidth(isolinesWidth);
+//		iso.setMinMax(minValue,maxValue,logScale);
+//		glDisable(GL_LIGHTING);
+//	}
 	
-	if ( (drawMode == "colormap") || (drawMode == "isolines") ) {
-		for (ie = 0; ie < (int) grid->_elems.size();  ie++) {
-			if (showElem( ie )) {
-				el = grid->_elems[ ie ];
-				for (iFace = 0; iFace < el->getFacesCount(); iFace++) {
-					int inbr = el->getNeighbourWithFaceNr(iFace);
-					if (inbr != 0) {
-						if (grid->_elems[ inbr - 1 ]->subdomain() != el->subdomain())
-							inbr = 0;
-					}
-					if (inbr == 0) {
-						face = el->getFaceOrder( iFace );
-						if (drawMode == "colormap") 
-							drawColormap( ie, face );
-						if (drawMode == "isolines")
-							drawIsolines( ie, face );
-					}
-				}
-			}
-		}
-	}
+//	if ( (drawMode == "colormap") || (drawMode == "isolines") ) {
+//		for (ie = 0; ie < (int) grid->_elems.size();  ie++) {
+//			if (showElem( ie )) {
+//				el = grid->_elems[ ie ];
+//				for (iFace = 0; iFace < el->getFacesCount(); iFace++) {
+//					int inbr = el->getNeighbourWithFaceNr(iFace);
+//					if (inbr != 0) {
+//						if (grid->_elems[ inbr - 1 ]->subdomain() != el->subdomain())
+//							inbr = 0;
+//					}
+//					if (inbr == 0) {
+//						face = el->getFaceOrder( iFace );
+//						if (drawMode == "colormap")
+//							drawColormap( ie, face );
+//						if (drawMode == "isolines")
+//							drawIsolines( ie, face );
+//					}
+//				}
+//			}
+//		}
+//	}
 	
-	if ( drawMode == "vectors" ) {
-            vectorThickness= fvsettings.value( QString("/RSoft/FViewer/vector.thickness"), QVariant("0.04") ).toDouble();
-            dontMissBigV= fvsettings.value( QString("/RSoft/FViewer/vector.dont-miss-big-vectors"), QVariant("true") ).toBool();
-            vectorHeadLength= fvsettings.value( QString("/RSoft/FViewer/vector.head.length"), QVariant("0.5") ).toDouble();
-            vectorHeadThickness= fvsettings.value( QString("/RSoft/FViewer/vector.head.thickness"), QVariant("0.2") ).toDouble();
-            headFaces= fvsettings.value( QString("/RSoft/FViewer/vector.head.faces"), QVariant("4") ).toInt();
-            if( ! fvsettings.value( QString("/RSoft/FViewer/vector.lighting"), QVariant("false") ).toBool() )
-                glDisable(GL_LIGHTING);
-            glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-            cm.init( colormapType );
-            if ( field->size() == grid->getNoElems()) {
-                for (ie = 0; ie < (int) grid->_elems.size();  ie++) {
-                    if (showElem(ie)) {
-                        drawVectorElem(ie);
-                    }
-                }
-            } else {
-                for (in = 0; in < (int) grid->_nodes.size();  in++) {
-                    if (showNode(in+1)) {
-                        drawVectorNode(in);
-                    }
-                }
-            }
-	}
+//	if ( drawMode == "vectors" ) {
+//            vectorThickness= fvsettings.value( QString("/RSoft/FViewer/vector.thickness"), QVariant("0.04") ).toDouble();
+//            dontMissBigV= fvsettings.value( QString("/RSoft/FViewer/vector.dont-miss-big-vectors"), QVariant("true") ).toBool();
+//            vectorHeadLength= fvsettings.value( QString("/RSoft/FViewer/vector.head.length"), QVariant("0.5") ).toDouble();
+//            vectorHeadThickness= fvsettings.value( QString("/RSoft/FViewer/vector.head.thickness"), QVariant("0.2") ).toDouble();
+//            headFaces= fvsettings.value( QString("/RSoft/FViewer/vector.head.faces"), QVariant("4") ).toInt();
+//            if( ! fvsettings.value( QString("/RSoft/FViewer/vector.lighting"), QVariant("false") ).toBool() )
+//                glDisable(GL_LIGHTING);
+//            glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+//            cm.init( colormapType );
+//            if ( field->size() == grid->getNoElems()) {
+//                for (ie = 0; ie < (int) grid->_elems.size();  ie++) {
+//                    if (showElem(ie)) {
+//                        drawVectorElem(ie);
+//                    }
+//                }
+//            } else {
+//                for (in = 0; in < (int) grid->_nodes.size();  in++) {
+//                    if (showNode(in+1)) {
+//                        drawVectorNode(in);
+//                    }
+//                }
+//            }
+//	}
 	
-	if (drawMode == "colormap" ) {
-		glEnd();
-	}
-	glEnable(GL_LIGHTING);
-	fvlist->end();
+//	if (drawMode == "colormap" ) {
+//		glEnd();
+//	}
+//	glEnable(GL_LIGHTING);
+//	fvlist->end();
 }
 
 void FVFieldDraw::setupAttributes( )
