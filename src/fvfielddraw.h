@@ -30,6 +30,9 @@
 #include <QtDebug>
 #include <QString>
 
+#include <dolfin/mesh/Mesh.h>
+#include <dolfin/mesh/MeshFunction.h>
+
 class FVBoxMgr;
 class Field;
 
@@ -95,7 +98,9 @@ protected:
 	
 private:
 	Grid * grid;
+        dolfin::Mesh* mesh;
 	Field * field;
+        dolfin::MeshFunction<uint>* mf;
 	ColorMap cm;
 	IsoLines iso;
 	SetOfInt visSub;

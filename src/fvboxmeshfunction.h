@@ -12,6 +12,7 @@
 #include <math.h>
 #include <field.h>
 #include <fvrequiregrid.h>
+#include <fvfieldinterface.h>
 
 class FViewer;
 
@@ -26,9 +27,11 @@ public:
 
         virtual void paintGL();
     virtual void updateAttributes();
+        virtual FVInterface * getInterface( QString interfaceName );
 
 public slots:
         void slotDraw();
+        void slotDrawColormap();
         /*
         virtual void slotMousePress( QMouseEvent * );
         void slotConnect();
@@ -46,6 +49,7 @@ protected:
         QMap< int, bool > subVisible;
 
         FVRequireGrid reqGrid;
+        FVFieldInterface * fvFieldInterface;
 
         QColor getColor();
         QColor getColor(int isub);

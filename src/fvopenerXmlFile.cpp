@@ -41,7 +41,7 @@ FVObject* FVOpenerXmlFile::open( FVBoxMgr * bm,  QString fname, int  )
     qDebug() << "Opening XML File: " << fname;
     dolfin::Mesh *m =  new dolfin::Mesh(fname.toStdString());
 
-    std::cout << "geometry" << m->geometry().str(true) << std::endl;
+//    std::cout << "geometry" << m->geometry().str(true) << std::endl;
 //    std::cout << "topology" << m->topology().str(true) << std::endl;
 //    std::cout << "data" << m->data().str(true) << std::endl;
 

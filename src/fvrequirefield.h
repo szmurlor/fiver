@@ -23,6 +23,7 @@
 #include <fvobject.h>
 #include <fvfieldinterface.h>
 #include <field.h>
+#include <dolfin/mesh/MeshFunction.h>
 
 /**
 	@author Robert Szmurlo <robert@iem.pw.edu.pl>
@@ -33,6 +34,7 @@ public:
 	~FVRequireField();
 
 	Field * getField( FVObject * fvo );
+        dolfin::MeshFunction<dolfin::uint> * getMeshFun( FVObject * fvo );
 };
 
 #endif

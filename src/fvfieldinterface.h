@@ -22,6 +22,7 @@
 
 #include <fvinterface.h>
 #include <field.h>
+#include <dolfin/mesh/MeshFunction.h>
 
 /**
 	@author Robert Szmurlo <robert@iem.pw.edu.pl>
@@ -29,12 +30,15 @@
 class FVFieldInterface : public FVInterface{
 public:
 	FVFieldInterface( Field ** fieldPtr);
+        FVFieldInterface( dolfin::MeshFunction<dolfin::uint> * meshFun);
 	virtual ~FVFieldInterface();
 
 	virtual Field * getField();
+        virtual dolfin::MeshFunction<dolfin::uint> * getMeshFun();
 
 private:
 	Field ** fp;
+        dolfin::MeshFunction<dolfin::uint>* mf;
 };
 
 #endif

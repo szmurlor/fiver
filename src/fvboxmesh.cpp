@@ -25,7 +25,7 @@ typedef std::map<std::string, dolfin::MeshFunction<uint>* >::const_iterator mf_c
 FVBoxMesh::FVBoxMesh( FVBoxMgr * manager,  dolfin::Mesh * m, int x, int y )
 : FVObject(manager,x,y)
 {
-        fvGridInterface = new FVGridInterface( m);
+        fvGridInterface = new FVGridInterface(m);
         mesh = m;
 
         cColor = fvsettings.value( classType() + "_DefaultColor", FV_DEFAULT_BOX_COLOR_GRID ).value<QColor>();
@@ -268,9 +268,10 @@ void FVBoxMesh::setupMenu( )
 
 FVInterface * FVBoxMesh::getInterface( QString interfaceName )
 {
+    std::cout << "FVBoxMesh: getInterface - szukanie interfejsu " << interfaceName.toLatin1().data() << std::endl;
         if (interfaceName == QString("FVGridInterface"))
                 return fvGridInterface;
-
+    std::cout << "FVBoxMesh: getInterface - szukanie dalej" << std::endl;
         return parentInterface( interfaceName );;
 }
 
