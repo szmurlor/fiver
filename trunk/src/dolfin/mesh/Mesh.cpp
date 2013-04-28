@@ -19,19 +19,19 @@
 //#include <common/Timer.h>
 #include <common/utils.h>
 #include <io/File.h>
-//#include <log/log.h>
-//#include <common/MPI.h>
-//#include "BoundaryMesh.h"
+#include <log/log.h>
+#include <common/MPI.h>
+#include "BoundaryMesh.h"
 #include "Cell.h"
-//#include "LocalMeshData.h"
+#include "LocalMeshData.h"
 //#include "MeshColoring.h"
 #include "MeshData.h"
 #include "MeshFunction.h"
 //#include "MeshOrdering.h"
-//#include "MeshPartitioning.h"
+#include "MeshPartitioning.h"
 //#include "MeshRenumbering.h"
 //#include "MeshSmoothing.h"
-//#include "ParallelData.h"
+#include "ParallelData.h"
 #include "TopologyComputation.h"
 #include "Vertex.h"
 #include "Mesh.h"
@@ -39,51 +39,51 @@
 using namespace dolfin;
 
 //-----------------------------------------------------------------------------
-Mesh::Mesh() : //Variable("mesh", "DOLFIN mesh"),
-//               Hierarchical<Mesh>(*this),
+Mesh::Mesh() : Variable("mesh", "DOLFIN mesh"),
+               Hierarchical<Mesh>(*this),
                _data(*this),
-//               _parallel_data(new ParallelData(*this)),
+               _parallel_data(new ParallelData(*this)),
                _cell_type(0),
-//               _intersection_operator(*this),
+               _intersection_operator(*this),
                _ordered(false)
 {
   // Do nothing
 }
 //-----------------------------------------------------------------------------
-Mesh::Mesh(const Mesh& mesh) : //Variable("mesh", "DOLFIN mesh"),
-//                               Hierarchical<Mesh>(*this),
+Mesh::Mesh(const Mesh& mesh) : Variable("mesh", "DOLFIN mesh"),
+                               Hierarchical<Mesh>(*this),
                                _data(*this),
-//                               _parallel_data(new ParallelData(*this)),
+                               _parallel_data(new ParallelData(*this)),
                                _cell_type(0),
-//                               _intersection_operator(*this),
+                               _intersection_operator(*this),
                                _ordered(false)
 {
   *this = mesh;
 }
 //-----------------------------------------------------------------------------
-Mesh::Mesh(std::string filename) : //Variable("mesh", "DOLFIN mesh"),
-//                                   Hierarchical<Mesh>(*this),
+Mesh::Mesh(std::string filename) : Variable("mesh", "DOLFIN mesh"),
+                                   Hierarchical<Mesh>(*this),
                                    _data(*this),
-//                                   _parallel_data(new ParallelData(*this)),
+                                   _parallel_data(new ParallelData(*this)),
                                    _cell_type(0),
-//                                   _intersection_operator(*this),
+                                   _intersection_operator(*this),
                                    _ordered(false)
 {
   File file(filename);
   file >> *this;
 }
 //-----------------------------------------------------------------------------
-//Mesh::Mesh(LocalMeshData& local_mesh_data)
-//                                 : Variable("mesh", "DOLFIN mesh"),
-//                                   Hierarchical<Mesh>(*this),
-//                                   _data(*this),
-//                                   _parallel_data(new ParallelData(*this)),
-//                                   _cell_type(0),
-//                                   _intersection_operator(*this),
-//                                   _ordered(false)
-//{
-//  MeshPartitioning::build_distributed_mesh(*this, local_mesh_data);
-//}
+Mesh::Mesh(LocalMeshData& local_mesh_data)
+                                 : Variable("mesh", "DOLFIN mesh"),
+                                   Hierarchical<Mesh>(*this),
+                                   _data(*this),
+                                   _parallel_data(new ParallelData(*this)),
+                                   _cell_type(0),
+                                   _intersection_operator(*this),
+                                   _ordered(false)
+{
+  MeshPartitioning::build_distributed_mesh(*this, local_mesh_data);
+}
 //-----------------------------------------------------------------------------
 Mesh::~Mesh()
 {
@@ -98,17 +98,17 @@ const Mesh& Mesh::operator=(const Mesh& mesh)
   // Assign data
   _topology = mesh._topology;
   _geometry = mesh._geometry;
-//  _domains = mesh._domains;
+  _domains = mesh._domains;
   _data = mesh._data;
-//  _parallel_data.reset(new ParallelData(*mesh._parallel_data));
+  _parallel_data.reset(new ParallelData(*mesh._parallel_data));
   if (mesh._cell_type)
     _cell_type = CellType::create(mesh._cell_type->cell_type());
 
   // Rename
-//  rename(mesh.name(), mesh.label());
+  rename(mesh.name(), mesh.label());
 
   // Call assignment operator for base class
-//  Hierarchical<Mesh>::operator=(mesh);
+  Hierarchical<Mesh>::operator=(mesh);
 
   return *this;
 }
@@ -123,17 +123,17 @@ const MeshData& Mesh::data() const
   return _data;
 }
 //-----------------------------------------------------------------------------
-//ParallelData& Mesh::parallel_data()
-//{
-//  dolfin_assert(_parallel_data);
-//  return *_parallel_data;
-//}
+ParallelData& Mesh::parallel_data()
+{
+  dolfin_assert(_parallel_data);
+  return *_parallel_data;
+}
 //-----------------------------------------------------------------------------
-//const ParallelData& Mesh::parallel_data() const
-//{
-//  dolfin_assert(_parallel_data);
-//  return *_parallel_data;
-//}
+const ParallelData& Mesh::parallel_data() const
+{
+  dolfin_assert(_parallel_data);
+  return *_parallel_data;
+}
 //-----------------------------------------------------------------------------
 dolfin::uint Mesh::init(uint dim) const
 {
@@ -226,7 +226,7 @@ void Mesh::clear()
   _data.clear();
   delete _cell_type;
   _cell_type = 0;
-//  _intersection_operator.clear();
+  _intersection_operator.clear();
   _ordered = false;
 }
 //-----------------------------------------------------------------------------
@@ -280,10 +280,10 @@ void Mesh::move(Mesh& mesh)
 //  ALE::move(*this, mesh);
 }
 //-----------------------------------------------------------------------------
-//void Mesh::move(const Function& displacement)
-//{
+void Mesh::move(const Function& displacement)
+{
 //  ALE::move(*this, displacement);
-//}
+}
 //-----------------------------------------------------------------------------
 void Mesh::smooth(uint num_iterations)
 {
@@ -337,70 +337,68 @@ void Mesh::smooth_boundary(uint num_iterations, bool harmonic_smoothing)
 void Mesh::intersected_cells(const Point& point,
                              std::set<uint>& cells) const
 {
-//  _intersection_operator.all_intersected_entities(point, cells);
+  _intersection_operator.all_intersected_entities(point, cells);
 }
 //-----------------------------------------------------------------------------
 void Mesh::intersected_cells(const std::vector<Point>& points,
                              std::set<uint>& cells) const
 {
-//  _intersection_operator.all_intersected_entities(points, cells);
+  _intersection_operator.all_intersected_entities(points, cells);
 }
 //-----------------------------------------------------------------------------
 void Mesh::intersected_cells(const MeshEntity & entity,
                              std::vector<uint>& cells) const
 {
-//  _intersection_operator.all_intersected_entities(entity, cells);
+  _intersection_operator.all_intersected_entities(entity, cells);
 }
 //-----------------------------------------------------------------------------
 void Mesh::intersected_cells(const std::vector<MeshEntity>& entities,
                              std::set<uint>& cells) const
 {
-//  _intersection_operator.all_intersected_entities(entities, cells);
+  _intersection_operator.all_intersected_entities(entities, cells);
 }
 //-----------------------------------------------------------------------------
 void Mesh::intersected_cells(const Mesh& another_mesh,
                              std::set<uint>& cells) const
 {
-//  _intersection_operator.all_intersected_entities(another_mesh, cells);
+  _intersection_operator.all_intersected_entities(another_mesh, cells);
 }
 //-----------------------------------------------------------------------------
 int Mesh::intersected_cell(const Point& point) const
 {
-//  return _intersection_operator.any_intersected_entity(point);
-	return 0;
+  return _intersection_operator.any_intersected_entity(point);
 }
 //-----------------------------------------------------------------------------
-//Point Mesh::closest_point(const Point& point) const
-//{
-//  return _intersection_operator.closest_point(point);
-//}
+Point Mesh::closest_point(const Point& point) const
+{
+  return _intersection_operator.closest_point(point);
+}
 //-----------------------------------------------------------------------------
-//dolfin::uint Mesh::closest_cell(const Point & point) const
-//{
-//  return _intersection_operator.closest_cell(point);
-//}
+dolfin::uint Mesh::closest_cell(const Point & point) const
+{
+  return _intersection_operator.closest_cell(point);
+}
 //-----------------------------------------------------------------------------
-//std::pair<Point,dolfin::uint>
-//Mesh::closest_point_and_cell(const Point & point) const
-//{
-//  return _intersection_operator.closest_point_and_cell(point);
-//}
+std::pair<Point,dolfin::uint>
+Mesh::closest_point_and_cell(const Point & point) const
+{
+  return _intersection_operator.closest_point_and_cell(point);
+}
 //-----------------------------------------------------------------------------
 double Mesh::distance(const Point& point) const
 {
-	return 0;
-//  return _intersection_operator.distance(point);
+  return _intersection_operator.distance(point);
 }
 //-----------------------------------------------------------------------------
-//IntersectionOperator& Mesh::intersection_operator()
-//{
-//  return _intersection_operator;
-//}
+IntersectionOperator& Mesh::intersection_operator()
+{
+  return _intersection_operator;
+}
 //-----------------------------------------------------------------------------
-//const IntersectionOperator& Mesh::intersection_operator() const
-//{
-//  return _intersection_operator;
-//}
+const IntersectionOperator& Mesh::intersection_operator() const
+{
+  return _intersection_operator;
+}
 //-----------------------------------------------------------------------------
 double Mesh::hmin() const
 {
@@ -450,48 +448,3 @@ std::string Mesh::str(bool verbose) const
   return s.str();
 }
 //-----------------------------------------------------------------------------
-
-
-void Mesh::getBBox(double minP[3], double maxP[3])
-{
-        unsigned int in;
-//        Node *n;
-//        Point p;
-        minP[0]=minP[1]=minP[2]=1e20;
-        maxP[0]=maxP[1]=maxP[2]=-1e20;
-
-        for (in=0; in < geometry().dim() * num_cells(); in++) {
-//                n = &_nodes[in];
-            Point p(coordinates()[3*in],coordinates()[3*in+1],coordinates()[3*in+2]);
-
-                if (p.coordinates()[0] < minP[0]) minP[0] = p.coordinates()[0];
-                if (p.coordinates()[1] < minP[1]) minP[1] = p.coordinates()[1];
-                if (p.coordinates()[2] < minP[2]) minP[2] = p.coordinates()[2];
-                if (p.coordinates()[0] > maxP[0]) maxP[0] = p.coordinates()[0];
-                if (p.coordinates()[1] > maxP[1]) maxP[1] = p.coordinates()[1];
-                if (p.coordinates()[2] > maxP[2]) maxP[2] = p.coordinates()[2];
-        //printf("min = %lf,%lf,%lf\n",minP[0], minP[1], minP[2]);
-        //printf("max = %lf,%lf,%lf\n",maxP[0], maxP[1], maxP[2]);
-        }
-
-//        SET(bb_min, minP);
-//        SET(bb_max, maxP);
-        //printf("min = %lf,%lf,%lf\n",minP[0], minP[1], minP[2]);
-        //printf("max = %lf,%lf,%lf\n",maxP[0], maxP[1], maxP[2]);
-}
-
-void Mesh::getCenter( double P[3] )
-{
-    unsigned int ie,ic;
-    double cc[3];
-    cc[0] = cc[1] = cc[2] = 0;
-//    vector< double > c;
-
-    for (ie = 0; ie < num_cells(); ie++) {
-        for (ic=0; ic < geometry().dim(); ic++)
-            cc[ic] += coordinates()[geometry().dim()*ie+ic];
-    }
-    P[0] = cc[0] / (double) num_cells();
-    P[1] = cc[1] / (double) num_cells();
-    P[2] = cc[2] / (double) num_cells();
-}
