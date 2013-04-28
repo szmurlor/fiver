@@ -18,7 +18,7 @@
 // First added:  2009-08-09
 // Last changed: 2010-11-18
 
-#include <boost/functional/hash.hpp>
+//#include <boost/functional/hash.hpp>
 #include <cstdlib>
 #include <sstream>
 #include "types.h"
@@ -64,11 +64,11 @@ std::string dolfin::to_string(const double* x, uint n)
   return s.str();
 }
 //-----------------------------------------------------------------------------
-dolfin::uint dolfin::hash(std::string signature)
-{
-  boost::hash<std::string> string_hash;
-  std::size_t h = string_hash(signature);
-
-  return h;
-}
+//dolfin::uint dolfin::hash(std::string signature)
+//{
+//  boost::hash<std::string> string_hash;
+//  std::size_t h = string_hash(signature);
+//
+//  return h;
+//}
 //-----------------------------------------------------------------------------

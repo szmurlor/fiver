@@ -7,8 +7,6 @@
 #include <attr.h>
 #include "setofint.h"
 
-#include <fvfielddraw.h>
-
 #include <QtDebug>
 #include <QMenu>
 #include <QStringList>
@@ -21,7 +19,6 @@ FVBoxMeshFunction::FVBoxMeshFunction(FVBoxMgr * manager, FVObject * parent, std:
  : FVObject(manager, x,y)
 {
     mesh = 0;
-    fvFieldInterface = new FVFieldInterface( mf );
     mf = 0;
     this->parent = parent;
     this->name = name;
@@ -90,11 +87,9 @@ void FVBoxMeshFunction::paintGL()
         }
 
         if (mf != 0) {
-            if ( mf->isVector() ){
-                std::cout << "rysowanie wektorowych"<<std::endl;
-            }else if ( mf->dim() == 3 )
+            if ( mf->dim() == 3 )
                 draw3();
-            else if ( mf->dim() == 2 )
+            if ( mf->dim() == 2 )
                 draw2b();
         }
 
@@ -567,7 +562,6 @@ void FVBoxMeshFunction::setupAttributes( )
 {
         mesh = reqGrid.getMesh(parentObject(), parent );
         mf = mesh->data().mesh_function(name);
-        fvFieldInterface = new FVFieldInterface( mf );
 
         qDebug() << "Setting up attributes for " << classType();
         // Here add the attributes
@@ -642,34 +636,15 @@ void FVBoxMeshFunction::slotMousePress( QMouseEvent * )
 void FVBoxMeshFunction::setupMenu( )
 {
         contextMenuObj->clear();
-
-//        if (field->dim() > 1) {
-//                contextMenuObj->addAction(tr("&Draw Vectors"), this, SLOT( slotDrawVectors() ) );
-//                QString msg("Field" + this->getName() + " may be drawn as vectors" );
-//                qDebug(msg.toAscii());
-//            } else {
-//            QString msg("Field" + this->getName() + " will not be drawn as vectors");
-//                            qDebug(msg.toAscii());
-//        }
-        contextMenuObj->addAction(tr("&Draw Colormap"), this, SLOT( slotDrawColormap() ) );
-
+        /*
+        contextMenuObj->addAction(tr("&Connect interaction"), this, SLOT( slotConnect() ) );
+        contextMenuObj->addAction(tr("&Disconnect interaction"), this, SLOT(  slotDisconnect() ) );
+        */
 //        contextMenuObj->addSeparator();
-//        contextMenuObj->addAction(tr("&Add Slice"), this, SLOT( slotSlice() ) );
+//        contextMenuObj->addAction(tr("&Draw"),this, SLOT(slotDraw()) );
+//        contextMenuObj->addAction(tr("De&lete"),(QWidget*) manager, SLOT(slotDelete()) );
 
-//        contextMenuObj->addSeparator();
-//        contextMenuObj->addAction(tr("&Animate Visualisation"), this, SLOT( slotAnimate() ) );
-
-//        contextMenuObj->addSeparator();
-//        contextMenuObj->addAction(tr("&Reload"), this, SLOT( slotReload() ) );
 }
-
-void FVBoxMeshFunction::slotDrawColormap( )
-{
-        FVFieldDraw * fd = new FVFieldDraw( manager, this );
-        addChild(fd);
-        fd->update();
-}
-
 
 void FVBoxMeshFunction::slotDraw( )
 {
@@ -680,11 +655,4 @@ void FVBoxMeshFunction::slotDraw( )
 }
 
 
-FVInterface * FVBoxMeshFunction::getInterface( QString interfaceName )
-{
-    std::cout << "FVBoxMeshFunction: getInterface - szukany interfejs " << interfaceName.toLatin1().data() << std::endl;
-    if (interfaceName == QString("FVMeshFunInterface"))
-            return fvFieldInterface;
-    else if (interfaceName == QString("FVGridInterface") )
-            return parentInterface( interfaceName );
-}
+

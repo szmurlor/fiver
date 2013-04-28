@@ -80,10 +80,10 @@ const dolfin::uint* MeshEntity::entities(uint dim) const
   return _mesh->topology()(_dim, dim)(_index);
 }
 //-----------------------------------------------------------------------------
-dolfin::uint MeshEntity::mesh_id() const
-{
-  return _mesh->id();
-}
+//dolfin::uint MeshEntity::mesh_id() const
+//{
+//  return _mesh->id();
+//}
 
 
 //-----------------------------------------------------------------------------

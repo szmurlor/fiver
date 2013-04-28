@@ -25,7 +25,7 @@ typedef std::map<std::string, dolfin::MeshFunction<uint>* >::const_iterator mf_c
 FVBoxMesh::FVBoxMesh( FVBoxMgr * manager,  dolfin::Mesh * m, int x, int y )
 : FVObject(manager,x,y)
 {
-        fvGridInterface = new FVGridInterface(m);
+        fvGridInterface = new FVGridInterface( m);
         mesh = m;
 
         cColor = fvsettings.value( classType() + "_DefaultColor", FV_DEFAULT_BOX_COLOR_GRID ).value<QColor>();
@@ -268,10 +268,9 @@ void FVBoxMesh::setupMenu( )
 
 FVInterface * FVBoxMesh::getInterface( QString interfaceName )
 {
-    std::cout << "FVBoxMesh: getInterface - szukanie interfejsu " << interfaceName.toLatin1().data() << std::endl;
         if (interfaceName == QString("FVGridInterface"))
                 return fvGridInterface;
-    std::cout << "FVBoxMesh: getInterface - szukanie dalej" << std::endl;
+
         return parentInterface( interfaceName );;
 }
 
@@ -281,11 +280,11 @@ void FVBoxMesh::slotRotateManipulator( )
 //            delete fvinteraction;
 //    }
 //    double p[3];
-//    getMesh()->getCenter(p);
+//    getGrid()->getCenter(p);
 //    double length, size;
 //    double bb[3],b1[3],b2[3];
-//    getMesh()->getBBox(b1,b2);
-//    getMesh()->getCenter(p);
+//    getGrid()->getBBox(b1,b2);
+//    getGrid()->getCenter(p);
 //    SUB(bb,b2,b1);
 //    size = bb[0];
 //    size = size > bb[1] ? size : bb[1];
@@ -316,8 +315,8 @@ void FVBoxMesh::slotTranslateManipulator( )
 //        double length, size, w, h;
 //        double bb[3],b1[3],b2[3];
 //        double p[3], n[3], u[3], v[3];
-//        getMesh()->getBBox(b1,b2);
-//        getMesh()->getCenter(p);
+//        getGrid()->getBBox(b1,b2);
+//        getGrid()->getCenter(p);
 //        SUB(bb,b2,b1);
 
 //        ZERO(n);

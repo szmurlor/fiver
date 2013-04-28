@@ -62,8 +62,8 @@ void Grid::getBBox(double minP[3], double maxP[3])
 	//printf("max = %lf,%lf,%lf\n",maxP[0], maxP[1], maxP[2]);
 	}
 
-        SET(bb_min, minP);
-        SET(bb_max, maxP);
+	SET(bb_min, minP);
+	SET(bb_max, maxP);
 	//printf("min = %lf,%lf,%lf\n",minP[0], minP[1], minP[2]);
 	//printf("max = %lf,%lf,%lf\n",maxP[0], maxP[1], maxP[2]);
 }

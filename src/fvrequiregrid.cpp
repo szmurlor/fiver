@@ -57,7 +57,7 @@ dolfin::Mesh * FVRequireGrid::getMesh( FVObject * fvo, FVObject * alternateObjec
         if (fvi != 0)
                 return fvi->getMesh();
         else {
-                qDebug() << "FVRequireGrid: Unable to get mesh from " << fvo->classType() << "!";
+                qDebug() << "FVRequireGrid: Unable to get grid from " << fvo->classType() << "!";
                 return 0;
         }
 }

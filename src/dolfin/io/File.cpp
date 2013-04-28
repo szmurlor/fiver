@@ -26,7 +26,7 @@
 #include <fstream>
 #include <string>
 
-#include <function/Function.h>
+//#include <function/Function.h>
 //#include "BinaryFile.h"
 //#include "RAWFile.h"
 //#include "VTKFile.h"
@@ -119,12 +119,12 @@ File::~File()
   // Do nothing
 }
 //-----------------------------------------------------------------------------
-void File::operator<<(const std::pair<const Function*, double> u)
-{
-  u.first->gather();
-  file->write();
-  *file << u;
-}
+//void File::operator<<(const std::pair<const Function*, double> u)
+//{
+//  u.first->gather();
+//  file->write();
+//  *file << u;
+//}
 //-----------------------------------------------------------------------------
 bool File::exists(std::string filename)
 {

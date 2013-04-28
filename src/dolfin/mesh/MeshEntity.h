@@ -255,7 +255,7 @@ namespace dolfin
 
     // Friends
     friend class MeshEntityIterator;
-    friend class SubsetIterator;
+//    friend class SubsetIterator;
 
     // The mesh
     Mesh const * _mesh;

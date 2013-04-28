@@ -32,16 +32,16 @@
 namespace dolfin
 {
 
-  class GenericDofMap;
-  class Function;
+//  class GenericDofMap;
+//  class Function;
 //  class FunctionPlotData;
 //  class GenericMatrix;
-  class GenericVector;
+//  class GenericVector;
 //  class LocalMeshData;
   class Mesh;
   template <typename T> class MeshFunction;
-  template <typename T> class MeshValueCollection;
-  class Parameters;
+//  template <typename T> class MeshValueCollection;
+//  class Parameters;
 
   class GenericFile
   {
@@ -56,19 +56,19 @@ namespace dolfin
 
     // Input
     virtual void operator>> (Mesh& mesh);
-    virtual void operator>> (GenericVector& x);
+//    virtual void operator>> (GenericVector& x);
 //    virtual void operator>> (GenericMatrix& A);
-    virtual void operator>> (GenericDofMap& dofmap);
+//    virtual void operator>> (GenericDofMap& dofmap);
 //    virtual void operator>> (LocalMeshData& data);
     virtual void operator>> (MeshFunction<int>& mesh_function);
     virtual void operator>> (MeshFunction<unsigned int>& mesh_function);
     virtual void operator>> (MeshFunction<double>& mesh_function);
     virtual void operator>> (MeshFunction<bool>& mesh_function);
-    virtual void operator>> (MeshValueCollection<int>& mesh_markers);
-    virtual void operator>> (MeshValueCollection<unsigned int>& mesh_markers);
-    virtual void operator>> (MeshValueCollection<double>& mesh_markers);
-    virtual void operator>> (MeshValueCollection<bool>& mesh_markers);
-    virtual void operator>> (Parameters& parameters);
+//    virtual void operator>> (MeshValueCollection<int>& mesh_markers);
+//    virtual void operator>> (MeshValueCollection<unsigned int>& mesh_markers);
+//    virtual void operator>> (MeshValueCollection<double>& mesh_markers);
+//    virtual void operator>> (MeshValueCollection<bool>& mesh_markers);
+//    virtual void operator>> (Parameters& parameters);
 //    virtual void operator>> (FunctionPlotData& data);
     virtual void operator>> (std::vector<int>& x);
     virtual void operator>> (std::vector<uint>& x);
@@ -79,28 +79,28 @@ namespace dolfin
     virtual void operator>> (std::map<uint, std::vector<int> >& array_map);
     virtual void operator>> (std::map<uint, std::vector<uint> >& array_map);
     virtual void operator>> (std::map<uint, std::vector<double> >& array_map);
-    virtual void operator>> (Function& u);
+//    virtual void operator>> (Function& u);
 
     // Output
-    virtual void operator<< (const GenericVector& x);
+//    virtual void operator<< (const GenericVector& x);
 //    virtual void operator<< (const GenericMatrix& A);
     virtual void operator<< (const Mesh& mesh);
-    virtual void operator<< (const GenericDofMap& dofmap);
+//    virtual void operator<< (const GenericDofMap& dofmap);
 //    virtual void operator<< (const LocalMeshData& data);
     virtual void operator<< (const MeshFunction<int>& mesh_function);
     virtual void operator<< (const MeshFunction<unsigned int>& mesh_function);
     virtual void operator<< (const MeshFunction<double>& mesh_function);
     virtual void operator<< (const MeshFunction<bool>& mesh_function);
-    virtual void operator<< (const MeshValueCollection<int>& mesh_markers);
-    virtual void operator<< (const MeshValueCollection<unsigned int>& mesh_markers);
-    virtual void operator<< (const MeshValueCollection<double>& mesh_markers);
-    virtual void operator<< (const MeshValueCollection<bool>& mesh_markers);
-    virtual void operator<< (const Function& u);
+//    virtual void operator<< (const MeshValueCollection<int>& mesh_markers);
+//    virtual void operator<< (const MeshValueCollection<unsigned int>& mesh_markers);
+//    virtual void operator<< (const MeshValueCollection<double>& mesh_markers);
+//    virtual void operator<< (const MeshValueCollection<bool>& mesh_markers);
+//    virtual void operator<< (const Function& u);
 
     // Output function with time
-    virtual void operator<< (const std::pair<const Function*, double> u);
+//    virtual void operator<< (const std::pair<const Function*, double> u);
 
-    virtual void operator<< (const Parameters& parameters);
+//    virtual void operator<< (const Parameters& parameters);
 //    virtual void operator<< (const FunctionPlotData& data);
     virtual void operator<< (const std::vector<int>& x);
     virtual void operator<< (const std::vector<uint>& x);
