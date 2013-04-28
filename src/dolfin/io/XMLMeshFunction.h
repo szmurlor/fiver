@@ -217,11 +217,11 @@ namespace dolfin
 //    }
 //  }
 //  //---------------------------------------------------------------------------
-//  template<typename T>
-//  void XMLMeshFunction::write(const MeshFunction<T>& mesh_function,
-//                              const std::string type, pugi::xml_node xml_node,
-//                              bool write_mesh)
-//  {
+  template<typename T>
+  void XMLMeshFunction::write(const MeshFunction<T>& mesh_function,
+                              const std::string type, pugi::xml_node xml_node,
+                              bool write_mesh)
+  {
 //    not_working_in_parallel("Writing XML MeshFunctions");
 //
 //    // Write mesh if requested
@@ -236,7 +236,7 @@ namespace dolfin
 //
 //    // Write MeshValueCollection
 //    XMLMeshValueCollection::write(mesh_value_collection, type, mf_node);
-//  }
+  }
   //---------------------------------------------------------------------------
 
 }

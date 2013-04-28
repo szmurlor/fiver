@@ -20,31 +20,31 @@
 
 #include <string>
 #include <utility>
-//#include <boost/scoped_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include <common/types.h>
-//#include <common/Variable.h>
-//#include <common/Hierarchical.h>
-//#include <intersection/IntersectionOperator.h>
-//#include <log/log.h>
+#include <common/Variable.h>
+#include <common/Hierarchical.h>
+#include <intersection/IntersectionOperator.h>
+#include <log/log.h>
 #include "MeshData.h"
 #include "MeshGeometry.h"
 #include "MeshConnectivity.h"
 #include "MeshTopology.h"
 #include "MeshEntity.h"
-//#include "MeshDomains.h"
+#include "MeshDomains.h"
 
 namespace dolfin
 {
 
   class CellType;
   class BoundaryMesh;
-//  class Function;
-//  class LocalMeshData;
-//  class MeshEntity;
+  class Function;
+  class LocalMeshData;
+  class MeshEntity;
   template <typename T> class MeshFunction;
-//  class ParallelData;
-//  class SubDomain;
+  class ParallelData;
+  class SubDomain;
 
   /// A _Mesh_ consists of a set of connected and numbered mesh entities.
   ///
@@ -80,7 +80,7 @@ namespace dolfin
   /// such as all edges connected to a given vertex must also be
   /// explicitly created (in this case by a call to mesh.init(0, 1)).
 
-  class Mesh //: public Variable, public Hierarchical<Mesh>
+  class Mesh : public Variable, public Hierarchical<Mesh>
   {
   public:
 
@@ -106,7 +106,7 @@ namespace dolfin
     /// *Arguments*
     ///     local_mesh_data (LocalMeshData)
     ///         Data from which to build the mesh.
-//    explicit Mesh(LocalMeshData& local_mesh_data);
+    explicit Mesh(LocalMeshData& local_mesh_data);
 
     /// Destructor.
     ~Mesh();
@@ -262,20 +262,20 @@ namespace dolfin
     /// *Returns*
     ///     _MeshDomains_
     ///         The (sub)domains associated with the mesh.
-//    MeshDomains& domains() { return _domains; }
+    MeshDomains& domains() { return _domains; }
 
     /// Get mesh (sub)domains.
-//    const MeshDomains& domains() const { return _domains; }
+    const MeshDomains& domains() const { return _domains; }
 
     /// Get intersection operator.
     ///
     /// *Returns*
     ///     _IntersectionOperator_
     ///         The intersection operator object associated with the mesh.
-//    IntersectionOperator& intersection_operator();
+    IntersectionOperator& intersection_operator();
 
     /// Return intersection operator (const version);
-//    const IntersectionOperator& intersection_operator() const;
+    const IntersectionOperator& intersection_operator() const;
 
     /// Get mesh data.
     ///
@@ -292,20 +292,20 @@ namespace dolfin
     /// *Returns*
     ///     _ParallelData_
     ///         The parallel data object associated with the mesh.
-//    ParallelData& parallel_data();
+    ParallelData& parallel_data();
 
     /// Get parallel mesh data (const version).
-//    const ParallelData& parallel_data() const;
+    const ParallelData& parallel_data() const;
 
     /// Get mesh cell type.
     ///
     /// *Returns*
     ///     _CellType_
     ///         The cell type object associated with the mesh.
-    CellType& type() { /*dolfin_assert(_cell_type);*/ return *_cell_type; }
+    CellType& type() { dolfin_assert(_cell_type); return *_cell_type; }
 
     /// Get mesh cell type (const version).
-    const CellType& type() const { /*dolfin_assert(_cell_type);*/ return *_cell_type; }
+    const CellType& type() const { dolfin_assert(_cell_type); return *_cell_type; }
 
     /// Compute entities of given topological dimension.
     ///
@@ -381,7 +381,7 @@ namespace dolfin
     /// *Arguments*
     ///     displacement (_Function_)
     ///         A _Function_ object.
-//    void move(const Function& displacement);
+    void move(const Function& displacement);
 
     /// Smooth internal vertices of mesh by local averaging.
     ///
@@ -522,7 +522,7 @@ namespace dolfin
     /// *Returns*
     ///     _Point_
     ///         The closest point.
-//    Point closest_point(const Point& point) const;
+    Point closest_point(const Point& point) const;
 
     /// Find the cell in the mesh closest to the given point.
     ///
@@ -544,7 +544,7 @@ namespace dolfin
     ///     output::
     ///
     ///         1
-//    dolfin::uint closest_cell(const Point& point) const;
+    dolfin::uint closest_cell(const Point& point) const;
 
     /// Find the point and corresponding cell closest to the given point.
     ///
@@ -555,7 +555,7 @@ namespace dolfin
     /// *Returns*
     ///     std::pair<_Point_, uint>
     ///         A pair consisting of the closest point and corresponding cell index.
-//    std::pair<Point, dolfin::uint> closest_point_and_cell(const Point& point) const;
+    std::pair<Point, dolfin::uint> closest_point_and_cell(const Point& point) const;
 
     /// Computes the distance between a given point and the mesh
     ///
@@ -612,10 +612,6 @@ namespace dolfin
     ///         No example code available for this function.
     std::string str(bool verbose) const;
 
-    /** bounding box of grid */
-    void getBBox(double minP[3], double maxP[3]);
-    void getCenter( double P[3] );
-
   private:
 
     // Friends
@@ -631,19 +627,19 @@ namespace dolfin
     MeshGeometry _geometry;
 
     // Mesh domains
-//    MeshDomains _domains;
+    MeshDomains _domains;
 
     // Auxiliary mesh data
     MeshData _data;
 
     // Auxiliary parallel mesh data
-//    boost::scoped_ptr<ParallelData> _parallel_data;
+    boost::scoped_ptr<ParallelData> _parallel_data;
 
     // Cell type
     CellType* _cell_type;
 
     // Intersection detector
-//    IntersectionOperator _intersection_operator;
+    IntersectionOperator _intersection_operator;
 
     // True if mesh has been ordered
     mutable bool _ordered;
