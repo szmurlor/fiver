@@ -133,12 +133,18 @@ namespace dolfin
     ///         The mesh.
     const Mesh& mesh() const;
 
+    void setVector (bool isVec) { isVectorData = isVec ; };
+    bool isVector () { return isVectorData; };
+
     /// Return topological dimension
     ///
     /// *Returns*
     ///     uint
     ///         The dimension.
     uint dim() const;
+
+    double min();
+    double max();
 
     /// Return size (number of entities)
     ///
@@ -298,6 +304,7 @@ namespace dolfin
 
     /// Number of mesh entities
     uint _size;
+    bool isVectorData;
   };
 
   template<> std::string MeshFunction<double>::str(bool verbose) const;
@@ -596,6 +603,30 @@ namespace dolfin
 	  std::fill(_values, _values + _size, value);
   }
   //---------------------------------------------------------------------------
+  template <typename T>
+  double MeshFunction<T>::min()
+  {
+          unsigned int i;
+          double vmin = 1e78;
+          for (i = 0;  i < _size; i++) {
+                  double t = _values[i];
+                  if (t < vmin)  { vmin = t;}
+          }
+          return vmin;
+  }
+
+  template <typename T>
+  double MeshFunction<T>::max()
+  {
+          unsigned int i;
+          double vmax = -1e78;
+          for (i = 0;  i < _size; i++) {
+                  double t = _values[i];
+                  if (t>vmax) vmax = t;
+          }
+          return vmax;
+  }
+
   template <typename T>
   std::string MeshFunction<T>::str(bool verbose) const
   {
