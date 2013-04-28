@@ -52,26 +52,6 @@ void FVMeshDraw::paintGL()
 
         fvlist->start();
 
-        GLfloat tx=0,ty=0,tz=0;
-        printf("%lf, %lf, %lf\n",tx,ty,tz);
-        if (isFirstShow()) {
-            double pmin[3], pmax[3], td;
-            mesh->getBBox( pmin, pmax );
-
-            printf("Pmin = %lf, %lf, %lf\n",pmin[0],pmin[1],pmin[2]);
-            printf("Pmax = %lf, %lf, %lf\n",pmax[0],pmax[1],pmax[2]);
-            tx = (pmax[0] - pmin[0]);
-            ty = (pmax[1] - pmin[1]);
-            tz = (pmax[2] - pmin[2]);
-            printf("%lf, %lf, %lf\n",tx,ty,tz);
-            qDebug() << tx << ", " << ty << ", " << tz << endl;
-            td = sqrt(tx*tx + ty*ty + tz*tz);
-            if ((td > 1e-10 ) && (td < 1e10)) {
-                getCurrentViewer()->setSceneRadius( td );
-            }
-        }
-
-
         if (getAttrValue( tr("Transparent") ) == tr("Yes") ) {
                 glEnable( GL_BLEND );
                 glEnable( GL_ALPHA_TEST );

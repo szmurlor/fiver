@@ -26,7 +26,6 @@
 #include <map>
 #include <ostream>
 #include <string>
-#include <boost/shared_ptr.hpp>
 #include "GenericFile.h"
 
 namespace pugi
@@ -38,14 +37,8 @@ namespace pugi
 namespace dolfin
 {
 
-  class Function;
-  class GenericVector;
-  class LocalMeshData;
   class Mesh;
-  class Parameters;
-  template<typename T> class Array;
   template<typename T> class MeshFunction;
-  template<typename T> class MeshValueCollection;
 
   class XMLFile: public GenericFile
   {
@@ -67,18 +60,18 @@ namespace dolfin
 //    void operator>> (LocalMeshData& input);
 //    void operator<< (const LocalMeshData& output);
 
-//    // Vector
+    // Vector
 //    void operator>> (GenericVector& input);
 //    void read_vector(Array<double>& input, Array<uint>& indices);
 //    void operator<< (const GenericVector& output);
-
-//    // Parameters
+//
+    // Parameters
 //    void operator>> (Parameters& input);
 //    void operator<< (const Parameters& output);
 
     // Function data
-    void operator>>(Function& input);
-    void operator<<(const Function& output);
+//    void operator>>(Function& input);
+//    void operator<<(const Function& output);
 
     // FunctionPlotData
 //    void operator>> (FunctionPlotData& input);
@@ -108,25 +101,25 @@ namespace dolfin
     void operator<< (const MeshFunction<bool>& input)
     { write_mesh_function(input, "bool"); }
 
-//    // MeshValueCollection (uint)
+    // MeshValueCollection (uint)
 //    void operator>> (MeshValueCollection<unsigned int>& input)
 //    { read_mesh_value_collection(input, "uint"); }
 //    void operator<< (const MeshValueCollection<unsigned int>& output)
 //    { write_mesh_value_collection(output, "uint"); }
 
-//    // MeshValueCollection (int)
+    // MeshValueCollection (int)
 //    void operator>> (MeshValueCollection<int>& input)
 //    { read_mesh_value_collection(input, "int"); }
 //    void operator<< (const MeshValueCollection<int>& output)
 //    { write_mesh_value_collection(output, "int"); }
-
-//    // MeshValueCollection (double)
+//
+    // MeshValueCollection (double)
 //    void operator>> (MeshValueCollection<double>& input)
 //    { read_mesh_value_collection(input, "double"); }
 //    void operator<< (const MeshValueCollection<double>& output)
 //    { write_mesh_value_collection(output, "double"); }
 
-//    // MeshValueCollection (bool)
+    // MeshValueCollection (bool)
 //    void operator>> (MeshValueCollection<bool>& input)
 //    { read_mesh_value_collection(input, "bool"); }
 //    void operator<< (const MeshValueCollection<bool>& input)
@@ -143,14 +136,14 @@ namespace dolfin
                                                   const std::string type);
 
     // Read MeshValueCollection
-    template<typename T>
-    void read_mesh_value_collection(MeshValueCollection<T>& t,
-                                    const std::string type) const;
+//    template<typename T>
+//    void read_mesh_value_collection(MeshValueCollection<T>& t,
+//                                    const std::string type) const;
 
     // Write MeshValueCollection
-    template<typename T>
-    void write_mesh_value_collection(const MeshValueCollection<T>& t,
-                                     const std::string type);
+//    template<typename T>
+//    void write_mesh_value_collection(const MeshValueCollection<T>& t,
+//                                     const std::string type);
 
     // Load/open XML doc (from file)
     void load_xml_doc(pugi::xml_document& xml_doc) const;
@@ -163,7 +156,7 @@ namespace dolfin
 
     static pugi::xml_node write_dolfin(pugi::xml_document& doc);
 
-    boost::shared_ptr<std::ostream> outstream;
+    std::ostream* outstream;
 
   };
 

@@ -9,8 +9,8 @@
 TEMPLATE = lib
 TARGET = meshreader2
 DEPENDPATH += . tests/testsimu
-INCLUDEPATH += ../coremesh2/src/ ../dolfin ../log 
-LIBS += -lcoremesh2 -ldolfin -L../bin -ltrivlog
+INCLUDEPATH += ../coremesh2/src/ ../log
+LIBS += -lcoremesh2 -L../bin -ltrivlog
 DESTDIR = ../bin
 
 target.path = $$INSTALL_ROOT/lib

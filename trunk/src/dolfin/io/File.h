@@ -111,7 +111,7 @@ namespace dolfin
     }
 
     /// Write Function to file
-    void operator<<(const Function& u);
+    //void operator<<(const Function& u);
 
     /// Write Function to file with time
     ///
@@ -121,7 +121,7 @@ namespace dolfin
     ///         File file("solution.pvd", "compressed");
     ///         file << std::make_pair<const Function*, double>(&u, t);
     ///
-    void operator<<(const std::pair<const Function*, double> u);
+//    void operator<<(const std::pair<const Function*, double> u);
 
     /// Write object to file
     template<typename T> void operator<<(const T& t)

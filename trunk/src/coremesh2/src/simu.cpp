@@ -51,7 +51,6 @@ Grid* Simu::getGrid(int idx)
 		return 0;
 }
 
-
 Field * Simu::newField()
 {
 	fields.push_back( new Field() );
@@ -63,8 +62,6 @@ Grid * Simu::newGrid()
 	grids.push_back( new Grid() );
 	return grids.back();
 }
-
-
 
 
 

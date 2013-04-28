@@ -19,13 +19,6 @@
 FVFieldInterface::FVFieldInterface( Field ** fieldPtr)
 {
 	fp = fieldPtr;
-        mf = 0;
-}
-
-FVFieldInterface::FVFieldInterface( dolfin::MeshFunction<dolfin::uint> * meshFun)
-{
-        fp = 0;
-        mf = meshFun;
 }
 
 
@@ -35,11 +28,6 @@ FVFieldInterface::~FVFieldInterface()
 
 Field * FVFieldInterface::getField( )
 {
-    return *fp;
-}
-
-dolfin::MeshFunction<dolfin::uint> * FVFieldInterface::getMeshFun()
-{
-    return mf;
+	return *fp;
 }
 

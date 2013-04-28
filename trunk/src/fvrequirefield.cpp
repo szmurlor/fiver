@@ -38,21 +38,7 @@ Field * FVRequireField::getField( FVObject * fvo )
 	else {
 		qDebug() << "FVRequireField: Unable to get field from " << fvo->classType() << "!";
 		return 0;
-        }
-}
-
-dolfin::MeshFunction<dolfin::uint> * FVRequireField::getMeshFun(FVObject *fvo)
-{
-    FVFieldInterface * fvi = 0;
-    if (fvo != 0)
-            fvi = (FVFieldInterface*) fvo->getInterface( QString("FVMeshFunInterface") );
-
-    if (fvi != 0)
-            return fvi->getMeshFun();
-    else {
-            qDebug() << "FVRequireField: Unable to get mesh  from " << fvo->classType() << "!";
-            return 0;
-    }
+	}
 }
 
 

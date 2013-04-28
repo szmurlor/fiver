@@ -11,7 +11,7 @@ class Simu {
 
 protected:
 	vector<Field*> fields;
-        vector<Grid*> grids;
+	vector<Grid*> grids;
 
 public:
 	Simu();
@@ -29,7 +29,7 @@ public:
 	Field* getField( int idx = 0 );
 	Grid* getGrid(int idx = 0);
 	
-        Field * newField();
+	Field * newField();
 	Grid * newGrid();
 	
 };

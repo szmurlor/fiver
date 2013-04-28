@@ -21,13 +21,12 @@ log.subdir=src/log
 boxmgr.subdir=src/boxmgr
 attr.subdir=src/attr
 coremesh2.subdir=src/coremesh2
-coremesh2.depends= dolfin
-dolfin.subdir=src/dolfin 
 meshreader2.subdir=src/meshreader2
-meshreader2.depends= coremesh2 dolfin
+meshreader2.depends=coremesh2
 tetgen.subdir=src/tetgen
 meshjoiner.subdir=src/meshjoiner
 meshjoiner.depends=tetgen
+dolfin.subdir=src/dolfin
 fiver.subdir=src
 fiver.depends= meshreader2 meshjoiner boxmgr log attr dolfin
 TEMPLATE = subdirs
@@ -51,7 +50,3 @@ utils-clean.commands= @echo Building $$utils.target && cd src/utils/fieldavg && 
 QMAKE_EXTRA_TARGETS += utils utils-clean
 
 QMAKE_DISTCLEAN += common.pri
-
-
-
-
