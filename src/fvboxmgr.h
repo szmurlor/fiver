@@ -27,6 +27,7 @@ class FVBoxSimulation;
 class Grid;
 class Field;
 class FVBoxField;
+class FVBoxFieldXml;
 class FVFieldDraw;
 class FVObject;
 class FVFieldSlice;
@@ -39,6 +40,7 @@ class FVMeshJoiner;
 class FVBoxXml;
 //class Mesh;
 #include <dolfin/mesh/Mesh.h>
+#include <dolfin/function/Function.h>
 
 
 
@@ -61,6 +63,7 @@ public:
     FVBoxSimulation * addBoxSimulation( QString filename, QString type );
     FVBoxField * addBoxField( FVObject * parent, Field *f, QString name, QString type );
     FVBoxField * addBoxField( Field * f, QString name, QString type );
+    FVBoxFieldXml * addBoxFieldXml( dolfin::Function * f, QString name, QString type );
     FVBoxCBlock * addBoxCBlock( QString filename, QString type );
     FVBoxSphere * addBoxSphere( QString type );
     FVBoxCoil * addBoxCoil( QString type );

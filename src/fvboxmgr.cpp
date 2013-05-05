@@ -22,6 +22,7 @@
 #include <fvobject.h>
 #include <fvboxgrid.h>
 #include <fvboxfield.h>
+#include <fvboxfieldxml.h>
 #include <fvboxsimulation.h>
 #include <fvfielddraw.h>
 #include <fvfieldslice.h>
@@ -233,6 +234,23 @@ FVBoxField * FVBoxMgr::addBoxField( Field * f, QString name, QString type )
 
     return bf;
 
+}
+
+FVBoxFieldXml * FVBoxMgr::addBoxFieldXml( dolfin::Function * f, QString name, QString type )
+{
+    FVBoxFieldXml * bf;
+    bf = new FVBoxFieldXml(this, f);
+
+    bf->sName = name;
+    bf->sType = type;
+    bf->setAttrValue("Name", name);
+    bf->setAttrValue("Type", type );
+
+    addObj( bf );
+
+    bf->update();
+
+    return bf;
 }
 
 FVBoxField * FVBoxMgr::addBoxField( FVObject* parent, Field * f, QString name, QString type )

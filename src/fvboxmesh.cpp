@@ -19,6 +19,8 @@
 #include <fvboxmeshfunction.h>
 #include <mesh/MeshData.h>
 #include <mesh/MeshFunction.h>
+#include <fvopenerxmlfield.h>
+#include <fvhelpers.h>
 
 typedef std::map<std::string, dolfin::MeshFunction<uint>* >::const_iterator mf_const_iterator;
 
@@ -135,30 +137,30 @@ void FVBoxMesh::slotNewHarmonicField()
 
 void FVBoxMesh::slotLoadField()
 {
-//    QStringList files;
-//    QString fname;
-//    QString selectedFilter;
+    QStringList files;
+    QString fname;
+    QString selectedFilter;
 
-//    QMap< QString, FVOpener* > filters;
-//    filters[tr("1 - Text field file (*.*)")] =  new FVOpenerTextField();
+    QMap< QString, FVOpener* > filters;
+    filters[tr("1 - Xml field file (*.xml*)")] =  new FVOpenerXmlField();
 
 //    //////////////////////////////////////////////////////
-//    // Show Dialog to Open File
-//    files = FVHelpers::openFiles(filters, selectedFilter);
+    // Show Dialog to Open File
+    files = FVHelpers::openFiles(filters, selectedFilter);
 //    ///////////////////////////////////////////////////////
 
 
-//    foreach (fname, files) {
-//        FVOpener *opener = filters[selectedFilter];
-//        if (opener != 0) {
-//            FVObject* box = opener->open(manager, fname, 0);
-//            if (box != 0) {
-//                FVFieldInterface* fi= (FVFieldInterface*)box->getInterface(QString("FVFieldInterface"));
+    foreach (fname, files) {
+        FVOpener *opener = filters[selectedFilter];
+        if (opener != 0) {
+            FVObject* box = opener->open(manager, fname, 0);
+            if (box != 0) {
+                FVFieldInterfaceXml* fi= (FVFieldInterfaceXml*)box->getInterface(QString("FVFieldInterfaceXml"));
 //                if( fi != 0 && fi->getField() != 0) {
-//                    Field *f= fi->getField();
+//                    dolfin::Function *f= fi->getField();
 //                    if( f->size() == grid->getNoNodes() || f->size() == grid->getNoElems() ) {
-//                        manager->addCon(this, box, tr(""), tr(""));
-//                        manager->autoArrangeChildren(this);
+                        manager->addCon(this, box, tr(""), tr(""));
+                        manager->autoArrangeChildren(this);
 //                    } else {
 //                        QMessageBox::warning(manager,"Loading text field", tr("I have encountered an error processing text field from file: %1.\nField size is not compatibe with the grid size.\nSee diagnostic messages to verify the problem.").arg(fname));
 //                        // ??? delete box;
@@ -167,13 +169,13 @@ void FVBoxMesh::slotLoadField()
 //                    QMessageBox::warning(manager,"Loading text field", tr("I have encountered an error processing text field from file: %1.\nIt does not contain a valid field.\nSee diagnostic messages to verify the problem.").arg(fname));
 //                    // ??? delete box;
 //                }
-//            } else {
-//                QMessageBox::warning(manager,"Loading text field", tr("I have encountered an error processing text field from file: %1. See diagnostic messages to verify the problem.").arg(fname));
-//            }
-//        } else {
-//            QMessageBox::warning(manager,"Loading text field", tr("You must selected proper filter to point the expected file format."));
-//        }
-//    }
+            } else {
+                QMessageBox::warning(manager,"Loading text field", tr("I have encountered an error processing text field from file: %1. See diagnostic messages to verify the problem.").arg(fname));
+            }
+        } else {
+            QMessageBox::warning(manager,"Loading text field", tr("You must selected proper filter to point the expected file format."));
+        }
+    }
 }
 
 
@@ -252,8 +254,8 @@ void FVBoxMesh::setupMenu( )
 //    contextMenuObj->addAction(tr("Draw &Boundaries"), this, SLOT(  slotDrawBoundaries() ) );
 //    contextMenuObj->addAction(tr("Draw B&oundig Box"), this, SLOT(  slotDrawBoundingBox() ) );
 
-//    contextMenuObj->addSeparator();
-//    contextMenuObj->addAction(tr("Load &field"), this, SLOT(  slotLoadField() ) );
+    contextMenuObj->addSeparator();
+    contextMenuObj->addAction(tr("Load &field"), this, SLOT(  slotLoadField() ) );
 
 //    contextMenuObj->addSeparator();
 //    contextMenuObj->addAction(tr("New &harmonic field"), this, SLOT(  slotNewHarmonicField()) );
