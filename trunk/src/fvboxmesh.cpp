@@ -21,6 +21,8 @@
 #include <mesh/MeshFunction.h>
 #include <fvopenerxmlfield.h>
 #include <fvhelpers.h>
+#include <fvfieldwizard.h>
+#include <configreader.h>
 
 typedef std::map<std::string, dolfin::MeshFunction<uint>* >::const_iterator mf_const_iterator;
 
@@ -144,10 +146,30 @@ void FVBoxMesh::slotLoadField()
     QMap< QString, FVOpener* > filters;
     filters[tr("1 - Xml field file (*.xml*)")] =  new FVOpenerXmlField();
 
-//    //////////////////////////////////////////////////////
-    // Show Dialog to Open File
-    files = FVHelpers::openFiles(filters, selectedFilter);
-//    ///////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
+    //Read config file
+    ConfigReader cr;
+    cr.ReadFromFile("config.txt");
+
+//    std::cout<< "wczytane z pliku"<<std::endl;
+//    for (std::vector<string>::iterator it = cr.elems.begin() ; it != cr.elems.end(); it++)
+//        std::cout << ' ' << *it;
+//    std::cout << '\n';
+
+//    for (std::vector<string>::iterator it = cr.approx.begin() ; it != cr.approx.end(); it++)
+//        std::cout << ' ' << *it;
+//    std::cout << '\n';
+
+    //////////////////////////////////////////////////////////
+
+
+    FVFieldWizard wizard(cr.elems, cr.approx);
+    wizard.exec();
+
+    //    //////////////////////////////////////////////////////
+//         Show Dialog to Open File
+        files = FVHelpers::openFiles(filters, selectedFilter);
+    //    ///////////////////////////////////////////////////////
 
 
     foreach (fname, files) {
