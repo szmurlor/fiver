@@ -16,7 +16,7 @@
 // along with DOLFIN. If not, see <http://www.gnu.org/licenses/>.
 //
 #include "Cell.h"
-//#include "ParallelData.h"
+#include "ParallelData.h"
 #include "Point.h"
 #include "Facet.h"
 
@@ -57,9 +57,9 @@ Point Facet::normal() const
 //-----------------------------------------------------------------------------
 bool Facet::exterior() const
 {
-//  if (_mesh->parallel_data().exterior_facet().size() > 0)
-//    return _mesh->parallel_data().exterior_facet()[this->index()];
-//  else
+  if (_mesh->parallel_data().exterior_facet().size() > 0)
+    return _mesh->parallel_data().exterior_facet()[this->index()];
+  else
     return num_entities(dim() + 1) == 1;
 }
 //-----------------------------------------------------------------------------

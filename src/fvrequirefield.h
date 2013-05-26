@@ -22,6 +22,7 @@
 
 #include <fvobject.h>
 #include <fvfieldinterface.h>
+#include <fvfieldinterfacexml.h>
 #include <field.h>
 
 /**
@@ -33,6 +34,7 @@ public:
 	~FVRequireField();
 
 	Field * getField( FVObject * fvo );
+        dolfin::Function * getFunction( FVObject * fvo );
 };
 
 #endif

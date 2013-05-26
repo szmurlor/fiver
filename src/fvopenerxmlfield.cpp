@@ -7,10 +7,10 @@
 #include <QDir>
 #include <dolfin/function/Function.h>
 #include <dolfin/function/FunctionSpace.h>
-#include <TetraScalar.h>
 #include <dolfin/mesh/Mesh.h>
 #include <dolfin/fem/FiniteElement.h>
 #include <dolfin/fem/DofMap.h>
+#include <boost/shared_ptr.hpp>
 
 FVOpenerXmlField::FVOpenerXmlField(QObject *parent) :
     FVOpener(parent)
@@ -59,28 +59,13 @@ FVObject* FVOpenerXmlField::open( FVBoxMgr * bm, QString fname, int type )
 {
     FVBoxFieldXml * box = 0;
 
-    // bm = bm;
     this->fname = fname;
     type = type;
 
     qDebug() << "Opening Xml Field: " << fname;
 
 
-
-    dolfin::Mesh* mesh = new dolfin::Mesh();
-    tetrascalar0* el0 = new tetrascalar0();
-    dolfin::FiniteElement elem(boost::shared_ptr<ufc::finite_element>(el0) );
-    tetrascalar_dof0* dof0 = new tetrascalar_dof0();
-    dolfin::DofMap dof( boost::shared_ptr<ufc::dofmap>(dof0) , boost::shared_ptr<dolfin::Mesh>(mesh) );
-    dolfin::FunctionSpace V(
-                boost::shared_ptr<dolfin::Mesh>(mesh),
-                boost::shared_ptr<dolfin::FiniteElement>(elem),
-                boost::shared_ptr<dolfin::DofMap>(dof)
-                );
-
-//    dolfin::Function fun( boost::shared_ptr<dolfin::FunctionSpace>(V), fname.toStdString() );
-
-    box = bm->addBoxFieldXml(NULL, fname, "nazwaFun");
+    box = bm->addBoxFieldXml(NULL, fname, "field");
     box->setOpener(this);
 
 
