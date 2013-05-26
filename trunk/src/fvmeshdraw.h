@@ -65,10 +65,6 @@ protected:
         void drawVertices();
         void drawSubdomainWireframe();
 
-        void getBBox(dolfin::Mesh* m, double minP[3], double maxP[3]);
-        void getCenter( dolfin::Mesh* m, double P[3] );
-
-
 };
 
 #endif

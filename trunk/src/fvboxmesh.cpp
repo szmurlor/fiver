@@ -24,6 +24,14 @@
 #include <fvfieldwizard.h>
 #include <configreader.h>
 
+#include <dolfin/function/Function.h>
+#include <dolfin/function/FunctionSpace.h>
+#include <dolfin/mesh/Mesh.h>
+#include <dolfin/fem/FiniteElement.h>
+#include <dolfin/fem/DofMap.h>
+#include <dolfin/la/GenericVector.h>
+#include <dolfin/common/Array.h>
+
 typedef std::map<std::string, dolfin::MeshFunction<uint>* >::const_iterator mf_const_iterator;
 
 FVBoxMesh::FVBoxMesh( FVBoxMgr * manager,  dolfin::Mesh * m, int x, int y )
@@ -148,55 +156,65 @@ void FVBoxMesh::slotLoadField()
 
     //////////////////////////////////////////////////////////
     //Read config file
-    ConfigReader cr;
-    cr.ReadFromFile("config.txt");
-
-//    std::cout<< "wczytane z pliku"<<std::endl;
-//    for (std::vector<string>::iterator it = cr.elems.begin() ; it != cr.elems.end(); it++)
-//        std::cout << ' ' << *it;
-//    std::cout << '\n';
-
-//    for (std::vector<string>::iterator it = cr.approx.begin() ; it != cr.approx.end(); it++)
-//        std::cout << ' ' << *it;
-//    std::cout << '\n';
-
+    ConfigReader* cr = new ConfigReader();
+    cr->ReadFromFile("src/config.txt");
+    cr->cutEndline();
     //////////////////////////////////////////////////////////
 
 
-    FVFieldWizard wizard(cr.elems, cr.approx);
+    FVFunctionSpaceWizard wizard(cr);
     wizard.exec();
 
-    //    //////////////////////////////////////////////////////
-//         Show Dialog to Open File
-        files = FVHelpers::openFiles(filters, selectedFilter);
-    //    ///////////////////////////////////////////////////////
+    if (wizard.isFinished){
+//        std::cout << "choosen vals: \n" << wizard.fieldType << " | "  << wizard.FEType << " | " << wizard.approxDeg << std::endl;
+        dolfin::FunctionSpace* V = wizard.getFunctionSpace(mesh);
+
+        if (wizard.optionExists) {
+            //    //////////////////////////////////////////////////////
+            //         Show Dialog to Open File
+            files = FVHelpers::openFiles(filters, selectedFilter);
+            //    ///////////////////////////////////////////////////////
+
+            foreach (fname, files) {
+                FVOpener *opener = filters[selectedFilter];
+                if (opener != 0) {
+                    FVObject* box = opener->open(manager, fname, 0);
+                    dolfin::Function* fun = new dolfin::Function( boost::shared_ptr<const dolfin::FunctionSpace>(V), fname.toStdString() );
+
+                    ////////////////////////////////////////////////////////////////////////
+                    /////////////wypisywanie wartości///////////////////////////////////////
+//                    dolfin::Array<double> val;
+//                    fun->compute_vertex_values(val,*mesh);
+
+//                    std::cout << "values size: " << val.size() << std::endl;
+//                    for (int i=0; i< val.size(); i++){
+//                        std::cout << val[i] << std::endl;
+//                    }
+
+                    ////////////////////////////////////////////////////////////////////////
+                    if (box != 0) {
+                        ((FVBoxFieldXml*) box)->setVector(wizard.isVector());
+                        ((FVBoxFieldXml*) box)->setMesh(mesh);
+                        ((FVBoxFieldXml*) box)->setField(fun);
+                        ((FVBoxFieldXml*) box)->setAtt();
 
 
-    foreach (fname, files) {
-        FVOpener *opener = filters[selectedFilter];
-        if (opener != 0) {
-            FVObject* box = opener->open(manager, fname, 0);
-            if (box != 0) {
-                FVFieldInterfaceXml* fi= (FVFieldInterfaceXml*)box->getInterface(QString("FVFieldInterfaceXml"));
-//                if( fi != 0 && fi->getField() != 0) {
-//                    dolfin::Function *f= fi->getField();
-//                    if( f->size() == grid->getNoNodes() || f->size() == grid->getNoElems() ) {
                         manager->addCon(this, box, tr(""), tr(""));
                         manager->autoArrangeChildren(this);
-//                    } else {
-//                        QMessageBox::warning(manager,"Loading text field", tr("I have encountered an error processing text field from file: %1.\nField size is not compatibe with the grid size.\nSee diagnostic messages to verify the problem.").arg(fname));
-//                        // ??? delete box;
-//                    }
-//                } else {
-//                    QMessageBox::warning(manager,"Loading text field", tr("I have encountered an error processing text field from file: %1.\nIt does not contain a valid field.\nSee diagnostic messages to verify the problem.").arg(fname));
-//                    // ??? delete box;
-//                }
-            } else {
-                QMessageBox::warning(manager,"Loading text field", tr("I have encountered an error processing text field from file: %1. See diagnostic messages to verify the problem.").arg(fname));
+
+                    } else {
+                        QMessageBox::warning(manager,"Loading text field", tr("I have encountered an error processing text field from file: %1. See diagnostic messages to verify the problem.").arg(fname));
+                    }
+                } else {
+                    QMessageBox::warning(manager,"Loading text field", tr("You must selected proper filter to point the expected file format."));
+                }
             }
-        } else {
-            QMessageBox::warning(manager,"Loading text field", tr("You must selected proper filter to point the expected file format."));
         }
+        else {
+            QMessageBox::warning(manager,"Loading text field", tr("Choosen options are not supported."));
+        }
+    }else {
+        std::cout << "Loading field was cancelled" << std::endl;
     }
 }
 

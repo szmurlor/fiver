@@ -15,23 +15,39 @@
 #include <string.h>
 #include <stdio.h>
 #include <vector>
+#include <dolfin/function/FunctionSpace.h>
+#include <configreader.h>
 
 /////////// FVFieldWizard class ////////////////////////
-class FVFieldWizard : public QWizard
+class FVFunctionSpaceWizard : public QWizard
 {
     Q_OBJECT
 public:
-    FVFieldWizard(std::vector<std::string> elems , std::vector<std::string> approx, QWidget *parent = 0);
+    FVFunctionSpaceWizard(ConfigReader* cr, QWidget *parent = 0);
+//    FVFunctionSpaceWizard(std::vector<std::string> elems , std::vector<std::string> approx, QWidget *parent = 0);
 
     void accept();
+    void reject()
+    {
+        isFinished = false;
+        QDialog::reject();
+    }
 
-    std::vector<std::string> elems;
-    std::vector<std::string> approx;
+//    std::vector<std::string> elems;
+//    std::vector<std::string> approx;
 
+    ConfigReader* cr;
     int fieldType;
     int FEType;
     int approxDeg;
+    bool isFinished;
+    bool optionExists;
 
+    dolfin::FunctionSpace* getFunctionSpace( dolfin::Mesh* mesh);
+    ufc::finite_element* getElementByName(string name);
+    ufc::dofmap* getDofByName(string name);
+
+    bool isVector();
 };
 
 /////////// IntroPage class ////////////////////////
@@ -52,7 +68,7 @@ class FieldTypePage : public QWizardPage
      Q_OBJECT
 
  public:
-     FieldTypePage(QWidget *parent = 0);
+     FieldTypePage(std::vector<std::string> types, QWidget *parent = 0);
 
  private:
      QLabel *classNameLabel;

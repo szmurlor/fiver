@@ -39,6 +39,9 @@ public:
 	void printHelp();
 	int interpArgs( int argc, char ** argv);
 	
+        virtual bool notify(QObject * receiver, QEvent * event) ;
+
+
 signals:
 	void signalMagellan( float x, float y, float z, float A, float B, float C );
 };

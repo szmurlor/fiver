@@ -4,7 +4,7 @@
 #include <QDir>
 #include <QMessageBox>
 #include <fvboxgrid.h>
-#include <fvfielddraw.h>
+#include <fvfielddrawxml.h>
 #include <fvfieldslice.h>
 #include <field.h>
 #include <fvanimation.h>
@@ -17,6 +17,8 @@ FVBoxFieldXml::FVBoxFieldXml(FVBoxMgr * manager, dolfin::Function * f, int x, in
     field = f;
 
     cColor = fvsettings.value( classType() + "_DefaultColor", FV_DEFAULT_BOX_COLOR_FIELD ).value<QColor>();
+
+    isVector = false;
 
     setupAttributes();
     setupMenu();
@@ -38,7 +40,10 @@ void FVBoxFieldXml::setupAttributes( )
         Attr * a;
         a = am->addAttr( tr("Type"), tr("Field"), QString("text") );
         a->setEditable(false);
-        a = am->addAttr( tr("Name"), tr(""), QString("text") );
+        QString name = tr("");
+        if (field != NULL )
+            name = tr(field->name().c_str());
+        a = am->addAttr( tr("Name"), name , QString("text") );
         a->setEditable(false);
 
         setupAttributesMinMax();
@@ -47,12 +52,24 @@ void FVBoxFieldXml::setupAttributes( )
 void FVBoxFieldXml::setupAttributesMinMax( )
 {
         Attr * a;
+        int valno=0;
+        double min=0;
+        double max=0;
 
-        a = am->updateAttr( tr("Values No."), QString("%1").arg( /*field->value_size()*/ 0 ) , QString("text") );
+
+        if ( this->mesh != NULL && field != NULL){
+            dolfin::Array<double> val;
+            field->compute_vertex_values(val,*mesh);
+            valno = val.size();
+            min = val.min();
+            max = val.max();
+        }
+
+        a = am->updateAttr( tr("Values No."), QString("%1").arg( valno ) , QString("text") );
         a->setEditable(false);
-        a = am->updateAttr( tr("Min. Value"), QString("%1").arg( /*field->min()*/ 0 ), QString("text") );
+        a = am->updateAttr( tr("Min. Value"), QString("%1").arg( min ), QString("text") );
         a->setEditable(false);
-        a = am->updateAttr( tr("Max. Value"), QString("%1").arg( /*field->max()*/ 0 ), QString("text") );
+        a = am->updateAttr( tr("Max. Value"), QString("%1").arg( max ), QString("text") );
         a->setEditable(false);
 }
 
@@ -60,14 +77,19 @@ void FVBoxFieldXml::setupMenu( )
 {
         contextMenuObj->clear();
 
-//        if (/*field->dim()*/ field->value_rank() > 1) {
-//                contextMenuObj->addAction(tr("&Draw Vectors"), this, SLOT( slotDrawVectors() ) );
-//                QString msg("Field" + this->getName() + " may be drawn as vectors" );
-//                qDebug(msg.toAscii());
-//            } else {
-//            QString msg("Field" + this->getName() + " will not be drawn as vectors");
-//                            qDebug(msg.toAscii());
-//        }
+
+        if (field != NULL ) {
+            dolfin::Array<double> val;
+            field->compute_vertex_values(val,*mesh);
+            if (isVector){
+                contextMenuObj->addAction(tr("&Draw Vectors"), this, SLOT( slotDrawVectors() ) );
+                QString msg("Xml Field " + this->getName() + " may be drawn as vectors" );
+                qDebug(msg.toAscii());
+            } else {
+                QString msg("Xml Field" + this->getName() + " will not be drawn as vectors");
+                qDebug(msg.toAscii());
+            }
+        }
         contextMenuObj->addAction(tr("&Draw Colormap"), this, SLOT( slotDrawColormap() ) );
 
         contextMenuObj->addSeparator();
@@ -85,14 +107,14 @@ void FVBoxFieldXml::setupMenu( )
 
 void FVBoxFieldXml::slotDrawColormap( )
 {
-        FVFieldDraw * fd = new FVFieldDraw( manager, this );
+        FVFieldDrawXml * fd = new FVFieldDrawXml( manager, this );
         addChild(fd);
         fd->update();
 }
 
 void FVBoxFieldXml::slotDrawVectors( )
 {
-        FVFieldDraw * fd = new FVFieldDraw(manager, this );
+        FVFieldDrawXml * fd = new FVFieldDrawXml(manager, this );
         qDebug("FVFieldDraw created");
         fd->setAttrValue( QString("View Style"), QString("vectors") );
         qDebug("FVFieldDraw set up as vectors");
@@ -127,9 +149,9 @@ void FVBoxFieldXml::slotReload( )
 
 FVInterface * FVBoxFieldXml::getInterface( QString interfaceName )
 {
-        if (interfaceName == QString("FVFieldInterfaceXml"))
-                return fvFieldInterfaceXml;
-
+        if (interfaceName == QString("FVFieldInterfaceXml")){
+            return fvFieldInterfaceXml;
+        }
         return parentInterface(interfaceName);
 }
 

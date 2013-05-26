@@ -13,6 +13,7 @@
 #include "fiverapp.h"
 #include "fivermain.h"
 #include "main.h"
+#include <QMessageBox>
 
 #ifdef Q_OS_UNIX
 
@@ -145,3 +146,17 @@ bool FiverApp::x11EventFilter(XEvent * event)
 	return false;
 }
 #endif
+
+bool FiverApp::notify(QObject * receiver, QEvent * event)
+{
+     try
+     {
+        return QApplication::notify(receiver, event);
+     }
+     catch(std::exception& e)
+     {
+        QMessageBox::warning(0, tr("Exception thrown"), tr(e.what()));
+        qDebug() << "Exception thrown:" << e.what();
+        return false;
+     }
+}

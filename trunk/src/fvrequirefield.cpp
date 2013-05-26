@@ -41,4 +41,18 @@ Field * FVRequireField::getField( FVObject * fvo )
 	}
 }
 
+dolfin::Function * FVRequireField::getFunction( FVObject * fvo )
+{
+        FVFieldInterfaceXml * fvi = 0;
+        if (fvo != 0)
+                fvi = (FVFieldInterfaceXml*) fvo->getInterface( QString("FVFieldInterfaceXml") );
+
+        if (fvi != 0)
+                return fvi->getField();
+        else {
+                qDebug() << "FVRequireField: Unable to get function from " << fvo->classType() << "!";
+                return 0;
+        }
+}
+
 

@@ -10,6 +10,7 @@
 #include <fvfieldinterfacexml.h>
 //#include <fvfieldinterface.h>
 #include <fvopener.h>
+#include <dolfin/mesh/Mesh.h>
 
 class FVBoxFieldXml : public FVObject
 {
@@ -32,6 +33,13 @@ public:
             return this->fvOpener;
         }
 
+        void setMesh(dolfin::Mesh* m ) {mesh = m;};
+        void setField(dolfin::Function* f) {field = f; fvFieldInterfaceXml = new FVFieldInterfaceXml (f); };
+        void setAtt(){setupAttributes(); setupMenu();};
+        void setVector(bool isVec ){isVector= isVec;};
+
+        bool isVector;
+
 public slots:
         void slotDrawColormap();
         void slotDrawVectors();
@@ -41,6 +49,7 @@ public slots:
 
 protected:
 //        Field * field;
+        dolfin::Mesh * mesh;
         dolfin::Function * field;
         FVFieldInterfaceXml * fvFieldInterfaceXml;
         FVOpener * fvOpener;

@@ -13,9 +13,13 @@ class ConfigReader
 public:
     ConfigReader();
     int ReadFromFile( string fname );
+    void cutEndline();
 
+    vector<string> types;
     vector<string> elems;
     vector<string> approx;
+
+    vector< vector<string> > map;
 };
 
 #endif // ConfigReader_H

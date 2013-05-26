@@ -2,40 +2,42 @@
 #include <QFormLayout>
 #include <iostream>
 
+//#include <TetraScalar.h>
+#include <Tetra.h>
+#include <dolfin/mesh/Mesh.h>
+#include <dolfin/fem/FiniteElement.h>
+#include <dolfin/fem/DofMap.h>
+#include <dolfin/la/GenericVector.h>
+#include <dolfin/common/Array.h>
+
 /////////// FVFieldWizard class impl ////////////////////////
-FVFieldWizard::FVFieldWizard(std::vector<std::string> elems, std::vector<std::string> approx, QWidget *parent)
+//FVFunctionSpaceWizard::FVFunctionSpaceWizard(std::vector<std::string> elems, std::vector<std::string> approx, QWidget *parent)
+FVFunctionSpaceWizard::FVFunctionSpaceWizard(ConfigReader* cr, QWidget *parent)
     : QWizard(parent)
  {
-    this->elems = elems;
-    this->approx = approx;
+//    this->elems = elems;
+//    this->approx = approx;
+
+
+    this->cr = cr;
 
     addPage(new IntroPage);
-    addPage(new FieldTypePage);
-    addPage(new FETypePage(elems));
-    addPage(new ApproxDegPage(approx));
-//     addPage(new OutputFilesPage);
-//     addPage(new ConclusionPage);
-
-//     setPixmap(QWizard::BannerPixmap, QPixmap(":/images/banner.png"));
-//     setPixmap(QWizard::BackgroundPixmap, QPixmap(":/images/background.png"));
+    addPage(new FieldTypePage(cr->types));
+    addPage(new FETypePage(cr->elems));
+    addPage(new ApproxDegPage(cr->approx));
 
     setWindowTitle(tr("Fiver Field Wizard"));
  }
 
 
 
-void FVFieldWizard::accept()
+void FVFunctionSpaceWizard::accept()
  {
-//     QByteArray className = field("className").toByteArray();
-//     QByteArray baseClass = field("baseClass").toByteArray();
-//     QByteArray macroName = field("macroName").toByteArray();
-//     QByteArray baseInclude = field("baseInclude").toByteArray();
-
      fieldType = field("fieldType").toInt();
      FEType = field("FEType").toInt();
      approxDeg = field("approxDeg").toInt();
-     std::cout << "wybrano: \n" << fieldType << " | "  << FEType << " | " << approxDeg << std::endl;
-//     QString implementation = field("implementation").toString();
+
+     isFinished = true;
      QDialog::accept();
  }
 
@@ -45,7 +47,6 @@ IntroPage::IntroPage(QWidget *parent)
     : QWizardPage(parent)
 {
     setTitle(tr("Field Definition Wizard"));
-    setPixmap(QWizard::WatermarkPixmap, QPixmap(":/images/watermark1.png"));
 
     label = new QLabel(tr("This wizard will help to determine "
                           "type of the field you try to load and the "
@@ -60,32 +61,18 @@ IntroPage::IntroPage(QWidget *parent)
 
 
 /////////// FieldTypePage class impl ////////////////////////
-FieldTypePage::FieldTypePage(QWidget *parent)
+FieldTypePage::FieldTypePage(std::vector<std::string> types, QWidget *parent)
      : QWizardPage(parent)
  {
      setTitle(tr("Field Type Definition"));
      setSubTitle(tr("Specify the type of field which you  "
                     "would like to load."));
-//     setPixmap(QWizard::LogoPixmap, QPixmap(":/images/logo1.png"));
-
-//     classNameLabel = new QLabel(tr("&Class name:"));
-//     classNameLineEdit = new QLineEdit;
-//     classNameLabel->setBuddy(classNameLineEdit);
 
      fieldTypeCombo = new QComboBox;
      fieldTypeCombo->addItem("select");
-     fieldTypeCombo->addItem("scalar field");
-     fieldTypeCombo->addItem("vector field");
+     for (std::vector<std::string>::iterator it = types.begin() ; it != types.end(); it++)
+         fieldTypeCombo->addItem((*it).c_str());
 
-//     baseClassLabel = new QLabel(tr("B&ase class:"));
-//     baseClassLineEdit = new QLineEdit;
-//     baseClassLabel->setBuddy(baseClassLineEdit);
-
-//     qobjectMacroCheckBox = new QCheckBox(tr("Generate Q_OBJECT &macro"));
-
-//     groupBox = new QGroupBox(tr("C&onstructor"));
-
-//     registerField("className", classNameLineEdit);
      registerField("fieldType*", fieldTypeCombo);
 
      QFormLayout *layout = new QFormLayout;
@@ -102,12 +89,11 @@ FETypePage::FETypePage(std::vector<std::string> elems, QWidget *parent)
      setTitle(tr("Finite Element Type Definition"));
      setSubTitle(tr("Specify the type of finite element which is  "
                     "in use."));
-//     setPixmap(QWizard::LogoPixmap, QPixmap(":/images/logo1.png"));
 
      FETypeCombo = new QComboBox;
      FETypeCombo->addItem("select");
      for (std::vector<std::string>::iterator it = elems.begin() ; it != elems.end(); it++)
-         FETypeCombo->addItem((*it).substr(0,(*it).size()-1).c_str());
+         FETypeCombo->addItem((*it).c_str());
 
      registerField("FEType*", FETypeCombo);
 
@@ -123,12 +109,11 @@ ApproxDegPage::ApproxDegPage(std::vector<std::string> approx,QWidget *parent)
  {
      setTitle(tr("Degree of approximation definition"));
      setSubTitle(tr("Specify the degree of approximation." ));
-//     setPixmap(QWizard::LogoPixmap, QPixmap(":/images/logo1.png"));
 
      approxCombo = new QComboBox;
      approxCombo->addItem("select");
      for (std::vector<std::string>::iterator it = approx.begin() ; it != approx.end(); it++)
-         approxCombo->addItem((*it).substr(0,(*it).size()-1).c_str());
+         approxCombo->addItem((*it).c_str());
 
      registerField("approxDeg*", approxCombo);
 
@@ -136,4 +121,77 @@ ApproxDegPage::ApproxDegPage(std::vector<std::string> approx,QWidget *parent)
      layout->addRow("Degree of approximation: ", approxCombo);
      setLayout(layout);
 
- }
+}
+
+dolfin::FunctionSpace * FVFunctionSpaceWizard::getFunctionSpace( dolfin::Mesh* mesh)
+{
+    ufc::finite_element* el;
+    ufc::dofmap* dofmap;
+    optionExists=false;
+
+//    std::cout << "Vals in wizard: \"" <<fieldType << "\" \"" << FEType<< "\" \"" << approxDeg << "\"" << std::endl;
+
+    int FT = fieldType, FET=FEType, AD = approxDeg;
+
+    for (int i=0; i < cr->map.size(); i++ ){
+        vector<string> m = cr->map[i];
+        if (cr->types[FT-1] == m[0] && cr->elems[FET-1] == m[1] && cr->approx[AD-1] == m[2] ){
+            el =getElementByName(m[3]);
+            dofmap = getDofByName(m[3]);
+            optionExists=true;
+            break;
+        }
+    }
+
+    if (optionExists){
+        dolfin::FiniteElement* elem = new dolfin::FiniteElement(boost::shared_ptr<ufc::finite_element>(el) );
+        dolfin::DofMap* dof = new dolfin::DofMap( boost::shared_ptr<ufc::dofmap>(dofmap) , *mesh );
+        dolfin::FunctionSpace* V = new dolfin::FunctionSpace(
+                    boost::shared_ptr<dolfin::Mesh>(mesh),
+                    boost::shared_ptr<dolfin::FiniteElement>(elem),
+                    boost::shared_ptr<dolfin::DofMap>(dof)
+                    );
+        return V;
+    } else {
+        std::cout << "There is no configuration for options: \""<< cr->types[FT-1] << "\" \""<<
+                     cr->elems[FET-1]  << "\" \"" << cr->approx[AD-1] <<"\""<< std::endl;
+    }
+    return NULL;
+}
+
+ufc::finite_element* FVFunctionSpaceWizard::getElementByName(std::string name)
+{
+    if (name == "tetrascalar0"){
+        return new tetrascalar0();
+    } else if ( name == "tetrascalar1") {
+        return new tetrascalar1();
+    } else if ( name == "tetravector0") {
+        return new tetravector0();
+    } else if ( name == "tetravector1") {
+        return new tetravector1();
+    } else {
+        std::cerr << "There is no class named: " << name << std::endl;
+        return NULL;
+    }
+}
+
+ufc::dofmap* FVFunctionSpaceWizard::getDofByName(std::string name)
+{
+    if (name == "tetrascalar0") {
+        return new tetrascalar_dof0();
+    } else if (name ==  "tetrascalar1" ) {
+        return new tetrascalar_dof1();
+    } else if (name ==  "tetravector0" ) {
+        return new tetravector_dof0();
+    } else if (name ==  "tetravector1" ) {
+        return new tetravector_dof1();
+    } else {
+        std::cerr << "There is no class named: " << name << std::endl;
+        return NULL;
+    }
+}
+
+bool FVFunctionSpaceWizard::isVector()
+{
+    return cr->types[fieldType-1] == "vector";
+}
