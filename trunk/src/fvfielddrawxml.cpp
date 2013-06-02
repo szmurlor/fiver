@@ -99,9 +99,12 @@ void FVFieldDrawXml::fillValuesOfFace( int ie, const dolfin::Facet & facet, doub
                 v[1] = 0;
                 v[2] = 0;
                 for (int vi = 0; vi < 3; vi++ ){
-                    v[0] += val[3*verts[0]+vi] * val[3*verts[0]+vi];
-                    v[1] += val[3*verts[1]+vi] * val[3*verts[1]+vi];
-                    v[2] += val[3*verts[2]+vi] * val[3*verts[2]+vi];
+                    v[0] += val[verts[0]+vi*val.size()/3] * val[verts[0]+vi*val.size()/3];
+//                    v[0] += val[3*verts[0]+vi] * val[3*verts[0]+vi];
+                    v[1] += val[verts[1]+vi*val.size()/3] * val[verts[1]+vi*val.size()/3];
+//                    v[1] += val[3*verts[1]+vi] * val[3*verts[1]+vi];
+                    v[2] += val[verts[2]+vi*val.size()/3] * val[verts[2]+vi*val.size()/3];
+//                    v[2] += val[3*verts[2]+vi] * val[3*verts[2]+vi];
                 }
                 v[0] = sqrt(v[0]);
                 v[1] = sqrt(v[1]);
@@ -269,8 +272,8 @@ void FVFieldDrawXml::drawVectorElem( int ie, dolfin::Array<double> val )
 //        v[i] = field->val(i,ie );
 //    }
     for (int i = 0; i < 3; i++) {
-        modv += val[3*ie+i] * val[3*ie+i];
-        v[i] = val[3*ie+i];
+        modv += val[ie+i*val.size()/3] * val[ie+i*val.size()/3];
+        v[i] = val[ie+i*val.size()/3];
     }
 
 
@@ -340,8 +343,8 @@ void FVFieldDrawXml::drawVectorNode( int in , dolfin::Array<double> val )
 //        v[i] = field->val(i,in );
 //    }
     for (int i = 0; i < 3; i++) {
-        modv += val[3*in+i] * val[3*in+i];
-        v[i] = val[3*in+i];
+        modv += val[in+i*val.size()/3] * val[in+i*val.size()/3];
+        v[i] = val[in+i*val.size()/3];
     }
 
     modv = sqrt(modv);

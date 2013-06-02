@@ -85,17 +85,17 @@ ConfigReader::ConfigReader()
 
     void ConfigReader::cutEndline()
     {
-        std::cout << "types;\n";
+//        std::cout << "types;\n";
         for (int i=0; i < types.size(); i++ ){
             types[i] = types[i].substr(0,types[i].size()-1); //ucinanie entera
 //            std::cout << types[i] << std::endl;
         }
-        std::cout << "elements:\n";
+//        std::cout << "elements:\n";
         for (int i=0; i < elems.size(); i++ ){
             elems[i] = elems[i].substr(0,elems[i].size()-1); //ucinanie entera
 //            std::cout << elems[i] << std::endl;
         }
-        std::cout << "\napprox:\n";
+//        std::cout << "\napprox:\n";
         for (int i=0; i < approx.size(); i++ ){
             approx[i] = approx[i].substr(0,approx[i].size()-1); //ucinanie entera
 //            std::cout << approx[i] << std::endl;

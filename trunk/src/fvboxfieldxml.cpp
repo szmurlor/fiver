@@ -3,10 +3,10 @@
 #include <QtDebug>
 #include <QDir>
 #include <QMessageBox>
-#include <fvboxgrid.h>
+//#include <fvboxgrid.h>
 #include <fvfielddrawxml.h>
-#include <fvfieldslice.h>
-#include <field.h>
+#include <fvfieldslicexml.h>
+//#include <field.h>
 #include <fvanimation.h>
 
 FVBoxFieldXml::FVBoxFieldXml(FVBoxMgr * manager, dolfin::Function * f, int x, int y)
@@ -29,8 +29,8 @@ FVBoxFieldXml::FVBoxFieldXml(FVBoxMgr * manager, dolfin::Function * f, int x, in
 
 FVBoxFieldXml::~FVBoxFieldXml()
 {
-        delete fvFieldInterfaceXml;
-        delete field;
+    delete fvFieldInterfaceXml;
+    delete fvOpener;
 }
 
 void FVBoxFieldXml::setupAttributes( )
@@ -126,7 +126,7 @@ void FVBoxFieldXml::slotDrawVectors( )
 
 void FVBoxFieldXml::slotSlice( )
 {
-        FVFieldSlice * fs = new FVFieldSlice(manager);
+        FVFieldSliceXml * fs = new FVFieldSliceXml(manager);
         addChild( fs );
         fs->slice();
         fs->update();
