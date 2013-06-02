@@ -172,25 +172,30 @@ void FVBoxMesh::slotLoadField()
         if (wizard.optionExists) {
             //    //////////////////////////////////////////////////////
             //         Show Dialog to Open File
-            files = FVHelpers::openFiles(filters, selectedFilter);
+//            files = FVHelpers::openFiles(filters, selectedFilter);
             //    ///////////////////////////////////////////////////////
 
-            foreach (fname, files) {
-                FVOpener *opener = filters[selectedFilter];
-                if (opener != 0) {
+//            foreach (fname, files) {
+                FVOpener *opener = new FVOpenerXmlField();
+                fname = wizard.fname;
+//                FVOpener *opener = filters[selectedFilter];
+//                if (opener != 0) {
                     FVObject* box = opener->open(manager, fname, 0);
                     dolfin::Function* fun = new dolfin::Function( boost::shared_ptr<const dolfin::FunctionSpace>(V), fname.toStdString() );
 
                     ////////////////////////////////////////////////////////////////////////
                     /////////////wypisywanie wartości///////////////////////////////////////
-//                    dolfin::Array<double> val;
-//                    fun->compute_vertex_values(val,*mesh);
-
-//                    std::cout << "values size: " << val.size() << std::endl;
-//                    for (int i=0; i< val.size(); i++){
-//                        std::cout << val[i] << std::endl;
-//                    }
-
+#if 0
+		    unsigned int dim= fun->value_dimension(0);
+                    dolfin::Array<double> val;
+                    fun->compute_vertex_values(val,*mesh);
+                    std::cout << "dim= " << dim << ", values size: " << val.size() << std::endl;
+                    for (int i=0; i< val.size()/dim; i++){
+			for( int d= 0; d < dim; d++ )
+                            std::cout << val[i+d*val.size()/dim] << " ";
+                        std::cout << std::endl;
+                    }
+#endif
                     ////////////////////////////////////////////////////////////////////////
                     if (box != 0) {
                         ((FVBoxFieldXml*) box)->setVector(wizard.isVector());
@@ -203,15 +208,15 @@ void FVBoxMesh::slotLoadField()
                         manager->autoArrangeChildren(this);
 
                     } else {
-                        QMessageBox::warning(manager,"Loading text field", tr("I have encountered an error processing text field from file: %1. See diagnostic messages to verify the problem.").arg(fname));
+                        QMessageBox::warning(manager,"Loading field", tr("I have encountered an error processing text field from file: %1. See diagnostic messages to verify the problem.").arg(fname));
                     }
-                } else {
-                    QMessageBox::warning(manager,"Loading text field", tr("You must selected proper filter to point the expected file format."));
-                }
-            }
+//                } else {
+//                    QMessageBox::warning(manager,"Loading text field", tr("You must selected proper filter to point the expected file format."));
+//                }
+//            }
         }
         else {
-            QMessageBox::warning(manager,"Loading text field", tr("Choosen options are not supported."));
+            QMessageBox::warning(manager,"Loading xml field", tr("Choosen options are not supported."));
         }
     }else {
         std::cout << "Loading field was cancelled" << std::endl;

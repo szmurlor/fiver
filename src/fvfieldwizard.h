@@ -10,6 +10,7 @@
 #include <QGroupBox>
 #include <QVBoxLayout>
 #include <QComboBox>
+#include <QPushButton>
 
 #include <sstream>
 #include <string.h>
@@ -17,6 +18,8 @@
 #include <vector>
 #include <dolfin/function/FunctionSpace.h>
 #include <configreader.h>
+#include <fvopenerxmlfield.h>
+#include <fvhelpers.h>
 
 /////////// FVFieldWizard class ////////////////////////
 class FVFunctionSpaceWizard : public QWizard
@@ -24,7 +27,6 @@ class FVFunctionSpaceWizard : public QWizard
     Q_OBJECT
 public:
     FVFunctionSpaceWizard(ConfigReader* cr, QWidget *parent = 0);
-//    FVFunctionSpaceWizard(std::vector<std::string> elems , std::vector<std::string> approx, QWidget *parent = 0);
 
     void accept();
     void reject()
@@ -33,13 +35,11 @@ public:
         QDialog::reject();
     }
 
-//    std::vector<std::string> elems;
-//    std::vector<std::string> approx;
-
     ConfigReader* cr;
     int fieldType;
     int FEType;
     int approxDeg;
+    QString fname;
     bool isFinished;
     bool optionExists;
 
@@ -50,55 +50,31 @@ public:
     bool isVector();
 };
 
-/////////// IntroPage class ////////////////////////
-class IntroPage : public QWizardPage
+
+/////////// WizardPage class ////////////////////////
+class WizardPage : public QWizardPage
  {
      Q_OBJECT
 
  public:
-     IntroPage(QWidget *parent = 0);
+     WizardPage(std::vector<std::string> types, std::vector<std::string> elems,
+                std::vector<std::string> approx, QWidget *parent = 0);
 
- private:
-     QLabel *label;
- };
-
-/////////// FieldTypePage class ////////////////////////
-class FieldTypePage : public QWizardPage
- {
-     Q_OBJECT
-
- public:
-     FieldTypePage(std::vector<std::string> types, QWidget *parent = 0);
-
- private:
-     QLabel *classNameLabel;
+public slots:
+     void on_fileButton_clicked();
+private:
      QComboBox *fieldTypeCombo;
-     QLineEdit *classNameLineEdit;
- };
-
-/////////// FETypePage class ////////////////////////
-class FETypePage : public QWizardPage
- {
-     Q_OBJECT
-
- public:
-     FETypePage(std::vector<std::string> elems, QWidget *parent = 0);
-
- private:
      QComboBox *FETypeCombo;
- };
-
-/////////// ApproxDegPage class ////////////////////////
-class ApproxDegPage : public QWizardPage
- {
-     Q_OBJECT
-
- public:
-     ApproxDegPage(std::vector<std::string> approx, QWidget *parent = 0);
-
- private:
      QComboBox *approxCombo;
+
+     QLineEdit *fileLineEdit;
+     QPushButton *fileButton;
+
+     QString selectedFilter;
+     QMap< QString, FVOpener* > filters;
+
  };
+
 
 
 #endif // FVFIELDWIZARD_H

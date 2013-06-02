@@ -2,8 +2,7 @@
 #include <QFormLayout>
 #include <iostream>
 
-//#include <TetraScalar.h>
-#include <Tetra.h>
+#include <finiteelementsclasses.h>
 #include <dolfin/mesh/Mesh.h>
 #include <dolfin/fem/FiniteElement.h>
 #include <dolfin/fem/DofMap.h>
@@ -15,16 +14,9 @@
 FVFunctionSpaceWizard::FVFunctionSpaceWizard(ConfigReader* cr, QWidget *parent)
     : QWizard(parent)
  {
-//    this->elems = elems;
-//    this->approx = approx;
-
-
     this->cr = cr;
 
-    addPage(new IntroPage);
-    addPage(new FieldTypePage(cr->types));
-    addPage(new FETypePage(cr->elems));
-    addPage(new ApproxDegPage(cr->approx));
+    addPage(new WizardPage(cr->types,cr->elems,cr->approx));
 
     setWindowTitle(tr("Fiver Field Wizard"));
  }
@@ -36,38 +28,25 @@ void FVFunctionSpaceWizard::accept()
      fieldType = field("fieldType").toInt();
      FEType = field("FEType").toInt();
      approxDeg = field("approxDeg").toInt();
-
+     fname = field("fileName").toString();
      isFinished = true;
+
+
      QDialog::accept();
  }
 
 
-/////////// IntroPage class impl ////////////////////////
-IntroPage::IntroPage(QWidget *parent)
-    : QWizardPage(parent)
-{
-    setTitle(tr("Field Definition Wizard"));
-
-    label = new QLabel(tr("This wizard will help to determine "
-                          "type of the field you try to load and the "
-                          "type of finite element which is in use."));
-    label->setWordWrap(true);
-
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(label);
-    setLayout(layout);
-}
-
-
-
-/////////// FieldTypePage class impl ////////////////////////
-FieldTypePage::FieldTypePage(std::vector<std::string> types, QWidget *parent)
+/////////// WizardPage class impl ////////////////////////
+WizardPage::WizardPage(std::vector<std::string> types,std::vector<std::string> elems,
+                       std::vector<std::string> approx, QWidget *parent)
      : QWizardPage(parent)
  {
-     setTitle(tr("Field Type Definition"));
-     setSubTitle(tr("Specify the type of field which you  "
-                    "would like to load."));
+     setTitle(tr("Field Definition Wizard"));
+     setSubTitle(tr("Specify the "
+                    "type of the field you try to load and the "
+                    "type of finite element which is in use."));
 
+     //Field type
      fieldTypeCombo = new QComboBox;
      fieldTypeCombo->addItem("select");
      for (std::vector<std::string>::iterator it = types.begin() ; it != types.end(); it++)
@@ -75,21 +54,7 @@ FieldTypePage::FieldTypePage(std::vector<std::string> types, QWidget *parent)
 
      registerField("fieldType*", fieldTypeCombo);
 
-     QFormLayout *layout = new QFormLayout;
-     layout->addRow("field type: ", fieldTypeCombo);
-     setLayout(layout);
-
- }
-
-
-/////////// FETypePage class impl ////////////////////////
-FETypePage::FETypePage(std::vector<std::string> elems, QWidget *parent)
-     : QWizardPage(parent)
- {
-     setTitle(tr("Finite Element Type Definition"));
-     setSubTitle(tr("Specify the type of finite element which is  "
-                    "in use."));
-
+     //FEType
      FETypeCombo = new QComboBox;
      FETypeCombo->addItem("select");
      for (std::vector<std::string>::iterator it = elems.begin() ; it != elems.end(); it++)
@@ -97,19 +62,7 @@ FETypePage::FETypePage(std::vector<std::string> elems, QWidget *parent)
 
      registerField("FEType*", FETypeCombo);
 
-     QFormLayout *layout = new QFormLayout;
-     layout->addRow("Finite Element type: ", FETypeCombo);
-     setLayout(layout);
-
- }
-
-/////////// ApproxDegPage class impl ////////////////////////
-ApproxDegPage::ApproxDegPage(std::vector<std::string> approx,QWidget *parent)
-     : QWizardPage(parent)
- {
-     setTitle(tr("Degree of approximation definition"));
-     setSubTitle(tr("Specify the degree of approximation." ));
-
+     //Degree of approx
      approxCombo = new QComboBox;
      approxCombo->addItem("select");
      for (std::vector<std::string>::iterator it = approx.begin() ; it != approx.end(); it++)
@@ -117,11 +70,34 @@ ApproxDegPage::ApproxDegPage(std::vector<std::string> approx,QWidget *parent)
 
      registerField("approxDeg*", approxCombo);
 
+     fileLineEdit = new QLineEdit();
+     fileLineEdit->setEnabled(false);
+     fileButton = new QPushButton("&Choose file", this);
+     connect(fileButton, SIGNAL(clicked()), this, SLOT(on_fileButton_clicked()));
+     registerField("fileName*", fileLineEdit);
+
      QFormLayout *layout = new QFormLayout;
+     layout->addRow("Field type: ", fieldTypeCombo);
+     layout->addRow("Finite Element type: ", FETypeCombo);
      layout->addRow("Degree of approximation: ", approxCombo);
+     layout->addRow(fileLineEdit, fileButton);
      setLayout(layout);
 
+ }
+
+void WizardPage::on_fileButton_clicked(){
+//    fileLineEdit->setEnabled(true);
+    filters[tr("1 - Xml field file (*.xml*)")] =  new FVOpenerXmlField();
+
+    //    //////////////////////////////////////////////////////
+    //         Show Dialog to Open File
+    QStringList files;
+    files = FVHelpers::openFiles(filters, selectedFilter);
+    //    ///////////////////////////////////////////////////////
+
+    fileLineEdit->insert(files.at(0));
 }
+
 
 dolfin::FunctionSpace * FVFunctionSpaceWizard::getFunctionSpace( dolfin::Mesh* mesh)
 {

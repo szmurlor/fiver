@@ -75,7 +75,8 @@ HEADERS += fviewer.h \
     fvfieldinterfacexml.h \
     fvfieldwizard.h \
     configreader.h \
-    fvfielddrawxml.h
+    fvfielddrawxml.h \
+    fvfieldslicexml.h
 SOURCES += main.cpp \
            fviewer.cpp \
            fvlist.cpp \
@@ -142,7 +143,8 @@ SOURCES += main.cpp \
     fvfieldinterfacexml.cpp \
     fvfieldwizard.cpp \
     configreader.cpp \
-    fvfielddrawxml.cpp
+    fvfielddrawxml.cpp \
+    fvfieldslicexml.cpp
 INCLUDEPATH += . ./boxmgr ./attr ./coremesh2/src ./meshreader2 ./meshjoiner ./fiverinjector ./tetgen ./dolfin \
         ../QConsole/QConsole \
         ../QConsole/Console \
@@ -177,6 +179,8 @@ target.path = $$INSTALL_ROOT/bin
 
 OTHER_FILES += \
     config.txt
+
+
 
 
 

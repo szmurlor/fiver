@@ -205,11 +205,13 @@ HEADERS += \
     la/uBLASILUPreconditioner.h \
     la/uBLASDummyPreconditioner.h \
     io/XMLFunctionData.h \
-    Tetra.h
+    finiteelementsclasses.h
 
 !win32 {
     LIBS +=  -L/usr/lib -lboost_program_options -larmadillo -lxml2 -lboost_iostreams -lboost_system -lboost_filesystem
 }
+
+
 
 
 
