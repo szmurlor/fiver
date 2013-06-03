@@ -60,8 +60,8 @@ void GUIAttributes::setUI( )
 	lw = new QListWidget(this);
 	gl->addWidget( lw,0,0);
 	connect( lw, SIGNAL(currentItemChanged ( QListWidgetItem*, QListWidgetItem*)), this, SLOT(slotCurrentItemChanged ( QListWidgetItem*, QListWidgetItem*)) );
-	lw->setMaximumWidth(100);
-	lw->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred );
+        lw->setMaximumWidth(150);
+        lw->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred );
 	
 	buildSections();
 	readSettings();
@@ -85,7 +85,7 @@ void GUIAttributes::setUI( )
 
 void GUIAttributes::saveSettings( )
 {
-	Attr * a;
+        Attr * a;
 	a = models[1]->getAttr( tr("Default Same Color") );
 	if (a != 0) fvsettings.setValue( QString("/RSoft/FViewer/SingleColor"), QVariant(a->color()) );	
 	
@@ -111,6 +111,15 @@ void GUIAttributes::saveSettings( )
         if (a != 0) fvsettings.setValue( QString("/RSoft/FViewer/vector.head.faces"), QVariant(a->value()) );
         a = models[2]->getAttr( tr("vector.same.length"));
         if (a != 0) fvsettings.setValue( QString("/RSoft/FViewer/vector.same.length"), QVariant(a->value()) );
+
+        a = models[3]->getAttr( tr("field types"));
+        if (a != 0) fvsettings.setValue( QString("/RSoft/FViewer/field_types"), QVariant(a->value()));
+        a = models[3]->getAttr( tr("finite elements types"));
+        if (a != 0) fvsettings.setValue( QString("/RSoft/FViewer/finite_elements_types"), QVariant(a->value()));
+        a = models[3]->getAttr( tr("approximation degrees"));
+        if (a != 0) fvsettings.setValue( QString("/RSoft/FViewer/approximation_degrees"), QVariant(a->value()));
+        a = models[3]->getAttr( tr("map"));
+        if (a != 0) fvsettings.setValue( QString("/RSoft/FViewer/map"), QVariant(a->value()));
 
 	fvsettings.sync();
 }
@@ -158,10 +167,23 @@ void GUIAttributes::readSettings( )
         if (a != 0) a->setValue(fvsettings.value( QString("/RSoft/FViewer/vector.head.faces"), QVariant("4") ).toString() );
         a = models[2]->getAttr( tr("vector.same.length"));
         if (a != 0) a->setValue(fvsettings.value( QString("/RSoft/FViewer/vector.same.length"), QVariant("true") ).toString() );
+
+        a = models[3]->getAttr( tr("field types"));
+        if (a != 0) a->setValue(fvsettings.value( QString("/RSoft/FViewer/field_types"), QVariant("scalar vector") ).toString() );
+        a = models[3]->getAttr( tr("finite elements types"));
+        if (a != 0) a->setValue(fvsettings.value( QString("/RSoft/FViewer/finite_elements_types"), QVariant("CG DG") ).toString() );
+        a = models[3]->getAttr( tr("approximation degrees"));
+        if (a != 0) a->setValue(fvsettings.value( QString("/RSoft/FViewer/approximation_degrees"), QVariant("0 1") ).toString() );
+        a = models[3]->getAttr( tr("map"));
+        if (a != 0) a->setValue(fvsettings.value( QString("/RSoft/FViewer/map"), QVariant("scalar DG 0 tetrascalar0\nscalar CG 1 tetrascalar1\nvector DG 0 tetravector0\nvector CG 1 tetravector1") ).toString() );
+
 }
 
 void GUIAttributes::slotOK( )
 {
+        for( QVector<AttrModel*>::iterator m = models.begin(); m != models.end(); m++){
+            (*m)->update();
+        }
 	saveSettings();
 	accept();
 }
@@ -224,5 +246,17 @@ void GUIAttributes::buildSections( )
 
         it = new QListWidgetItem(tr("Parameters"),lw );
         it->setData(1,2);
+        lw->addItem( it );
+
+        // Wizard Properties
+        m = new AttrModel();
+        models.push_back( m );
+        m->addAttr( tr("field types"), QString("scalar vector"), QString("text") );
+        m->addAttr( tr("finite element types"), QString("CG DG"), QString("text") );
+        m->addAttr( tr("approximation degrees"), QString("0 1"), QString("text") );
+        m->addAttr( tr("map"), QString("scalar DG 0 tetrascalar0\nscalar CG 1 tetrascalar1\nvector DG 0 tetravector0\nvector CG 1 tetravector1"), QString("text") );
+
+        it = new QListWidgetItem(tr("Wizard Properties"),lw );
+        it->setData(1,3);
         lw->addItem( it );
 }

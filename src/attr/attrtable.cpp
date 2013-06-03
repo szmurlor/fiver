@@ -28,10 +28,11 @@ AttrTable::AttrTable(QWidget * _parent)
 
         connect(ad, SIGNAL(closeEditor(QWidget*)), this, SLOT(customCloseEditor(QWidget*)) );
 	
-	verticalHeader()->setResizeMode( QHeaderView::Fixed );
+        verticalHeader()->setResizeMode( QHeaderView::ResizeToContents );
 	verticalHeader()->setDefaultSectionSize( fontInfo().pixelSize() + 10 );
 	
         horizontalHeader()->setStretchLastSection( false );
+        horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
 
 	setEditTriggers( CurrentChanged | SelectedClicked);
 }
