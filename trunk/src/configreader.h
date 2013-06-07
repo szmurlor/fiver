@@ -13,6 +13,7 @@ class ConfigReader
 public:
     ConfigReader();
     int ReadFromFile( string fname );
+    int ReadConfig();
     void cutEndline();
 
     vector<string> types;

@@ -61,7 +61,7 @@ public:
 public slots:
 	void slotDrawColormap();
 	void slotDrawVectors();
-	void slotDrawGrid();
+        void slotDrawMesh();
 	void slotDrawBoundingBox();
 	void slotRotateManipulator();
 	void slotTranslateManipulator();

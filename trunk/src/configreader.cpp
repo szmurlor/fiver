@@ -1,5 +1,7 @@
 #include "configreader.h"
 #include <iostream>
+#include <main.h>
+#include <boost/algorithm/string.hpp>
 
 ConfigReader::ConfigReader()
 {
@@ -80,6 +82,53 @@ ConfigReader::ConfigReader()
             fclose(fin);
         }
         std::cout << "ConfigReader: Reading configuration ended." << std::endl;
+        return(0);
+    }
+
+    int ConfigReader::ReadConfig()
+    {
+        std::cout << "ConfigReader: Reading configuration." << std::endl;
+
+        std::string s;
+        QVariant var =fvsettings.value( QString("/RSoft/FViewer/field_types"));
+        if (var != 0){
+            s = var.toString().toStdString();
+            std::cout << "field_types:" << std::endl;
+            boost::split(types, s, boost::is_any_of(" "));
+            for (std::vector<string>::iterator it = types.begin(); it != types.end(); it++)
+                std::cout <<  (*it) << std::endl;
+        }
+        var =fvsettings.value( QString("/RSoft/FViewer/finite_elements_types"));
+        if (var != 0){
+            s = var.toString().toStdString();
+            std::cout << "finite_elements_types:" << std::endl;
+            boost::split(elems, s, boost::is_any_of(" "));
+            for (std::vector<string>::iterator it = elems.begin(); it != elems.end(); it++)
+                std::cout <<  (*it) << std::endl;
+        }
+        var =fvsettings.value( QString("/RSoft/FViewer/approximation_degrees"));
+        if (var != 0){
+            s = var.toString().toStdString();
+            std::cout << "approximation_degrees:" << std::endl;
+            boost::split(approx, s, boost::is_any_of(" "));
+            for (std::vector<string>::iterator it = approx.begin(); it != approx.end(); it++)
+                std::cout <<  (*it) << std::endl;
+        }
+        var =fvsettings.value( QString("/RSoft/FViewer/map"));
+        if (var != 0){
+            s = var.toString().toStdString();
+            std::cout << "map: " << std::endl;
+            vector<string> tmp;
+            boost::split(tmp, s, boost::is_any_of("\n"));
+
+            for (vector<string>::iterator it=tmp.begin(); it!= tmp.end(); it++){
+                vector<string>* vec = new vector<string>();
+                std::cout << (*it) << std::endl;
+                boost::split((*vec), (*it) , boost::is_any_of(" "));
+                map.push_back(*vec);
+            }
+        }
+
         return(0);
     }
 

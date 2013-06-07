@@ -23,6 +23,7 @@
 #include <fvhelpers.h>
 #include <fvfieldwizard.h>
 #include <configreader.h>
+#include <fvboundbox.h>
 
 #include <dolfin/function/Function.h>
 #include <dolfin/function/FunctionSpace.h>
@@ -156,9 +157,12 @@ void FVBoxMesh::slotLoadField()
 
     //////////////////////////////////////////////////////////
     //Read config file
+    //Read config file
     ConfigReader* cr = new ConfigReader();
-    cr->ReadFromFile("src/config.txt");
-    cr->cutEndline();
+    cr->ReadConfig();
+//    char *configpath= getenv( "FIVER_XML_FIELD_CONFIG" );
+//    cr->ReadFromFile(configpath);
+//    cr->cutEndline();
     //////////////////////////////////////////////////////////
 
 
@@ -170,16 +174,8 @@ void FVBoxMesh::slotLoadField()
         dolfin::FunctionSpace* V = wizard.getFunctionSpace(mesh);
 
         if (wizard.optionExists) {
-            //    //////////////////////////////////////////////////////
-            //         Show Dialog to Open File
-//            files = FVHelpers::openFiles(filters, selectedFilter);
-            //    ///////////////////////////////////////////////////////
-
-//            foreach (fname, files) {
                 FVOpener *opener = new FVOpenerXmlField();
                 fname = wizard.fname;
-//                FVOpener *opener = filters[selectedFilter];
-//                if (opener != 0) {
                     FVObject* box = opener->open(manager, fname, 0);
                     dolfin::Function* fun = new dolfin::Function( boost::shared_ptr<const dolfin::FunctionSpace>(V), fname.toStdString() );
 
@@ -210,10 +206,6 @@ void FVBoxMesh::slotLoadField()
                     } else {
                         QMessageBox::warning(manager,"Loading field", tr("I have encountered an error processing text field from file: %1. See diagnostic messages to verify the problem.").arg(fname));
                     }
-//                } else {
-//                    QMessageBox::warning(manager,"Loading text field", tr("You must selected proper filter to point the expected file format."));
-//                }
-//            }
         }
         else {
             QMessageBox::warning(manager,"Loading xml field", tr("Choosen options are not supported."));
@@ -234,15 +226,15 @@ void FVBoxMesh::slotDrawBoundaries( )
 
 void FVBoxMesh::slotDrawBoundingBox( )
 {
-//        FVBoundBox * bb = new FVBoundBox( manager );
+        FVBoundBox * bb = new FVBoundBox( manager );
 
-//        // Initialize the bounding box. This will we just fixed.
-//        double p1[3],p2[3];
-//        grid->getBBox(p1,p2);
-//        bb->setBBox(p1,p2);
+        // Initialize the bounding box. This will we just fixed.
+        double p1[3],p2[3];
+        FVHelpers::getBBox(mesh,p1,p2);
+        bb->setBBox(p1,p2);
 
-//        addChild( bb );
-//        bb->update();
+        addChild( bb );
+        bb->update();
 }
 
 void FVBoxMesh::slotGridToSTL()
@@ -295,9 +287,9 @@ void FVBoxMesh::setupMenu( )
 //    contextMenuObj->addAction(tr("&Draw Elements"), this, SLOT( slotDrawElements() ) );
     contextMenuObj->addAction(tr("&Draw Vertices"), this, SLOT( slotDrawVertices() ) );
 //    contextMenuObj->addAction(tr("&Draw Subdomain wireframe"), this, SLOT( slotDrawSubdomainWireframe() ) );
-//    contextMenuObj->addSeparator();
+    contextMenuObj->addSeparator();
 //    contextMenuObj->addAction(tr("Draw &Boundaries"), this, SLOT(  slotDrawBoundaries() ) );
-//    contextMenuObj->addAction(tr("Draw B&oundig Box"), this, SLOT(  slotDrawBoundingBox() ) );
+    contextMenuObj->addAction(tr("Draw B&oundig Box"), this, SLOT(  slotDrawBoundingBox() ) );
 
     contextMenuObj->addSeparator();
     contextMenuObj->addAction(tr("Load &field"), this, SLOT(  slotLoadField() ) );
@@ -318,7 +310,7 @@ FVInterface * FVBoxMesh::getInterface( QString interfaceName )
         if (interfaceName == QString("FVGridInterface"))
                 return fvGridInterface;
 
-        return parentInterface( interfaceName );;
+        return parentInterface( interfaceName );
 }
 
 void FVBoxMesh::slotRotateManipulator( )
