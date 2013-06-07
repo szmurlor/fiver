@@ -252,7 +252,7 @@ void GUIAttributes::buildSections( )
         m = new AttrModel();
         models.push_back( m );
         m->addAttr( tr("field types"), QString("scalar vector"), QString("text") );
-        m->addAttr( tr("finite element types"), QString("CG DG"), QString("text") );
+        m->addAttr( tr("finite elements types"), QString("CG DG"), QString("text") );
         m->addAttr( tr("approximation degrees"), QString("0 1"), QString("text") );
         m->addAttr( tr("map"), QString("scalar DG 0 tetrascalar0\nscalar CG 1 tetrascalar1\nvector DG 0 tetravector0\nvector CG 1 tetravector1"), QString("text") );
 

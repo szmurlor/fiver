@@ -47,6 +47,7 @@ FVFieldSliceXml::FVFieldSliceXml(FVBoxMgr * manager, int x, int y)
         sName = "FVFieldSliceXml";
 	sType = "Slice";
 
+
         fvFieldInterface = new FVFieldInterfaceXml( field );
         fvGridInterface = new FVGridInterface( mesh );
 
@@ -77,15 +78,16 @@ void FVFieldSliceXml::slice()
         dolfin::Function * f = reqField.getFunction(parentObject());
         dolfin::Mesh * m = reqGrid.getMesh(parentObject());
 
-        sName = f->name().c_str();//->getAttr("name").c_str();
-	
-//        delete mesh;
-//        mesh = new dolfin::Mesh();
+        mesh = m;
+        field = f;
 
-//	delete field;
-//	field = new dolfin::Function();
-			
-	
+        delete fvFieldInterface;
+        fvFieldInterface = new FVFieldInterfaceXml( field );
+        delete fvGridInterface;
+        fvGridInterface = new FVGridInterface( mesh );
+
+        sName = f->name().c_str();//->getAttr("name").c_str();
+
         if (bFirstSlice) {
                 bFirstSlice = false;
                 FVHelpers::getCenter(m,P);//g->getCenter( P );
@@ -133,7 +135,7 @@ void FVFieldSliceXml::setupMenu( )
 //		contextMenuObj->addAction(tr("Draw &Vectors"), this, SLOT( slotDrawVectors() ) );
 	contextMenuObj->addAction(tr("Draw &Colormap"), this, SLOT( slotDrawColormap() ) );
 	
-	contextMenuObj->addAction(tr("Draw &Grid"), this, SLOT( slotDrawGrid() ) );
+        contextMenuObj->addAction(tr("Draw &Mesh"), this, SLOT( slotDrawMesh() ) );
 	contextMenuObj->addAction(tr("Draw &Bounding Box"), this, SLOT( slotDrawBoundingBox() ) );
 	
 	contextMenuObj->addSeparator();
@@ -143,24 +145,24 @@ void FVFieldSliceXml::setupMenu( )
 	
 }
 
-void FVFieldSliceXml::slotDrawGrid( )
+void FVFieldSliceXml::slotDrawMesh( )
 {
-//        qDebug() << "FVFieldSliceXml drawing grid...";
-//	FVGridDraw * gd = new FVGridDraw( manager, this, childSuggestedX(), childSuggestedY() );
-//	manager->addObj( gd );
-//	manager->addCon(this, gd, "", "");
-//	gd->update();
+        qDebug() << "FVFieldSliceXml drawing mesh...";
+        FVMeshDraw* md = new FVMeshDraw(manager, this, childSuggestedX(), childSuggestedY() );
+        manager->addObj( md );
+        manager->addCon(this, md, "", "");
+        md->update();
 }
 
 void FVFieldSliceXml::slotDrawBoundingBox( )
 {
-//	FVBoundBox * bb = new FVBoundBox( manager, childSuggestedX(), childSuggestedY() );
-//	double p1[3],p2[3];
-//	grid->getBBox(p1,p2);
-//	bb->setBBox(p1,p2);
-//	manager->addObj( bb );
-//	manager->addCon(this, bb, "", "");
-//	bb->update();
+        FVBoundBox * bb = new FVBoundBox( manager, childSuggestedX(), childSuggestedY() );
+        double p1[3],p2[3];
+        FVHelpers::getBBox(mesh,p1,p2);
+        bb->setBBox(p1,p2);
+        manager->addObj( bb );
+        manager->addCon(this, bb, "", "");
+        bb->update();
 }
 
 void FVFieldSliceXml::setupAttributes( )
@@ -220,10 +222,10 @@ void FVFieldSliceXml::updateAttributes( )
 
 void FVFieldSliceXml::slotDrawVectors( )
 {
-//	FVFieldDraw * fd = new FVFieldDraw(manager,this);
-//	addChild(fd,QString("DrawField"),QString("Draw"));
-//	fd->setAttrValue( QString("View Style"), QString("vectors") );
-//	fd->update();
+        FVFieldDrawXml * fd = new FVFieldDrawXml(manager,this);
+        addChild(fd,QString("DrawField"),QString("Draw"));
+        fd->setAttrValue( QString("View Style"), QString("vectors") );
+        fd->update();
 }
 
 void FVFieldSliceXml::slotRotateManipulator( )
@@ -350,7 +352,7 @@ void FVFieldSliceXml::updateSlice( )
 
 FVInterface * FVFieldSliceXml::getInterface( QString interfaceName )
 {
-	if (interfaceName == QString("FVFieldInterface"))
+        if (interfaceName == QString("FVFieldInterface"))
 		return fvFieldInterface;
 	if (interfaceName == QString("FVGridInterface"))
 		return fvGridInterface;
@@ -360,9 +362,9 @@ FVInterface * FVFieldSliceXml::getInterface( QString interfaceName )
 
 void FVFieldSliceXml::slotDrawColormap( )
 {
-//	FVFieldDraw * fd = new FVFieldDraw( manager, this );
-//	addChild(fd, QString("DrawField"),QString("Draw"));
-//	fd->update();
+        FVFieldDrawXml * fd = new FVFieldDrawXml( manager, this );
+        addChild(fd, QString("DrawFieldXml"),QString("Draw"));
+        fd->update();
 }
 
 bool FVFieldSliceXml::message( const QList< QString > &argv )

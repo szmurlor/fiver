@@ -92,14 +92,14 @@ void FVBoxFieldXml::setupMenu( )
         }
         contextMenuObj->addAction(tr("&Draw Colormap"), this, SLOT( slotDrawColormap() ) );
 
-        contextMenuObj->addSeparator();
-        contextMenuObj->addAction(tr("&Add Slice"), this, SLOT( slotSlice() ) );
+//        contextMenuObj->addSeparator();
+//        contextMenuObj->addAction(tr("&Add Slice"), this, SLOT( slotSlice() ) );
 
-        contextMenuObj->addSeparator();
-        contextMenuObj->addAction(tr("&Animate Visualisation"), this, SLOT( slotAnimate() ) );
+//        contextMenuObj->addSeparator();
+//        contextMenuObj->addAction(tr("&Animate Visualisation"), this, SLOT( slotAnimate() ) );
 
-        contextMenuObj->addSeparator();
-        contextMenuObj->addAction(tr("&Reload"), this, SLOT( slotReload() ) );
+//        contextMenuObj->addSeparator();
+//        contextMenuObj->addAction(tr("&Reload"), this, SLOT( slotReload() ) );
 
         contextMenuObj->addSeparator();
         contextMenuObj->addAction(tr("De&lete"),(QWidget*) manager, SLOT(slotDelete()) );
