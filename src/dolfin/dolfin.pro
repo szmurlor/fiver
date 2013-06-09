@@ -1,7 +1,7 @@
 TEMPLATE = lib
 TARGET = dolfin
 DEPENDPATH += .
-INCLUDEPATH += . .. /usr/include/libxml2 /usr/include/boost
+INCLUDEPATH += . .. /usr/include/libxml2 /usr/include/boost ../ufc-2.0.5
 DESTDIR = ../bin
 
 target.path = $$INSTALL_ROOT/lib
@@ -208,7 +208,8 @@ HEADERS += \
     finiteelementsclasses.h
 
 !win32 {
-    LIBS +=  -L/usr/lib -lboost_program_options -larmadillo -lxml2 -lboost_iostreams -lboost_system -lboost_filesystem
+    LIBS +=  -L/usr/lib -lboost_program_options -larmadillo -lxml2 -lboost_iostreams -lboost_system -lboost_filesystem 
+    TARGETDEPS += ../ufc-2.0.5/_ufc.so
 }
 
 

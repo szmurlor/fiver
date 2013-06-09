@@ -16,7 +16,7 @@ isEmpty(INSTALL_ROOT){
 unix { system("echo INSTALL_ROOT=$$INSTALL_ROOT >> common.pri") }
 
 #SUBDIRS += src/fiverinjector QConsole src/log src/boxmgr src/attr src/coremesh2  src/meshreader2 src
-SUBDIRS += log boxmgr attr coremesh2  meshreader2 meshjoiner tetgen fiver dolfin
+SUBDIRS += log boxmgr attr coremesh2  meshreader2 meshjoiner tetgen fiver dolfin ufc
 log.subdir=src/log
 boxmgr.subdir=src/boxmgr
 attr.subdir=src/attr
@@ -26,9 +26,11 @@ meshreader2.depends=coremesh2
 tetgen.subdir=src/tetgen
 meshjoiner.subdir=src/meshjoiner
 meshjoiner.depends=tetgen
+ufc.subdir=src/ufc-2.0.5
 dolfin.subdir=src/dolfin
+dolfin.depends=ufc
 fiver.subdir=src
-fiver.depends= meshreader2 meshjoiner boxmgr log attr dolfin
+fiver.depends= meshreader2 meshjoiner boxmgr log attr dolfin 
 TEMPLATE = subdirs
 CONFIG += \
 #release \

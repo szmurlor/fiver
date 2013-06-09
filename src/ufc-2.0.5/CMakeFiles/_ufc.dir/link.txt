@@ -1,0 +1,1 @@
+/usr/bin/c++  -fPIC -O3 -DNDEBUG   -shared -Wl,-soname,_ufc.so -o _ufc.so CMakeFiles/_ufc.dir/src/ufc/ufcPYTHON_wrap.cxx.o -lpython2.7 
