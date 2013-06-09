@@ -1,0 +1,1 @@
+/home/kokos/Pulpit/ufc-2.0.5/CMakeFiles/_ufc.dir
