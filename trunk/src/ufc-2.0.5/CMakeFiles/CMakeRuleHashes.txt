@@ -1,2 +1,0 @@
-# Hashes of file build rules.
-f5662abb081108dd05f79ae94deb3fe3 src/ufc/ufcPYTHON_wrap.cxx
