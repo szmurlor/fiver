@@ -1,4 +1,11 @@
 
+#ufc.target = src/ufc-2.0.5/_ufc.so
+#ufc.subdir=src/ufc-2.0.5
+#ufc.depends = FORCE
+system ( echo 'Building ufc' && cd src/ufc-2.0.5 && cmake . && make )
+
+PRE_TARGETDEPS += src/ufc-2.0.5/_ufc.so 
+
 #Check for QGLViewer
 isEmpty(QGLVIEWER_LIB){
     QGLVIEWER_LIB=qglviewer-qt4
@@ -26,6 +33,7 @@ meshreader2.depends=coremesh2
 tetgen.subdir=src/tetgen
 meshjoiner.subdir=src/meshjoiner
 meshjoiner.depends=tetgen
+#ufc.commands= @echo 'Building ufc' && cd src/ufc-2.0.5 && cmake & make
 ufc.subdir=src/ufc-2.0.5
 dolfin.subdir=src/dolfin
 dolfin.depends=ufc
@@ -49,6 +57,6 @@ utils.commands= @echo Building $$utils.target && cd src/utils/fieldavg && make &
 utils-clean.target=fiver-utils-clean
 utils-clean.commands= @echo Building $$utils.target && cd src/utils/fieldavg && make clean && cd ../fieldenergy && make clean && cd ../fieldinfo && make clean && cd ../gridscale && make clean && cd ../vol2surf && make clean
 
-QMAKE_EXTRA_TARGETS += utils utils-clean
+QMAKE_EXTRA_TARGETS += utils utils-clean ufc
 
 QMAKE_DISTCLEAN += common.pri
