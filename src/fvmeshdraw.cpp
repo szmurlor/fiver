@@ -124,7 +124,7 @@ void FVMeshDraw::paintGL()
 
 void FVMeshDraw::paintElemsNums( )
 {
-        SetOfInt visEle( getAttrValue(tr("Interesting Elements")), 1, mesh->num_entities(3) );
+        SetOfInt visEle( getAttrValue(tr("Interesting Elements")), 1, mesh->num_entities(mesh->topology().dim()) );
 
         if (visEle.sum() > 1000) {
             if (QMessageBox::question( 0, tr("To many objects warning."), tr("You are trying to draw over 1000 element numbers. This process may take a long time. Do you want to continue?"), QMessageBox::Yes | QMessageBox::No ) == QMessageBox::No) {
@@ -132,10 +132,11 @@ void FVMeshDraw::paintElemsNums( )
                 return;
             }
         }
-        dolfin::MeshConnectivity con = mesh->topology()(3,0);
+	int tdim = mesh->topology().dim();
+        dolfin::MeshConnectivity con = mesh->topology()(tdim,0);
         const uint* connList = con();
-        for ( int e = 0; e < con.size(); e+=4 ) {
-                if( ! visEle.find(e/4+1) )
+        for ( int e = 0; e < con.size(); e+=(tdim+1) ) {
+                if( ! visEle.find(e/(tdim+1)+1) )
                         continue;
                 float ec[3];
                 ec[0]= ec[1]= ec[2]= 0.0;
@@ -280,11 +281,21 @@ void FVMeshDraw::drawSubdomainWireframe()
 
 void FVMeshDraw::drawNormal(QString & paintMode, double dShrink)
 {
+	dolfin::MeshTopology t= mesh->topology();
+	int tdim = t.dim();
+        std::cout << "Topological dim=" << tdim << std::endl;
+        dolfin::MeshConnectivity con = t(tdim,0);
+        std::cout << "Num elements=" << mesh->num_entities(tdim) << std::endl;
+        std::cout << "Connectivity size=" << con.size() << std::endl;
+        const uint* connList = con();
+//      std::cout << std::endl << con.str(true) << std::endl;
+//	std::cout << std::endl << mesh->topology()(tdim,0).str(true) << std::endl;
+
         bool bElements = false;
         int i,j,k;
         GLfloat fTransparency = 0;
         fTransparency = getAttrValue( tr("Transparency Ratio") ).toFloat();
-        SetOfInt visEle( getAttrValue(tr("Interesting Elements")), 1, mesh->num_entities(3) );
+        SetOfInt visEle( getAttrValue(tr("Interesting Elements")), 1, mesh->num_entities(tdim) );
 
         if ((paintMode == "Solid") || (paintMode == "Elements")) {
                 if (paintMode == "Elements") bElements = true;
@@ -300,54 +311,84 @@ void FVMeshDraw::drawNormal(QString & paintMode, double dShrink)
                 glBegin( GL_TRIANGLES );
         }
 
-        dolfin::MeshConnectivity con = mesh->topology()(3,0);
-//        std::cout << std::endl << con.str(true) << std::endl;
-//        std::cout << std::endl << mesh->topology()(3,0).str(true) << std::endl;
-        const uint* connList = con();
 
-        for (i = 0; i < (int) con.size(); i+=4) {
-            if (visEle.find(i/4 + 1)){
-                //ustawienie koloru wyświetlania
-                QColor cl = getColor();
-                glColor4f((GLfloat) cl.red()/255,
-                                   (GLfloat) cl.green()/255,
-                                   (GLfloat) cl.blue()/255,
-                                   fTransparency);
-//                glColor4f((GLfloat) 85/255, (GLfloat) 170/255, (GLfloat) 255/255, fTransparency);
-                //pobranie punktów czworościanu
-                dolfin::Point points[4];
-                double n[3];
-                points[0] = mesh->geometry().point(connList[i]);
-                points[1] = mesh->geometry().point(connList[i+1]);
-                points[2] = mesh->geometry().point(connList[i+2]);
-                points[3] = mesh->geometry().point(connList[i+3]);
+	if( tdim == 3 ) {
 
-                //wyświetlanie każdej ze ścian
-                        normalny4p(points[0].coordinates(), points[1].coordinates(), points[2].coordinates(), points[3].coordinates(), n);
-                        glNormal3f( n[0], n[1], n[2] );
-                        glVertex3f( points[0].x(), points[0].y(), points[0].z() );
-                        glVertex3f( points[1].x(), points[1].y(), points[1].z() );
-                        glVertex3f( points[2].x(), points[2].y(), points[2].z() );
+            for (i = 0; i < (int) con.size(); i+=4) {
+                if (visEle.find(i/4 + 1)){
+                    //ustawienie koloru wyświetlania
+                    QColor cl = getColor();
+                    glColor4f((GLfloat) cl.red()/255,
+                                       (GLfloat) cl.green()/255,
+                                       (GLfloat) cl.blue()/255,
+                                       fTransparency);
+//                    glColor4f((GLfloat) 85/255, (GLfloat) 170/255, (GLfloat) 255/255, fTransparency);
+                    //pobranie punktów czworościanu
+                    dolfin::Point points[4];
+                    double n[3];
+                    points[0] = mesh->geometry().point(connList[i]);
+                    points[1] = mesh->geometry().point(connList[i+1]);
+                    points[2] = mesh->geometry().point(connList[i+2]);
+                    points[3] = mesh->geometry().point(connList[i+3]);
 
-                        normalny4p(points[1].coordinates(), points[2].coordinates(), points[3].coordinates(), points[0].coordinates(), n);
-                        glNormal3f( n[0], n[1], n[2] );
-                        glVertex3f( points[1].x(), points[1].y(), points[1].z() );
-                        glVertex3f( points[2].x(), points[2].y(), points[2].z() );
-                        glVertex3f( points[3].x(), points[3].y(), points[3].z() );
+                    //wyświetlanie każdej ze ścian
+                    normalny4p(points[0].coordinates(), points[1].coordinates(), points[2].coordinates(), points[3].coordinates(), n);
+                    glNormal3f( n[0], n[1], n[2] );
+                    glVertex3f( points[0].x(), points[0].y(), points[0].z() );
+                    glVertex3f( points[1].x(), points[1].y(), points[1].z() );
+                    glVertex3f( points[2].x(), points[2].y(), points[2].z() );
 
-                        normalny4p(points[2].coordinates(), points[3].coordinates(), points[0].coordinates(), points[1].coordinates(), n);
-                        glNormal3f( n[0], n[1], n[2] );
-                        glVertex3f( points[2].x(), points[2].y(), points[2].z() );
-                        glVertex3f( points[3].x(), points[3].y(), points[3].z() );
-                        glVertex3f( points[0].x(), points[0].y(), points[0].z() );
+                    normalny4p(points[1].coordinates(), points[2].coordinates(), points[3].coordinates(), points[0].coordinates(), n);
+                    glNormal3f( n[0], n[1], n[2] );
+                    glVertex3f( points[1].x(), points[1].y(), points[1].z() );
+                    glVertex3f( points[2].x(), points[2].y(), points[2].z() );
+                    glVertex3f( points[3].x(), points[3].y(), points[3].z() );
 
-                        normalny4p(points[3].coordinates(), points[0].coordinates(), points[1].coordinates(), points[2].coordinates(), n);
-                        glNormal3f( n[0], n[1], n[2] );
-                        glVertex3f( points[3].x(), points[3].y(), points[3].z() );
-                        glVertex3f( points[0].x(), points[0].y(), points[0].z() );
-                        glVertex3f( points[1].x(), points[1].y(), points[1].z() );
+                    normalny4p(points[2].coordinates(), points[3].coordinates(), points[0].coordinates(), points[1].coordinates(), n);
+                    glNormal3f( n[0], n[1], n[2] );
+                    glVertex3f( points[2].x(), points[2].y(), points[2].z() );
+                    glVertex3f( points[3].x(), points[3].y(), points[3].z() );
+                    glVertex3f( points[0].x(), points[0].y(), points[0].z() );
+
+                    normalny4p(points[3].coordinates(), points[0].coordinates(), points[1].coordinates(), points[2].coordinates(), n);
+                    glNormal3f( n[0], n[1], n[2] );
+                    glVertex3f( points[3].x(), points[3].y(), points[3].z() );
+                    glVertex3f( points[0].x(), points[0].y(), points[0].z() );
+                    glVertex3f( points[1].x(), points[1].y(), points[1].z() );
+                }
             }
-        }
+	} else {
+//            std::cout << std::endl << con.str(true) << std::endl;
+//            std::cout << std::endl << mesh->topology()(tdim,0).str(true) << std::endl;
+
+            for (i = 0; i < (int) con.size(); i+=3) {
+                if ( visEle.find(i/3 + 1)){
+                    //ustawienie koloru wyświetlania
+                    QColor cl = getColor();
+                    glColor4f((GLfloat) cl.red()/255,
+                                       (GLfloat) cl.green()/255,
+                                       (GLfloat) cl.blue()/255,
+                                       fTransparency);
+//                    glColor4f((GLfloat) 85/255, (GLfloat) 170/255, (GLfloat) 255/255, fTransparency);
+                    //pobranie punktów trojkata
+                    dolfin::Point points[3];
+                    double n[3];
+                    points[0] = mesh->geometry().point(connList[i]);
+                    points[1] = mesh->geometry().point(connList[i+1]);
+                    points[2] = mesh->geometry().point(connList[i+2]);
+
+                    //wyświetlanie każdej ze ścian
+                    NORM(n, points[0].coordinates(), points[1].coordinates(), points[2].coordinates());
+                    glNormal3f( n[0], n[1], n[2] );
+                    glVertex3f( points[0].x(), points[0].y(), points[0].z() );
+                    glVertex3f( points[1].x(), points[1].y(), points[1].z() );
+                    glVertex3f( points[2].x(), points[2].y(), points[2].z() );
+		    //std::cout << "Drawing: " <<  points[0].x() << "," << points[0].y() << "," << points[0].z() << " & ";
+		    //std::cout <<  points[1].x() << "," << points[1].y() << "," << points[1].z() << " & ";
+		    //std::cout <<  points[2].x() << "," << points[2].y() << "," << points[2].z() << std::endl;
+                }
+            }
+	}
         glEnd();
 }
 
@@ -458,7 +499,7 @@ void FVMeshDraw::setupAttributes( )
                 a = am->addSection( tr("Visibility") );
 //                a = am->addAttr( tr("Visible Subdomains"), tr("%1-%2").arg(1).arg(grid->_subdomains.size()), "text" );
                 a = am->addAttr( tr("Show Elems Nums"), QString("No"), "boolean" );
-                a = am->addAttr( tr("Interesting Elements"), tr("%1-%2").arg(1).arg(mesh->num_entities(3)), "text" );
+                a = am->addAttr( tr("Interesting Elements"), tr("%1-%2").arg(1).arg(mesh->num_entities(mesh->topology().dim())), "text" );
                 a = am->addAttr( tr("Show Verts Nums"), QString("No"), "boolean" );
                 a = am->addAttr( tr("Interesting Vertices"), tr("%1-%2").arg(1).arg(mesh->num_vertices()), "text" );
         }
