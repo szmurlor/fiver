@@ -39,6 +39,7 @@ public:
     virtual FVInterface * getInterface( QString interfaceName );
     template <typename T>
     void createMeshFunction(QString& fname);
+    void createMF( QString& fname);
 
 public slots:
     void slotDraw();

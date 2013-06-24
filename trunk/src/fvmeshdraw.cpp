@@ -324,7 +324,7 @@ void FVMeshDraw::drawNormal(QString & paintMode, double dShrink)
               fTransparency);
 
     if( tdim == 3 ) {
-        if ( paintMode == "BoundaryWireframe" || paintMode == "Solid" ) {
+        if ( paintMode == "BoundaryWireframe" /*|| paintMode == "Solid"*/ ) {
             if (exteriorBoundary == 0){
                 std::cout << "BoundaryMesh computation started" << std::endl;
                 exteriorBoundary = new dolfin::BoundaryMesh(*mesh);
@@ -340,10 +340,9 @@ void FVMeshDraw::drawNormal(QString & paintMode, double dShrink)
                 points[2] = exteriorBoundary->geometry().point(p[2]);
 
                 double n[3];
-//                FVHelpers::normVec(points[0].coordinates(), points[1].coordinates(), points[2].coordinates(), n);
-//                NORM(n, points[0].coordinates(), points[1].coordinates(), points[2].coordinates());
+                FVHelpers::normVec(points[0].coordinates(), points[1].coordinates(), points[2].coordinates(), n);
                 FVHelpers::normalny4p(points[0].coordinates(), points[1].coordinates(), points[2].coordinates(), center, n);
-                glNormal3f( n[0], n[1], n[2] );
+//                glNormal3f( n[0], n[1], n[2] );
 
                 glVertex3f( points[0].x(), points[0].y(), points[0].z() );
                 glVertex3f( points[1].x(), points[1].y(), points[1].z() );

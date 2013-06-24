@@ -132,7 +132,7 @@ namespace dolfin
 //    void operator<< (const MeshValueCollection<bool>& input)
 //    { write_mesh_value_collection(input, "bool"); }
 
-  private:
+//  private:
 
     // Read MeshFunction
     template<typename T> void read_mesh_function(MeshFunction<T>& t,

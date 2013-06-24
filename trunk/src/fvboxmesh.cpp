@@ -32,6 +32,11 @@
 #include <dolfin/fem/DofMap.h>
 #include <dolfin/la/GenericVector.h>
 #include <dolfin/common/Array.h>
+#include <dolfin/io/XMLFile.h>
+#include <dolfin/io/XMLMesh.h>
+#include <dolfin/mesh/MeshData.h>
+#include <dolfin/io/XMLMeshFunction.h>
+#include <dolfin/io/pugixml.hpp>
 
 typedef std::map<std::string, boost::shared_ptr<dolfin::MeshFunction<uint> > >::const_iterator mf_const_iterator;
 
@@ -231,58 +236,10 @@ void FVBoxMesh::slotLoadMeshFunction()
 
 
     foreach (fname, files) {
-//        FVOpener *opener = filters[selectedFilter];
-//        std::cout << it->first << " (size = " << it->second->size() << ")" << std::endl;
-
         createMeshFunction<uint>(fname);
+//        createMF(fname);
 
-//        std::string str = fname.toStdString();
-//        unsigned found = str.find_last_of("/\\");
-
-//        //dodanie boxa
-//        FVBoxMeshFunction * mf = new FVBoxMeshFunction( manager, this, str.substr(found+1) );
-//        addChild( mf );
-//        mf->update();
-//        //wczytanie danych z pliku
-//        dolfin::MeshFunction<uint>* newMF = /*mesh->data().create_mesh_function(str.substr(found+1)).get();
-//        newMF = */new dolfin::MeshFunction<uint>(*mesh, fname.toStdString());
-//        std::cout << "FVBoxMesh: wczytano " << newMF->size() << "wartości" << std::endl;
-//        mf->setMeshFunction(newMF);
-    //        funMap.insert("name", *newMF);
-
-//        if (opener != 0) {
-
-//            FVObject* box = opener->open(manager, fname, 0);
-//            if (box != 0) {
-//                FVFieldInterface* fi= (FVFieldInterface*)box->getInterface(QString("FVFieldInterface"));
-//                if( fi != 0 && fi->getField() != 0) {
-//                    Field *f= fi->getField();
-//                    if( f->size() == grid->getNoNodes() || f->size() == grid->getNoElems() ) {
-//                        manager->addCon(this, box, tr(""), tr(""));
-//                        manager->autoArrangeChildren(this);
-//                    } else {
-//                        QMessageBox::warning(manager,"Loading text field", tr("I have encountered an error processing text field from file: %1.\nField size is not compatibe with the grid size.\nSee diagnostic messages to verify the problem.").arg(fname));
-//                        // ??? delete box;
-//                    }
-//                } else {
-//                    QMessageBox::warning(manager,"Loading text field", tr("I have encountered an error processing text field from file: %1.\nIt does not contain a valid field.\nSee diagnostic messages to verify the problem.").arg(fname));
-//                    // ??? delete box;
-//                }
-//            } else {
-//                QMessageBox::warning(manager,"Loading text field", tr("I have encountered an error processing text field from file: %1. See diagnostic messages to verify the problem.").arg(fname));
-//            }
-//        } else {
-//            QMessageBox::warning(manager,"Loading text field", tr("You must selected proper filter to point the expected file format."));
-//        }
     }
-    //dodawanie boxików
-//    std::map<std::string, boost::shared_ptr<dolfin::MeshFunction<uint> > > funMap = mesh->data().getMeshFunctions();
-//    for (mf_const_iterator it = funMap.begin(); it != funMap.end(); ++it){
-//        std::cout << it->first << " (size = " << it->second->size() << ")" << std::endl;
-//        FVBoxMeshFunction * mf = new FVBoxMeshFunction( manager, this, it->first );
-//        addChild( mf );
-//        mf->update();
-//    }
 }
 
 
@@ -292,9 +249,6 @@ void FVBoxMesh::slotDrawBoundaries( )
     addChild( md );
     md->setAttrValue( tr("Solid/Wire"), tr("BoundaryWireframe") );
     md->update();
-//        FVGridBnd * bb = new FVGridBnd( manager, this );
-//        addChild( bb );
-//        bb->update();
 }
 
 void FVBoxMesh::slotDrawBoundingBox( )
@@ -498,8 +452,7 @@ dolfin::Mesh * FVBoxMesh::getMesh( )
     return mesh;
 }
 
-template <typename T>
-void FVBoxMesh::createMeshFunction( QString& fname)
+void FVBoxMesh::createMF( QString& fname)
 {
     std::string str = fname.toStdString();
     unsigned found = str.find_last_of("/\\");
@@ -508,8 +461,8 @@ void FVBoxMesh::createMeshFunction( QString& fname)
     std::cout << "wartość str: " << str <<std::endl;
     FVBoxMeshFunction * mf;
     //wczytanie danych z pliku
-    dolfin::MeshFunction<int>* newMF = /*mesh->data().create_mesh_function(str.substr(found+1)).get();
-    newMF = */new dolfin::MeshFunction<int>(*mesh, fname.toStdString());
+    dolfin::MeshFunction<unsigned int>* newMF = /*mesh->data().create_mesh_function(str.substr(found+1)).get();
+    newMF = */new dolfin::MeshFunction<uint>(*mesh, fname.toStdString());
     std::cout << "FVBoxMesh: wczytano " << newMF->size() << "wartości" << std::endl;
     //dodanie boxa
     if ( found != str.length() )
@@ -517,7 +470,40 @@ void FVBoxMesh::createMeshFunction( QString& fname)
     else
         mf = new FVBoxMeshFunction( manager, this, "str");
     addChild( mf );
-    mf->setMeshFunction(newMF);
+//    mf->setMeshFunction(newMF);
     mf->setAtt();
     mf->update();
+}
+
+
+template <typename T>
+void FVBoxMesh::createMeshFunction( QString& fname)
+{
+    std::string str = fname.toStdString();
+    unsigned found = str.find_last_of("/\\");
+    FVBoxMeshFunction * mf;
+    dolfin::MeshFunction<int>* newMF = new dolfin::MeshFunction<int>(*mesh);
+    dolfin::XMLFile xmlfile(fname.toStdString());
+
+    pugi::xml_document xml_doc;
+    xmlfile.load_xml_doc(xml_doc);
+    const pugi::xml_node dolfin_node = xmlfile.get_dolfin_xml_node(xml_doc);
+    const pugi::xml_node mesh_fun_node = dolfin_node.child("mesh_function");
+    const pugi::xml_node mesh_val_coll = mesh_fun_node.child("mesh_value_collection");
+    const std::string mesh_fun_type = mesh_val_coll.attribute("type").value();
+
+    if (mesh_fun_node){
+        dolfin::XMLMeshFunction::read(*newMF, mesh_fun_type, dolfin_node);
+        //dodanie boxa
+        if ( found != str.length() )
+            mf = new FVBoxMeshFunction( manager, this, str.substr(found+1) );
+        else
+            mf = new FVBoxMeshFunction( manager, this, "str");
+        addChild( mf );
+        mf->setMeshFunction(newMF);
+        mf->setAtt();
+        mf->update();
+    } else {
+        std::cerr << "Reading mesh function ended with error" << std::endl;
+    }
 }
