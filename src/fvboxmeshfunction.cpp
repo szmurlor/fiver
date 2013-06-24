@@ -35,28 +35,34 @@ void FVBoxMeshFunction::updateAttributes( )
     manager->sendMessage(QString("update"), this, true );
 }
 
-uint FVBoxMeshFunction::findMax( )
+int FVBoxMeshFunction::findMax( )
 {
-    uint max = 0;
-    uint* vals = mf->values();
-    if ( mf != 0 )
+    int max = -99999999;
+    if ( mf != 0 ){
+        int* vals = mf->values();
         for (int i = 0; i < mf->size() ; i++ ){
             if ( vals[i] > max){
                 max = vals[i];
             }
         }
-    return max;
+        return max;
+    }
+    return 1;
 }
 
-uint FVBoxMeshFunction::findMin( )
+int FVBoxMeshFunction::findMin( )
 {
-    uint min = 99999999;
-    uint* vals = mf->values();
-    if ( mf != 0 )
-        for (int i = 0; i < mf->size() ; i++ )
-            if ( vals[i] < min)
+    int min = 99999999;
+    if ( mf != 0 ){
+        int* vals = mf->values();
+        for (int i = 0; i < mf->size() ; i++ ){
+            if ( vals[i] < min){
                 min = vals[i];
-    return min;
+            }
+        }
+        return min;
+    }
+    return 0;
 }
 
 void FVBoxMeshFunction::paintGL()
@@ -254,10 +260,10 @@ void FVBoxMeshFunction::draw3(/*QString & paintMode, double dShrink*/)
     int i,j,k;
     GLfloat fTransparency = 0;
 
-    uint min = findMin();
-    uint max = findMax();
-    uint value = 0;
-    uint* vals = mf->values();
+    int min = findMin();
+    int max = findMax();
+    int value = 0;
+    int* vals = mf->values();
 
     fTransparency = getAttrValue( tr("Transparency Ratio") ).toFloat();
     SetOfInt visEle( getAttrValue(tr("Interesting Elements")), 1, mesh->num_entities(mf->dim()) );
@@ -340,10 +346,10 @@ void FVBoxMeshFunction::draw2( )
     int i,j,k;
     GLfloat fTransparency = 0;
 
-    uint min = findMin();
-    uint max = findMax();
-    uint value = 0;
-    uint* vals = mf->values();
+    int min = findMin();
+    int max = findMax();
+    int value = 0;
+    int* vals = mf->values();
 
     fTransparency = getAttrValue( tr("Transparency Ratio") ).toFloat();
     SetOfInt visEle( getAttrValue(tr("Interesting Elements")), 1, mesh->num_entities(mf->dim()) );
@@ -429,10 +435,10 @@ void FVBoxMeshFunction::draw2b( )
     int i,j,k;
     GLfloat fTransparency = 0;
 
-    uint min = findMin();
-    uint max = findMax();
-    uint value = 0;
-    uint* vals = mf->values();
+    int min = findMin();
+    int max = findMax();
+    int value = 0;
+    int* vals = mf->values();
 
     fTransparency = getAttrValue( tr("Transparency Ratio") ).toFloat();
     SetOfInt visEle( getAttrValue(tr("Interesting Elements")), 1, mesh->num_entities(mf->dim()) );
@@ -560,8 +566,9 @@ void FVBoxMeshFunction::paintVertsNums( )
 
 void FVBoxMeshFunction::setupAttributes( )
 {
+        am->clear();
         mesh = reqGrid.getMesh(parentObject(), parent );
-        mf = mesh->data().mesh_function(name);
+//        mf = mesh->data().mesh_function(name).get();
 
         qDebug() << "Setting up attributes for " << classType();
         // Here add the attributes
@@ -611,7 +618,7 @@ void FVBoxMeshFunction::setupAttributes( )
         a = am->addAttr( tr("Color"), defColor, "color" );
 
         if (mesh != 0) {
-                for (unsigned int i = findMin(); i <= findMax(); i++) {
+                for (int i = findMin(); i <= findMax(); i++) {
                     v = fvsettings.value( QString("/RSoft/FViewer/Color%1").arg(i+1), QVariant(QColor(100,100,100)) );
                     defColor = v.value<QColor>();
                     a = am->addAttr( tr("Function Value %1").arg(i), defColor, "color" );
@@ -620,7 +627,8 @@ void FVBoxMeshFunction::setupAttributes( )
                 a = am->addSection( tr("Visibility") );
                 a = am->addAttr( tr("Visible values"), tr("%1-%2").arg(findMin()).arg(findMax()), "text" );
 //                a = am->addAttr( tr("Show Elems Nums"), QString("No"), "boolean" );
-                a = am->addAttr( tr("Interesting Elements"), tr("%1-%2").arg(1).arg(mesh->num_entities(mf->dim())), "text" );
+                if ( mf != 0 )
+                    a = am->addAttr( tr("Interesting Elements"), tr("%1-%2").arg(1).arg(mesh->num_entities(mf->dim())), "text" );
 //                a = am->addAttr( tr("Show Verts Nums"), QString("No"), "boolean" );
 //                a = am->addAttr( tr("Interesting Vertices"), tr("%1-%2").arg(1).arg(mesh->num_vertices()), "text" );
         }
@@ -651,7 +659,13 @@ void FVBoxMeshFunction::slotDraw( )
 //    mesh = reqGrid.getMesh( parentObject(), parent );
 //    mf = mesh->data().mesh_function(name);
 //    std::cout << "MESH FUNCTION name:  " << name << std::endl;
-//    std::cout << mf->str(true) << std::endl;
+    //    std::cout << mf->str(true) << std::endl;
+}
+
+void FVBoxMeshFunction::setMeshFunction(dolfin::MeshFunction<int>* meshfun)
+{
+    std::cout << "ustawianie funkcji siatki na: " << meshfun << std::endl;
+    mf = meshfun;
 }
 
 

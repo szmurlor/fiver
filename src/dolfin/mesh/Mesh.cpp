@@ -15,22 +15,31 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with DOLFIN. If not, see <http://www.gnu.org/licenses/>.
 //
-//#include <ale/ALE.h>
-//#include <common/Timer.h>
-#include <common/utils.h>
-#include <io/File.h>
-#include <log/log.h>
-#include <common/MPI.h>
+// Modified by Johan Hoffman 2007
+// Modified by Garth N. Wells 2007-2011
+// Modified by Niclas Jansson 2008
+// Modified by Kristoffer Selim 2008
+// Modified by Andre Massing 2009-2010
+//
+// First added:  2006-05-09
+// Last changed: 2011-11-14
+
+//#include <dolfin/ale/ALE.h>
+#include <dolfin/common/Timer.h>
+#include <dolfin/common/utils.h>
+#include <dolfin/io/File.h>
+#include <dolfin/log/log.h>
+#include <dolfin/common/MPI.h>
 #include "BoundaryMesh.h"
 #include "Cell.h"
 #include "LocalMeshData.h"
-//#include "MeshColoring.h"
+#include "MeshColoring.h"
 #include "MeshData.h"
 #include "MeshFunction.h"
-//#include "MeshOrdering.h"
+#include "MeshOrdering.h"
 #include "MeshPartitioning.h"
-//#include "MeshRenumbering.h"
-//#include "MeshSmoothing.h"
+#include "MeshRenumbering.h"
+#include "MeshSmoothing.h"
 #include "ParallelData.h"
 #include "TopologyComputation.h"
 #include "Vertex.h"
@@ -145,7 +154,7 @@ dolfin::uint Mesh::init(uint dim) const
   // Skip if mesh is empty
   if (num_cells() == 0)
   {
-    printf("Mesh is empty, unable to create entities of dimension %d.", dim);
+    warning("Mesh is empty, unable to create entities of dimension %d.", dim);
     return 0;
   }
 
@@ -160,7 +169,9 @@ dolfin::uint Mesh::init(uint dim) const
   // Check that mesh is ordered
   if (!ordered())
   {
-    printf("Mesh.cpp: initialize mesh entities. Mesh is not ordered according to the UFC numbering convention. Consider calling mesh.order()");
+    dolfin_error("Mesh.cpp",
+                 "initialize mesh entities",
+                 "Mesh is not ordered according to the UFC numbering convention. Consider calling mesh.order()");
   }
 
   // Compute connectivity
@@ -184,7 +195,7 @@ void Mesh::init(uint d0, uint d1) const
   // Skip if mesh is empty
   if (num_cells() == 0)
   {
-    printf("Mesh is empty, unable to create connectivity %d --> %d.", d0, d1);
+    warning("Mesh is empty, unable to create connectivity %d --> %d.", d0, d1);
     return;
   }
 
@@ -195,7 +206,9 @@ void Mesh::init(uint d0, uint d1) const
   // Check that mesh is ordered
   if (!ordered())
   {
-    printf("Mesh.cpp: initialize mesh connectivity. Mesh is not ordered according to the UFC numbering convention. Consider calling mesh.order()");
+    dolfin_error("Mesh.cpp",
+                 "initialize mesh connectivity",
+                 "Mesh is not ordered according to the UFC numbering convention. Consider calling mesh.order()");
   }
 
   // Compute connectivity
@@ -246,7 +259,7 @@ void Mesh::clean()
 void Mesh::order()
 {
   // Order mesh
-//  MeshOrdering::order(*this);
+  MeshOrdering::order(*this);
 
   // Remember that the mesh has been ordered
   _ordered = true;
@@ -258,17 +271,17 @@ bool Mesh::ordered() const
   if (_ordered)
     return true;
 
-//  _ordered = MeshOrdering::ordered(*this);
+  _ordered = MeshOrdering::ordered(*this);
   return _ordered;
 }
 //-----------------------------------------------------------------------------
-//dolfin::Mesh Mesh::renumber_by_color() const
-//{
-//  std::vector<uint> coloring_type;
-//  const uint D = topology().dim();
-//  coloring_type.push_back(D); coloring_type.push_back(0); coloring_type.push_back(D);
-//  return MeshRenumbering::renumber_by_color(*this, coloring_type);
-//}
+dolfin::Mesh Mesh::renumber_by_color() const
+{
+  std::vector<uint> coloring_type;
+  const uint D = topology().dim();
+  coloring_type.push_back(D); coloring_type.push_back(0); coloring_type.push_back(D);
+  return MeshRenumbering::renumber_by_color(*this, coloring_type);
+}
 //-----------------------------------------------------------------------------
 void Mesh::move(BoundaryMesh& boundary)
 {
@@ -287,52 +300,52 @@ void Mesh::move(const Function& displacement)
 //-----------------------------------------------------------------------------
 void Mesh::smooth(uint num_iterations)
 {
-//  MeshSmoothing::smooth(*this, num_iterations);
+  MeshSmoothing::smooth(*this, num_iterations);
 }
 //-----------------------------------------------------------------------------
 void Mesh::smooth_boundary(uint num_iterations, bool harmonic_smoothing)
 {
-//  MeshSmoothing::smooth_boundary(*this, num_iterations, harmonic_smoothing);
+  MeshSmoothing::smooth_boundary(*this, num_iterations, harmonic_smoothing);
 }
 //-----------------------------------------------------------------------------
-//void Mesh::snap_boundary(const SubDomain& sub_domain, bool harmonic_smoothing)
-//{
-//  MeshSmoothing::snap_boundary(*this, sub_domain, harmonic_smoothing);
-//}
+void Mesh::snap_boundary(const SubDomain& sub_domain, bool harmonic_smoothing)
+{
+  MeshSmoothing::snap_boundary(*this, sub_domain, harmonic_smoothing);
+}
 //-----------------------------------------------------------------------------
-//const dolfin::MeshFunction<dolfin::uint>&
-//Mesh::color(std::string coloring_type) const
-//{
-//  // Define graph type
-//  const uint dim = MeshColoring::type_to_dim(coloring_type, *this);
-//  std::vector<uint> _coloring_type;
-//  _coloring_type.push_back(topology().dim());
-//  _coloring_type.push_back(dim);
-//  _coloring_type.push_back(topology().dim());
-//
-//  return color(_coloring_type);
-//}
+const dolfin::MeshFunction<dolfin::uint>&
+Mesh::color(std::string coloring_type) const
+{
+  // Define graph type
+  const uint dim = MeshColoring::type_to_dim(coloring_type, *this);
+  std::vector<uint> _coloring_type;
+  _coloring_type.push_back(topology().dim());
+  _coloring_type.push_back(dim);
+  _coloring_type.push_back(topology().dim());
+
+  return color(_coloring_type);
+}
 //-----------------------------------------------------------------------------
-//const dolfin::MeshFunction<dolfin::uint>&
-//Mesh::color(std::vector<uint> coloring_type) const
-//{
-//  // Find color data
-//  std::map<const std::vector<uint>, std::pair<MeshFunction<uint>,
-//           std::vector<std::vector<uint> > > >::const_iterator coloring_data;
-//  coloring_data = this->parallel_data().coloring.find(coloring_type);
-//
-//  if (coloring_data != this->parallel_data().coloring.end())
-//  {
-//    dolfin_debug("Mesh has already been colored, not coloring again.");
-//    return coloring_data->second.first;
-//  }
-//
-//  // We do the same const-cast trick here as in the init() functions
-//  // since we are not really changing the mesh, just attaching some
-//  // auxiliary data to it.
-//  Mesh* _mesh = const_cast<Mesh*>(this);
-//  return MeshColoring::color(*_mesh, coloring_type);
-//}
+const dolfin::MeshFunction<dolfin::uint>&
+Mesh::color(std::vector<uint> coloring_type) const
+{
+  // Find color data
+  std::map<const std::vector<uint>, std::pair<MeshFunction<uint>,
+           std::vector<std::vector<uint> > > >::const_iterator coloring_data;
+  coloring_data = this->parallel_data().coloring.find(coloring_type);
+
+  if (coloring_data != this->parallel_data().coloring.end())
+  {
+    dolfin_debug("Mesh has already been colored, not coloring again.");
+    return coloring_data->second.first;
+  }
+
+  // We do the same const-cast trick here as in the init() functions
+  // since we are not really changing the mesh, just attaching some
+  // auxiliary data to it.
+  Mesh* _mesh = const_cast<Mesh*>(this);
+  return MeshColoring::color(*_mesh, coloring_type);
+}
 //-----------------------------------------------------------------------------
 void Mesh::intersected_cells(const Point& point,
                              std::set<uint>& cells) const

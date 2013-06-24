@@ -37,6 +37,8 @@ public:
     virtual QString classType() { return QString("FVBoxMesh"); }
 
     virtual FVInterface * getInterface( QString interfaceName );
+    template <typename T>
+    void createMeshFunction(QString& fname);
 
 public slots:
     void slotDraw();
@@ -46,6 +48,8 @@ public slots:
     void slotDrawVertices();
     void slotDrawSubdomainWireframe();
     void slotLoadField();
+
+    void slotLoadMeshFunction();
     void slotNewHarmonicField();
 
     void slotDrawBoundaries();

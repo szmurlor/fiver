@@ -382,7 +382,9 @@ void FVFieldDrawXml::paintGL( )
 //        Elem * el;
 //        CFace face;
         GLfloat tx,ty,tz;
+        time_t dstart, dend;
 
+        dstart = time(0);
         qDebug("FVFieldDrawXml::paintGL started");
 
         field = reqField.getFunction(parentObject());
@@ -436,7 +438,12 @@ void FVFieldDrawXml::paintGL( )
                 glDisable(GL_LIGHTING);
         }
         dolfin::Array<double> val;
+        time_t tstart, tend;
+        tstart = time(0);
+        qDebug() << "Field values calculations started..." << endl;
         field->compute_vertex_values(val,*mesh);
+        tend = time(0);
+        qDebug() << "Values calculations took" << tend- tstart << " second(s)." << endl;
 
         if ( (drawMode == "colormap") || (drawMode == "isolines") ) {
             for (dolfin::CellIterator c(*mesh); !c.end(); ++c)
@@ -472,19 +479,6 @@ void FVFieldDrawXml::paintGL( )
                     drawVectorNode((*v).index(), val);
                 }
             }
-//            if ( field->size() == grid->getNoElems()) {
-//                for (ie = 0; ie < (int) grid->_elems.size();  ie++) {
-//                    if (showElem(ie)) {
-//                        drawVectorElem(ie);
-//                    }
-//                }
-//            } else {
-//                for (in = 0; in < (int) grid->_nodes.size();  in++) {
-//                    if (showNode(in+1)) {
-//                        drawVectorNode(in);
-//                    }
-//                }
-//            }
         }
 
         if (drawMode == "colormap" ) {
@@ -492,6 +486,9 @@ void FVFieldDrawXml::paintGL( )
         }
         glEnable(GL_LIGHTING);
         fvlist->end();
+        dend = time(0);
+        qDebug() << "Drawing took" << dend- dstart << " second(s)." << endl;
+
 }
 
 void FVFieldDrawXml::setupAttributes( )

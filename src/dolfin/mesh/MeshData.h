@@ -15,6 +15,12 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with DOLFIN. If not, see <http://www.gnu.org/licenses/>.
 //
+// Modified by Niclas Jansson, 2008.
+// Modified by Garth N. Wells, 2011.
+//
+// First added:  2008-05-19
+// Last changed: 2011-09-15
+
 #ifndef __MESH_DATA_H
 #define __MESH_DATA_H
 
@@ -22,10 +28,10 @@
 #include <string>
 #include <utility>
 #include <vector>
-//#include <boost/shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
-#include <common/types.h>
-//#include <common/Variable.h>
+#include <dolfin/common/types.h>
+#include <dolfin/common/Variable.h>
 
 namespace dolfin
 {
@@ -54,7 +60,7 @@ namespace dolfin
   ///
   /// Note to developers: use underscore in names in place of spaces.
 
-  class MeshData //: public Variable
+  class MeshData : public Variable
   {
   public:
 
@@ -85,8 +91,7 @@ namespace dolfin
     /// *Returns*
     ///     _MeshFunction_ <unsigned int>
     ///         The mesh function.
-//    boost::shared_ptr<MeshFunction<unsigned int> >
-    MeshFunction<unsigned int>*
+    boost::shared_ptr<MeshFunction<unsigned int> >
     create_mesh_function(std::string name);
 
     /// Create MeshFunction with given name and dimension
@@ -100,8 +105,7 @@ namespace dolfin
     /// *Returns*
     ///     _MeshFunction_ <unsigned int>
     ///         The mesh function.
-//    boost::shared_ptr<MeshFunction<unsigned int> >
-    MeshFunction<unsigned int>*
+    boost::shared_ptr<MeshFunction<unsigned int> >
     create_mesh_function(std::string name, uint dim);
 
     /// Create empty array (vector) with given name
@@ -113,8 +117,7 @@ namespace dolfin
     /// *Returns*
     ///     std::vector<uint>
     ///         The array.
-//    boost::shared_ptr<std::vector<uint> > create_array(std::string name);
-    std::vector<uint>* create_array(std::string name);
+    boost::shared_ptr<std::vector<uint> > create_array(std::string name);
 
     /// Create array (vector) with given name and size
     ///
@@ -127,8 +130,7 @@ namespace dolfin
     /// *Returns*
     ///     std::vector<uint>
     ///         The array.
-//    boost::shared_ptr<std::vector<uint> > create_array(std::string name, uint size);
-    std::vector<uint>* create_array(std::string name, uint size);
+    boost::shared_ptr<std::vector<uint> > create_array(std::string name, uint size);
 
     //--- Retrieval of data ---
 
@@ -142,8 +144,7 @@ namespace dolfin
     /// *Returns*
     ///     _MeshFunction_ <unsigned int>
     ///         The mesh function with given name
-//    boost::shared_ptr<MeshFunction<unsigned int> > mesh_function(const std::string name) const;
-    MeshFunction<unsigned int>* mesh_function(const std::string name) const;
+    boost::shared_ptr<MeshFunction<unsigned int> > mesh_function(const std::string name) const;
 
     /// Return array with given name (returning zero if data is not
     /// available)
@@ -155,13 +156,11 @@ namespace dolfin
     /// *Returns*
     ///     std::vector<uint>
     ///         The array.
-//    boost::shared_ptr<std::vector<uint> > array(const std::string name) const;
-    std::vector<uint>* array(const std::string name) const;
+    boost::shared_ptr<std::vector<uint> > array(const std::string name) const;
 
-    std::map<std::string, MeshFunction<uint>* > getMeshFunctions(){
+    std::map<std::string, boost::shared_ptr<MeshFunction<uint> > > getMeshFunctions(){
         return mesh_functions;
     }
-
     //--- Removal of data ---
 
     /// Erase MeshFunction with given name
@@ -193,7 +192,7 @@ namespace dolfin
 
     /// Friends
     friend class XMLMesh;
-//    friend class MeshPartitioning;
+    friend class MeshPartitioning;
 
   private:
 
@@ -204,12 +203,10 @@ namespace dolfin
     Mesh& mesh;
 
     // A map from named mesh data to MeshFunctions
-//    std::map<std::string, boost::shared_ptr<MeshFunction<uint> > > mesh_functions;
-    std::map<std::string, MeshFunction<uint>* > mesh_functions;
+    std::map<std::string, boost::shared_ptr<MeshFunction<uint> > > mesh_functions;
 
     // A map from named mesh data to vector
-//    std::map<std::string, boost::shared_ptr<std::vector<uint> > > arrays;
-    std::map<std::string, std::vector<uint>* > arrays;
+    std::map<std::string, boost::shared_ptr<std::vector<uint> > > arrays;
 
     // List of depcrecated named data
     std::vector<std::string> _deprecated_names;

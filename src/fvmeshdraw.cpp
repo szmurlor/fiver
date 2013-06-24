@@ -13,18 +13,23 @@
 #include <QMessageBox>
 #include <ctime>
 #include <dolfin/mesh/Point.h>
+#include <dolfin/mesh/BoundaryMesh.h>
+#include <dolfin/mesh/Face.h>
 #include <fvhelpers.h>
 
 FVMeshDraw::FVMeshDraw(FVBoxMgr * manager, FVObject * parent, int x, int y)
  : FVObject(manager, x,y)
 {
     mesh = 0;
+    exteriorBoundary = 0;
     this->parent = parent;
     initDrawable("MeshDraw","Draw");
 }
 
 FVMeshDraw::~FVMeshDraw()
 {
+    if (exteriorBoundary != 0 )
+        delete exteriorBoundary;
 }
 
 void FVMeshDraw::updateAttributes( )
@@ -91,7 +96,7 @@ void FVMeshDraw::paintGL()
                         dShrink = a->toDouble();
 
                 QString paintMode = getAttrValue( tr("Solid/Wire") );
-                if ( (paintMode == "Solid") || (paintMode == "Wireframe") || (paintMode == "Elements") ) {
+                if ( (paintMode == "Solid") || (paintMode == "Wireframe") || (paintMode == "BoundaryWireframe") || (paintMode == "Elements") ) {
                         drawNormal(paintMode, dShrink);
                 }
                 if ( paintMode == "Vertices" )
@@ -281,48 +286,75 @@ void FVMeshDraw::drawSubdomainWireframe()
 
 void FVMeshDraw::drawNormal(QString & paintMode, double dShrink)
 {
-	dolfin::MeshTopology t= mesh->topology();
-	int tdim = t.dim();
-        std::cout << "Topological dim=" << tdim << std::endl;
-        dolfin::MeshConnectivity con = t(tdim,0);
-        std::cout << "Num elements=" << mesh->num_entities(tdim) << std::endl;
-        std::cout << "Connectivity size=" << con.size() << std::endl;
-        const uint* connList = con();
-//      std::cout << std::endl << con.str(true) << std::endl;
-//	std::cout << std::endl << mesh->topology()(tdim,0).str(true) << std::endl;
+    dolfin::MeshTopology t= mesh->topology();
+    int tdim = t.dim();
+    std::cout << "Topological dim=" << tdim << std::endl;
+    dolfin::MeshConnectivity con = t(tdim,0);
+    std::cout << "Num elements=" << mesh->num_entities(tdim) << std::endl;
+    std::cout << "Connectivity size=" << con.size() << std::endl;
+    const uint* connList = con();
+    //      std::cout << std::endl << con.str(true) << std::endl;
+    //	std::cout << std::endl << mesh->topology()(tdim,0).str(true) << std::endl;
 
-        bool bElements = false;
-        int i,j,k;
-        GLfloat fTransparency = 0;
-        fTransparency = getAttrValue( tr("Transparency Ratio") ).toFloat();
-        SetOfInt visEle( getAttrValue(tr("Interesting Elements")), 1, mesh->num_entities(tdim) );
+    bool bElements = false;
+    int i,j,k;
+    GLfloat fTransparency = 0;
+    fTransparency = getAttrValue( tr("Transparency Ratio") ).toFloat();
+    SetOfInt visEle( getAttrValue(tr("Interesting Elements")), 1, mesh->num_entities(tdim) );
 
-        if ((paintMode == "Solid") || (paintMode == "Elements")) {
-                if (paintMode == "Elements") bElements = true;
-                glShadeModel(GL_SMOOTH);
-                glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-                glBegin( GL_TRIANGLES );
-        }
-        if (paintMode == "Wireframe") {
-                glDisable(GL_BLEND);
-                glDisable(GL_LIGHTING);
-                glLineWidth( getLineWidth() );
-                glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-                glBegin( GL_TRIANGLES );
-        }
+    if ((paintMode == "Solid") || (paintMode == "Elements")) {
+        if (paintMode == "Elements") bElements = true;
+        glShadeModel(GL_SMOOTH);
+        glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+        glBegin( GL_TRIANGLES );
+    }
+    if (paintMode == "Wireframe" || (paintMode == "BoundaryWireframe")) {
+        glDisable(GL_BLEND);
+        glDisable(GL_LIGHTING);
+        glLineWidth( getLineWidth() );
+        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+        glBegin( GL_TRIANGLES );
+    }
 
+    //ustawienie koloru wyświetlania
+    QColor cl = getColor();
+    glColor4f((GLfloat) cl.red()/255,
+              (GLfloat) cl.green()/255,
+              (GLfloat) cl.blue()/255,
+              fTransparency);
 
-	if( tdim == 3 ) {
+    if( tdim == 3 ) {
+        if ( paintMode == "BoundaryWireframe" || paintMode == "Solid" ) {
+            if (exteriorBoundary == 0){
+                std::cout << "BoundaryMesh computation started" << std::endl;
+                exteriorBoundary = new dolfin::BoundaryMesh(*mesh);
+                FVHelpers::getCenter(exteriorBoundary,center);
+            }
+            for (int i=0; i< exteriorBoundary->num_cells() ; i++){
+                dolfin::Face f(*exteriorBoundary,i);
 
+                const uint* p = f.entities(0);
+                dolfin::Point points[3];
+                points[0] = exteriorBoundary->geometry().point(p[0]);
+                points[1] = exteriorBoundary->geometry().point(p[1]);
+                points[2] = exteriorBoundary->geometry().point(p[2]);
+
+                double n[3];
+//                FVHelpers::normVec(points[0].coordinates(), points[1].coordinates(), points[2].coordinates(), n);
+//                NORM(n, points[0].coordinates(), points[1].coordinates(), points[2].coordinates());
+                FVHelpers::normalny4p(points[0].coordinates(), points[1].coordinates(), points[2].coordinates(), center, n);
+                glNormal3f( n[0], n[1], n[2] );
+
+                glVertex3f( points[0].x(), points[0].y(), points[0].z() );
+                glVertex3f( points[1].x(), points[1].y(), points[1].z() );
+                glVertex3f( points[2].x(), points[2].y(), points[2].z() );
+
+            }
+
+        }else {
             for (i = 0; i < (int) con.size(); i+=4) {
                 if (visEle.find(i/4 + 1)){
-                    //ustawienie koloru wyświetlania
-                    QColor cl = getColor();
-                    glColor4f((GLfloat) cl.red()/255,
-                                       (GLfloat) cl.green()/255,
-                                       (GLfloat) cl.blue()/255,
-                                       fTransparency);
-//                    glColor4f((GLfloat) 85/255, (GLfloat) 170/255, (GLfloat) 255/255, fTransparency);
+
                     //pobranie punktów czworościanu
                     dolfin::Point points[4];
                     double n[3];
@@ -332,64 +364,57 @@ void FVMeshDraw::drawNormal(QString & paintMode, double dShrink)
                     points[3] = mesh->geometry().point(connList[i+3]);
 
                     //wyświetlanie każdej ze ścian
-                    normalny4p(points[0].coordinates(), points[1].coordinates(), points[2].coordinates(), points[3].coordinates(), n);
+                    FVHelpers::normalny4p(points[0].coordinates(), points[1].coordinates(), points[2].coordinates(), points[3].coordinates(), n);
                     glNormal3f( n[0], n[1], n[2] );
                     glVertex3f( points[0].x(), points[0].y(), points[0].z() );
                     glVertex3f( points[1].x(), points[1].y(), points[1].z() );
                     glVertex3f( points[2].x(), points[2].y(), points[2].z() );
 
-                    normalny4p(points[1].coordinates(), points[2].coordinates(), points[3].coordinates(), points[0].coordinates(), n);
+                    FVHelpers::normalny4p(points[1].coordinates(), points[2].coordinates(), points[3].coordinates(), points[0].coordinates(), n);
                     glNormal3f( n[0], n[1], n[2] );
                     glVertex3f( points[1].x(), points[1].y(), points[1].z() );
                     glVertex3f( points[2].x(), points[2].y(), points[2].z() );
                     glVertex3f( points[3].x(), points[3].y(), points[3].z() );
 
-                    normalny4p(points[2].coordinates(), points[3].coordinates(), points[0].coordinates(), points[1].coordinates(), n);
+                    FVHelpers::normalny4p(points[2].coordinates(), points[3].coordinates(), points[0].coordinates(), points[1].coordinates(), n);
                     glNormal3f( n[0], n[1], n[2] );
                     glVertex3f( points[2].x(), points[2].y(), points[2].z() );
                     glVertex3f( points[3].x(), points[3].y(), points[3].z() );
                     glVertex3f( points[0].x(), points[0].y(), points[0].z() );
 
-                    normalny4p(points[3].coordinates(), points[0].coordinates(), points[1].coordinates(), points[2].coordinates(), n);
+                    FVHelpers::normalny4p(points[3].coordinates(), points[0].coordinates(), points[1].coordinates(), points[2].coordinates(), n);
                     glNormal3f( n[0], n[1], n[2] );
                     glVertex3f( points[3].x(), points[3].y(), points[3].z() );
                     glVertex3f( points[0].x(), points[0].y(), points[0].z() );
                     glVertex3f( points[1].x(), points[1].y(), points[1].z() );
                 }
-            }
-	} else {
-//            std::cout << std::endl << con.str(true) << std::endl;
-//            std::cout << std::endl << mesh->topology()(tdim,0).str(true) << std::endl;
+            }}
+    } else {
+        //            std::cout << std::endl << con.str(true) << std::endl;
+        //            std::cout << std::endl << mesh->topology()(tdim,0).str(true) << std::endl;
 
-            for (i = 0; i < (int) con.size(); i+=3) {
-                if ( visEle.find(i/3 + 1)){
-                    //ustawienie koloru wyświetlania
-                    QColor cl = getColor();
-                    glColor4f((GLfloat) cl.red()/255,
-                                       (GLfloat) cl.green()/255,
-                                       (GLfloat) cl.blue()/255,
-                                       fTransparency);
-//                    glColor4f((GLfloat) 85/255, (GLfloat) 170/255, (GLfloat) 255/255, fTransparency);
-                    //pobranie punktów trojkata
-                    dolfin::Point points[3];
-                    double n[3];
-                    points[0] = mesh->geometry().point(connList[i]);
-                    points[1] = mesh->geometry().point(connList[i+1]);
-                    points[2] = mesh->geometry().point(connList[i+2]);
+        for (i = 0; i < (int) con.size(); i+=3) {
+            if ( visEle.find(i/3 + 1)){
+                //pobranie punktów trojkata
+                dolfin::Point points[3];
+                double n[3];
+                points[0] = mesh->geometry().point(connList[i]);
+                points[1] = mesh->geometry().point(connList[i+1]);
+                points[2] = mesh->geometry().point(connList[i+2]);
 
-                    //wyświetlanie każdej ze ścian
-                    NORM(n, points[0].coordinates(), points[1].coordinates(), points[2].coordinates());
-                    glNormal3f( n[0], n[1], n[2] );
-                    glVertex3f( points[0].x(), points[0].y(), points[0].z() );
-                    glVertex3f( points[1].x(), points[1].y(), points[1].z() );
-                    glVertex3f( points[2].x(), points[2].y(), points[2].z() );
-		    //std::cout << "Drawing: " <<  points[0].x() << "," << points[0].y() << "," << points[0].z() << " & ";
-		    //std::cout <<  points[1].x() << "," << points[1].y() << "," << points[1].z() << " & ";
-		    //std::cout <<  points[2].x() << "," << points[2].y() << "," << points[2].z() << std::endl;
-                }
+                //wyświetlanie każdej ze ścian
+                NORM(n, points[0].coordinates(), points[1].coordinates(), points[2].coordinates());
+                glNormal3f( n[0], n[1], n[2] );
+                glVertex3f( points[0].x(), points[0].y(), points[0].z() );
+                glVertex3f( points[1].x(), points[1].y(), points[1].z() );
+                glVertex3f( points[2].x(), points[2].y(), points[2].z() );
+                //std::cout << "Drawing: " <<  points[0].x() << "," << points[0].y() << "," << points[0].z() << " & ";
+                //std::cout <<  points[1].x() << "," << points[1].y() << "," << points[1].z() << " & ";
+                //std::cout <<  points[2].x() << "," << points[2].y() << "," << points[2].z() << std::endl;
             }
-	}
-        glEnd();
+        }
+    }
+    glEnd();
 }
 
 void FVMeshDraw::drawVertices( )
@@ -470,6 +495,7 @@ void FVMeshDraw::setupAttributes( )
         QStringList lst;
         lst.append("Solid");
         lst.append("Wireframe");
+        lst.append("BoundaryWireframe");
         lst.append("Elements");
         lst.append("Vertices");
 //        lst.append("Subdomain wireframe");

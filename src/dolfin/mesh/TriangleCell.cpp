@@ -15,8 +15,16 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with DOLFIN. If not, see <http://www.gnu.org/licenses/>.
 //
+// Modified by Garth N. Wells 2006
+// Modified by Kristian Oelgaard 2006-2007
+// Modified by Dag Lindbo 2008
+// Modified by Kristoffer Selim 2008
+//
+// First added:  2006-06-05
+// Last changed: 2011-11-14
+
 #include <algorithm>
-//#include <log/dolfin_log.h>
+#include <dolfin/log/dolfin_log.h>
 #include "Cell.h"
 #include "MeshEditor.h"
 #include "Facet.h"
@@ -42,7 +50,9 @@ dolfin::uint TriangleCell::num_entities(uint dim) const
   case 2:
     return 1; // cells
   default:
-    printf("TriangleCell.cpp: access number of entities of triangle cell. Illegal topological dimension (%d)", dim);
+    dolfin_error("TriangleCell.cpp",
+                 "access number of entities of triangle cell",
+                 "Illegal topological dimension (%d)", dim);
   }
 
   return 0;
@@ -59,7 +69,7 @@ dolfin::uint TriangleCell::num_vertices(uint dim) const
   case 2:
     return 3; // cells
   default:
-    printf("TriangleCell.cpp",
+    dolfin_error("TriangleCell.cpp",
                  "access number of vertices for subsimplex of triangle cell",
                  "Illegal topological dimension (%d)", dim);
   }
@@ -85,7 +95,9 @@ void TriangleCell::create_entities(uint** e, uint dim, const uint* v) const
   // We only need to know how to create edges
   if (dim != 1)
   {
-    printf("TriangleCell.cpp: create entities of triangle cell. Don't know how to create entities of topological dimension %d", dim);
+    dolfin_error("TriangleCell.cpp",
+                 "create entities of triangle cell",
+                 "Don't know how to create entities of topological dimension %d", dim);
   }
 
   // Create the three edges
@@ -100,8 +112,8 @@ void TriangleCell::refine_cell(Cell& cell, MeshEditor& editor,
   // Get vertices and edges
   const uint* v = cell.entities(0);
   const uint* e = cell.entities(1);
-//  dolfin_assert(v);
-//  dolfin_assert(e);
+  dolfin_assert(v);
+  dolfin_assert(e);
 
   // Get offset for new vertex indices
   const uint offset = cell.mesh().num_vertices();
@@ -126,7 +138,9 @@ double TriangleCell::volume(const MeshEntity& triangle) const
   // Check that we get a triangle
   if (triangle.dim() != 2)
   {
-    printf("TriangleCell.cpp: compute volume (area) of triangle cell. Illegal mesh entity, not a triangle");
+    dolfin_error("TriangleCell.cpp",
+                 "compute volume (area) of triangle cell",
+                 "Illegal mesh entity, not a triangle");
   }
 
   // Get mesh geometry
@@ -157,7 +171,9 @@ double TriangleCell::volume(const MeshEntity& triangle) const
     return  0.5*sqrt(v0*v0 + v1*v1 + v2*v2);
   }
   else
-    printf("TriangleCell.cpp: compute volume of triangle. Only know how to compute volume when embedded in R^2 or R^3");
+    dolfin_error("TriangleCell.cpp",
+                 "compute volume of triangle",
+                 "Only know how to compute volume when embedded in R^2 or R^3");
 
   return 0.0;
 }
@@ -167,7 +183,9 @@ double TriangleCell::diameter(const MeshEntity& triangle) const
   // Check that we get a triangle
   if (triangle.dim() != 2)
   {
-    printf("TriangleCell.cpp: compute diameter of triangle cell. Illegal mesh entity, not a triangle");
+    dolfin_error("TriangleCell.cpp",
+                 "compute diameter of triangle cell",
+                 "Illegal mesh entity, not a triangle");
   }
 
   // Get mesh geometry
@@ -175,7 +193,9 @@ double TriangleCell::diameter(const MeshEntity& triangle) const
 
   // Only know how to compute the diameter when embedded in R^2 or R^3
   if (geometry.dim() != 2 && geometry.dim() != 3)
-    printf("TriangleCell.cpp: compute diameter of triangle. Only know how to compute diameter when embedded in R^2 or R^3");
+    dolfin_error("TriangleCell.cpp",
+                 "compute diameter of triangle",
+                 "Only know how to compute diameter when embedded in R^2 or R^3");
 
   // Get the coordinates of the three vertices
   const uint* vertices = triangle.entities(0);
@@ -210,7 +230,9 @@ Point TriangleCell::normal(const Cell& cell, uint facet) const
 
   // The normal vector is currently only defined for a triangle in R^2
   if (cell.mesh().geometry().dim() != 2)
-    printf("TriangleCell.cpp: find normal. Normal vector is not defined in dimension %d (only defined when the triangle is in R^2", cell.mesh().geometry().dim());
+    dolfin_error("TriangleCell.cpp",
+                 "find normal",
+                 "Normal vector is not defined in dimension %d (only defined when the triangle is in R^2", cell.mesh().geometry().dim());
 
   // Get global index of opposite vertex
   const uint v0 = cell.entities(0)[facet];
@@ -277,7 +299,7 @@ void TriangleCell::order(Cell& cell,
   // Sort local vertices on edges in ascending order, connectivity 1 - 0
   if (topology(1, 0).size() > 0)
   {
-//    dolfin_assert(topology(2, 1).size() > 0);
+    dolfin_assert(topology(2, 1).size() > 0);
 
     // Get edges
     const uint* cell_edges = cell.entities(1);
@@ -300,7 +322,7 @@ void TriangleCell::order(Cell& cell,
   // Sort local edges on cell after non-incident vertex, connectivity 2 - 1
   if (topology(2, 1).size() > 0)
   {
-//    dolfin_assert(topology(2, 1).size() > 0);
+    dolfin_assert(topology(2, 1).size() > 0);
 
     // Get cell vertices and edges
     const uint* cell_vertices = cell.entities(0);
@@ -340,20 +362,22 @@ dolfin::uint TriangleCell::find_edge(uint i, const Cell& cell) const
   // Get vertices and edges
   const uint* v = cell.entities(0);
   const uint* e = cell.entities(1);
-//  dolfin_assert(v);
-//  dolfin_assert(e);
+  dolfin_assert(v);
+  dolfin_assert(e);
 
   // Look for edge satisfying ordering convention
   for (uint j = 0; j < 3; j++)
   {
     const uint* ev = cell.mesh().topology()(1, 0)(e[j]);
-//    dolfin_assert(ev);
+    dolfin_assert(ev);
     if (ev[0] != v[i] && ev[1] != v[i])
       return j;
   }
 
   // We should not reach this
-  printf("TriangleCell.cpp: find specified edge in cell. Edge really not found");
+  dolfin_error("TriangleCell.cpp",
+               "find specified edge in cell",
+               "Edge really not found");
   return 0;
 }
 //-----------------------------------------------------------------------------

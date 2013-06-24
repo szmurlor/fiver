@@ -15,6 +15,16 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with DOLFIN. If not, see <http://www.gnu.org/licenses/>.
 //
+// Modified by Johan Hoffman 2007
+// Modified by Magnus Vikstrøm 2007
+// Modified by Garth N. Wells 2007-2011
+// Modified by Niclas Jansson 2008
+// Modified by Kristoffer Selim 2008
+// Modified by Andre Massing 2009-2010
+//
+// First added:  2006-05-08
+// Last changed: 2011-11-11
+
 #ifndef __MESH_H
 #define __MESH_H
 
@@ -22,16 +32,15 @@
 #include <utility>
 #include <boost/scoped_ptr.hpp>
 
-#include <common/types.h>
-#include <common/Variable.h>
-#include <common/Hierarchical.h>
-#include <intersection/IntersectionOperator.h>
-#include <log/log.h>
+#include <dolfin/common/types.h>
+#include <dolfin/common/Variable.h>
+#include <dolfin/common/Hierarchical.h>
+#include <dolfin/intersection/IntersectionOperator.h>
+#include <dolfin/log/log.h>
 #include "MeshData.h"
 #include "MeshGeometry.h"
 #include "MeshConnectivity.h"
 #include "MeshTopology.h"
-#include "MeshEntity.h"
 #include "MeshDomains.h"
 
 namespace dolfin
@@ -352,7 +361,7 @@ namespace dolfin
     /// renumbered to improve the locality within each color. It is
     /// assumed that the mesh has already been colored and that only
     /// cell-vertex connectivity exists as part of the mesh.
-//    Mesh renumber_by_color() const;
+    Mesh renumber_by_color() const;
 
     /// Check if mesh is ordered according to the UFC numbering convention.
     ///
@@ -412,7 +421,7 @@ namespace dolfin
     ///     harmonic_smoothing (bool)
     ///         Flag to turn on harmonics smoothing, default
     ///         value is true.
-//    void snap_boundary(const SubDomain& sub_domain, bool harmonic_smoothing=true);
+    void snap_boundary(const SubDomain& sub_domain, bool harmonic_smoothing=true);
 
     /// Color the cells of the mesh such that no two neighboring cells
     /// share the same color. A colored mesh keeps a
@@ -428,7 +437,7 @@ namespace dolfin
     /// *Returns*
     ///     MeshFunction<unsigned int>
     ///         The colors as a mesh function over the cells of the mesh.
-//    const MeshFunction<unsigned int>& color(std::string coloring_type) const;
+    const MeshFunction<unsigned int>& color(std::string coloring_type) const;
 
     /// Color the cells of the mesh such that no two neighboring cells
     /// share the same color. A colored mesh keeps a
@@ -443,7 +452,7 @@ namespace dolfin
     /// *Returns*
     ///     MeshFunction<unsigned int>
     ///         The colors as a mesh function over entities of the mesh.
-//    const MeshFunction<unsigned int>& color(std::vector<unsigned int> coloring_type) const;
+    const MeshFunction<unsigned int>& color(std::vector<unsigned int> coloring_type) const;
 
     /// Compute all cells which are intersected by the given point.
     ///
@@ -617,8 +626,8 @@ namespace dolfin
     // Friends
     friend class MeshEditor;
     friend class TopologyComputation;
-//    friend class MeshOrdering;
-//    friend class BinaryFile;
+    friend class MeshOrdering;
+    friend class BinaryFile;
 
     // Mesh topology
     MeshTopology _topology;

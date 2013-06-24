@@ -15,9 +15,15 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with DOLFIN. If not, see <http://www.gnu.org/licenses/>.
 //
-//#include <log/dolfin_log.h>
+// Modified by Anders Logg, 2008.
+// Modified by Kristoffer Sleim, 2008.
+//
+// First added:  2007-12-12
+// Last changed: 2010-01-19
+
+#include <dolfin/log/dolfin_log.h>
 #include "Cell.h"
-//#include "Facet.h"
+#include "Facet.h"
 #include "MeshEditor.h"
 #include "Vertex.h"
 #include "PointCell.h"
@@ -37,7 +43,9 @@ dolfin::uint PointCell::num_entities(uint dim) const
   case 0:
     return 1; // vertices
   default:
-    printf("PointCell.cpp: extract number of entities of given dimension in cell. Illegal topological dimension %d for point", dim);
+    dolfin_error("PointCell.cpp",
+                 "extract number of entities of given dimension in cell",
+                 "Illegal topological dimension %d for point", dim);
   }
 
   return 0;
@@ -50,7 +58,9 @@ dolfin::uint PointCell::num_vertices(uint dim) const
   case 0:
     return 1; // vertices
   default:
-    printf("PointCell.cpp: extract number of vertices of given dimension in cell. Illegal topological dimension %d for point", dim);
+    dolfin_error("PointCell.cpp",
+                 "extract number of vertices of given dimension in cell",
+                 "Illegal topological dimension %d for point", dim);
   }
 
   return 0;
@@ -58,56 +68,74 @@ dolfin::uint PointCell::num_vertices(uint dim) const
 //-----------------------------------------------------------------------------
 dolfin::uint PointCell::orientation(const Cell& cell) const
 {
-  printf("PointCell.cpp: find orientation. Orientation not defined for point cell");
+  dolfin_error("PointCell.cpp",
+               "find orientation",
+               "Orientation not defined for point cell");
   return 0;
 }
 //-----------------------------------------------------------------------------
 void PointCell::create_entities(uint** e, uint dim, const uint* v) const
 {
-  printf("PointCell.cpp: create entities. Entities on a point cell are not defined");
+  dolfin_error("PointCell.cpp",
+               "create entities",
+               "Entities on a point cell are not defined");
 }
 //-----------------------------------------------------------------------------
 void PointCell::refine_cell(Cell& cell, MeshEditor& editor,
                           uint& current_cell) const
 {
-  printf("PointCell.cpp: refine cell. Refinement of a point cell is not defined");
+  dolfin_error("PointCell.cpp",
+               "refine cell",
+               "Refinement of a point cell is not defined");
 }
 //-----------------------------------------------------------------------------
 double PointCell::volume(const MeshEntity& triangle) const
 {
-  printf("PointCell.cpp: compute volume of cell. Volume of a point cell is not defined");
+  dolfin_error("PointCell.cpp",
+               "compute volume of cell",
+               "Volume of a point cell is not defined");
   return 0.0;
 }
 //-----------------------------------------------------------------------------
 double PointCell::diameter(const MeshEntity& triangle) const
 {
-  printf("PointCell.cpp: find diameter of cell. Diameter of a point cell is not defined");
+  dolfin_error("PointCell.cpp",
+               "find diameter of cell",
+               "Diameter of a point cell is not defined");
   return 0.0;
 }
 //-----------------------------------------------------------------------------
 double PointCell::normal(const Cell& cell, uint facet, uint i) const
 {
-  printf("PointCell.cpp: find component of normal vector of cell. Component %d of normal of a point cell is not defined", i);
+  dolfin_error("PointCell.cpp",
+               "find component of normal vector of cell",
+               "Component %d of normal of a point cell is not defined", i);
   return 0.0;
 }
 //-----------------------------------------------------------------------------
 Point PointCell::normal(const Cell& cell, uint facet) const
 {
-  printf("PointCell.cpp: find normal vector of cell. Normal vector of a point cell is not defined");
+  dolfin_error("PointCell.cpp",
+               "find normal vector of cell",
+               "Normal vector of a point cell is not defined");
   Point p;
   return p;
 }
 //-----------------------------------------------------------------------------
 double PointCell::facet_area(const Cell& cell, uint facet) const
 {
-  printf("PointCell.cpp: find facet area of cell. Facet area of a point cell is not defined");
+  dolfin_error("PointCell.cpp",
+               "find facet area of cell",
+               "Facet area of a point cell is not defined");
   return 0.0;
 }
 //-----------------------------------------------------------------------------
 void PointCell::order(Cell& cell,
                       const MeshFunction<uint>* global_vertex_indices) const
 {
-  printf("PointCell.cpp: order cell. Ordering of a point cell is not defined");
+  dolfin_error("PointCell.cpp",
+               "order cell",
+               "Ordering of a point cell is not defined");
 }
 //-----------------------------------------------------------------------------
 std::string PointCell::description(bool plural) const
@@ -119,7 +147,9 @@ std::string PointCell::description(bool plural) const
 //-----------------------------------------------------------------------------
 dolfin::uint PointCell::find_edge(uint i, const Cell& cell) const
 {
-  printf("PointCell.cpp: find edge. Edges are not defined for a point cell");
+  dolfin_error("PointCell.cpp",
+               "find edge",
+               "Edges are not defined for a point cell");
   return 0;
 }
 //-----------------------------------------------------------------------------

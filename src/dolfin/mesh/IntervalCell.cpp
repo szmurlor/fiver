@@ -15,8 +15,15 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with DOLFIN. If not, see <http://www.gnu.org/licenses/>.
 //
+// Modified by Kristian Oelgaard, 2007.
+// Modified by Kristoffer Selim, 2008.
+// Modified by Marie E. Rognes, 2011.
+//
+// First added:  2006-06-05
+// Last changed: 2011-11-14
+
 #include <algorithm>
-//#include <log/dolfin_log.h>
+#include <dolfin/log/dolfin_log.h>
 #include "Cell.h"
 #include "MeshEditor.h"
 #include "MeshGeometry.h"
@@ -39,7 +46,9 @@ dolfin::uint IntervalCell::num_entities(uint dim) const
   case 1:
     return 1; // cells
   default:
-    printf("IntervalCell.cpp access number of entities of interval cell Illegal topological dimension (%d)", dim);
+    dolfin_error("IntervalCell.cpp",
+                 "access number of entities of interval cell",
+                 "Illegal topological dimension (%d)", dim);
   }
 
   return 0;
@@ -54,7 +63,9 @@ dolfin::uint IntervalCell::num_vertices(uint dim) const
   case 1:
     return 2; // cells
   default:
-    printf("IntervalCell.cpp access number of vertices for subsimplex of interval cell Illegal topological dimension (%d)", dim);
+    dolfin_error("IntervalCell.cpp",
+                 "access number of vertices for subsimplex of interval cell",
+                 "Illegal topological dimension (%d)", dim);
   }
 
   return 0;
@@ -71,7 +82,9 @@ dolfin::uint IntervalCell::orientation(const Cell& cell) const
 void IntervalCell::create_entities(uint** e, uint dim, const uint* v) const
 {
   // We don't need to create any entities
-  printf("IntervalCell.cpp create entities of interval cell Don't know how to create entities of topological dimension %d", dim);
+  dolfin_error("IntervalCell.cpp",
+               "create entities of interval cell",
+               "Don't know how to create entities of topological dimension %d", dim);
 }
 //-----------------------------------------------------------------------------
 void IntervalCell::refine_cell(Cell& cell, MeshEditor& editor,
@@ -79,7 +92,7 @@ void IntervalCell::refine_cell(Cell& cell, MeshEditor& editor,
 {
   // Get vertices
   const uint* v = cell.entities(0);
-//  dolfin_assert(v);
+  dolfin_assert(v);
 
   // Get offset for new vertex indices
   const uint offset = cell.mesh().num_vertices();
@@ -99,7 +112,9 @@ double IntervalCell::volume(const MeshEntity& interval) const
   // Check that we get an interval
   if (interval.dim() != 1)
   {
-    printf("IntervalCell.cpp compute volume (length) of interval cell Illegal mesh entity, not an interval");
+    dolfin_error("IntervalCell.cpp",
+                 "compute volume (length) of interval cell",
+                 "Illegal mesh entity, not an interval");
   }
 
   // Get mesh geometry
@@ -126,7 +141,9 @@ double IntervalCell::diameter(const MeshEntity& interval) const
   // Check that we get an interval
   if (interval.dim() != 1)
   {
-    printf("IntervalCell.cpp: compute diameter of interval cell. Illegal mesh entity, not an interval");
+    dolfin_error("IntervalCell.cpp",
+                 "compute diameter of interval cell",
+                 "Illegal mesh entity, not an interval");
   }
 
   // Diameter is same as volume for interval (line segment)

@@ -20,12 +20,12 @@
 
 #include <sstream>
 #include <string>
-//#include "LocalMeshValueCollection.h"
+#include "LocalMeshValueCollection.h"
 #include "Mesh.h"
 #include "MeshEntity.h"
-//#include "MeshPartitioning.h"
+#include "MeshPartitioning.h"
 #include "MeshFunction.h"
-//#include "MeshValueCollection.h"
+#include "MeshValueCollection.h"
 
 namespace dolfin
 {

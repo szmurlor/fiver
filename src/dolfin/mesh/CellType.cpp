@@ -15,9 +15,14 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with DOLFIN. If not, see <http://www.gnu.org/licenses/>.
 //
+// Modified by Kristoffer Selim 2008
+// Modified by Andre Massing 2010
+//
+// First added:  2006-06-05
+// Last changed: 2011-11-14
 
 #include <algorithm>
-//#include <log/dolfin_log.h>
+#include <dolfin/log/dolfin_log.h>
 #include "Cell.h"
 #include "CellType.h"
 #include "IntervalCell.h"
@@ -73,7 +78,9 @@ CellType* CellType::create(Type type)
   case tetrahedron:
     return new TetrahedronCell();
   default:
-    printf("CellType.cpp create cell type Unknown cell type (%d)", type);
+    dolfin_error("CellType.cpp",
+                 "create cell type",
+                 "Unknown cell type (%d)", type);
   }
 
   return 0;
@@ -94,7 +101,9 @@ CellType::Type CellType::string2type(std::string type)
     return tetrahedron;
   else
   {
-    printf("CellType.cpp convert string to cell type Unknown cell type (\"%s\")", type.c_str());
+    dolfin_error("CellType.cpp",
+                 "convert string to cell type",
+                 "Unknown cell type (\"%s\")", type.c_str());
   }
 
   return interval;
@@ -113,7 +122,9 @@ std::string CellType::type2string(Type type)
   case tetrahedron:
     return "tetrahedron";
   default:
-    printf("CellType.cpp convert cell type to string Unknown cell type (\"%d\")", type);
+    dolfin_error("CellType.cpp",
+                 "convert cell type to string",
+                 "Unknown cell type (\"%d\")", type);
   }
 
   return "";
@@ -130,7 +141,7 @@ bool CellType::ordered(const Cell& cell,
   // Get vertices
   const uint num_vertices = topology(dim, 0).size(c);
   const uint* vertices = topology(dim, 0)(c);
-//  dolfin_assert(vertices);
+  dolfin_assert(vertices);
 
   // Check that vertices are in ascending order
   if (!increasing(num_vertices, vertices, global_vertex_indices))
@@ -219,8 +230,8 @@ bool CellType::increasing(uint n0, const uint* v0,
                           uint num_vertices, const uint* vertices,
                           const MeshFunction<uint>* global_vertex_indices)
 {
-//  dolfin_assert(n0 == n1);
-//  dolfin_assert(num_vertices > n0);
+  dolfin_assert(n0 == n1);
+  dolfin_assert(num_vertices > n0);
   const uint num_non_incident = num_vertices - n0;
 
   // Compute non-incident vertices for first entity
@@ -241,7 +252,7 @@ bool CellType::increasing(uint n0, const uint* v0,
     if (!incident)
       w0[k++] = v;
   }
-//  dolfin_assert(k == num_non_incident);
+  dolfin_assert(k == num_non_incident);
 
   // Compute non-incident vertices for second entity
   std::vector<uint> w1(num_non_incident);
@@ -262,7 +273,7 @@ bool CellType::increasing(uint n0, const uint* v0,
     if (!incident)
       w1[k++] = v;
   }
-//  dolfin_assert(k == num_non_incident);
+  dolfin_assert(k == num_non_incident);
 
   // Compare lexicographic ordering of w0 and w1
   for (uint k = 0; k < num_non_incident; k++)
