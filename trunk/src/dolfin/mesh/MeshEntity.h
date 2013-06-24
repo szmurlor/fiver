@@ -29,8 +29,8 @@
 #include <CGAL/Bbox_3.h>
 #endif
 
-#include <common/types.h>
-//#include <intersection/PrimitiveIntersector.h>
+#include <dolfin/common/types.h>
+#include <dolfin/intersection/PrimitiveIntersector.h>
 #include "Point.h"
 
 namespace dolfin
@@ -173,8 +173,8 @@ namespace dolfin
     /// *Returns*
     ///     bool
     ///         True if the given point intersects.
-//    bool intersects(const Point& point) const
-//    { return PrimitiveIntersector::do_intersect(*this, point); }
+    bool intersects(const Point& point) const
+    { return PrimitiveIntersector::do_intersect(*this, point); }
 
     /// Check if given entity intersects (using inexact but fast
     /// numerics)
@@ -186,8 +186,8 @@ namespace dolfin
     /// *Returns*
     ///     bool
     ///         True if the given entity intersects.
-//    bool intersects(const MeshEntity& entity) const
-//    { return PrimitiveIntersector::do_intersect(*this,entity); }
+    bool intersects(const MeshEntity& entity) const
+    { return PrimitiveIntersector::do_intersect(*this,entity); }
 
     /// Check if given point intersects (using exact numerics)
     ///
@@ -198,8 +198,8 @@ namespace dolfin
     /// *Returns*
     ///     bool
     ///         True if the given point intersects.
-//    bool intersects_exactly(const Point& point) const
-//    { return PrimitiveIntersector::do_intersect_exact(*this,point); }
+    bool intersects_exactly(const Point& point) const
+    { return PrimitiveIntersector::do_intersect_exact(*this,point); }
 
     /// Check if given entity intersects (using exact numerics)
     ///
@@ -210,8 +210,8 @@ namespace dolfin
     /// *Returns*
     ///     bool
     ///         True if the given entity intersects.
-//    bool intersects_exactly(const MeshEntity& entity) const
-//    { return PrimitiveIntersector::do_intersect_exact(*this,entity); }
+    bool intersects_exactly(const MeshEntity& entity) const
+    { return PrimitiveIntersector::do_intersect_exact(*this,entity); }
 
     /// Compute local index of given incident entity (error if not
     /// found)

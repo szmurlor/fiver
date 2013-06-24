@@ -15,11 +15,16 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with DOLFIN. If not, see <http://www.gnu.org/licenses/>.
 //
+// Modified by Kristoffer Selim, 2008.
+//
+// First added:  2006-06-05
+// Last changed: 2010-01-15
+
 #ifndef __INTERVAL_CELL_H
 #define __INTERVAL_CELL_H
 
 #include <string>
-#include <common/types.h>
+#include <dolfin/common/types.h>
 #include "CellType.h"
 
 namespace dolfin

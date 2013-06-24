@@ -90,7 +90,13 @@ SOURCES += \
     la/SparsityPattern.cpp \
     la/uBLASILUPreconditioner.cpp \
     la/uBLASDummyPreconditioner.cpp \
-    io/XMLFunctionData.cpp
+    io/XMLFunctionData.cpp \
+    mesh/Face.cpp \
+    io/xmlutils.cpp \
+    mesh/MeshColoring.cpp \
+    mesh/MeshOrdering.cpp \
+    mesh/MeshRenumbering.cpp \
+    mesh/MeshSmoothing.cpp
 
 HEADERS += \
     common/utils.h \
@@ -205,12 +211,32 @@ HEADERS += \
     la/uBLASILUPreconditioner.h \
     la/uBLASDummyPreconditioner.h \
     io/XMLFunctionData.h \
-    finiteelementsclasses.h
+    finiteelementsclasses.h \
+    mesh/Face.h \
+    io/XMLMeshValueCollection.h \
+    io/xmlutils.h \
+    mesh/MeshColoring.h \
+    mesh/MeshOrdering.h \
+    mesh/MeshRenumbering.h \
+    mesh/MeshSmoothing.h
 
 !win32 {
     LIBS +=  -L/usr/lib -lboost_program_options -larmadillo -lxml2 -lboost_iostreams -lboost_system -lboost_filesystem 
-    TARGETDEPS += ../ufc-2.0.5/_ufc.so
+    POST_TARGETDEPS += ../ufc-2.0.5/_ufc.so
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -15,6 +15,12 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with DOLFIN. If not, see <http://www.gnu.org/licenses/>.
 //
+// Modified by Anders Logg, 2008.
+// Modified by Kristoffer Selim, 2008.
+//
+// First added:  2007-12-12
+// Last changed: 2010-01-15
+
 #ifndef __POINT_CELL_H
 #define __POINT_CELL_H
 

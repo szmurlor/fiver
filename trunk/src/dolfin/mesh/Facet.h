@@ -15,11 +15,16 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with DOLFIN. If not, see <http://www.gnu.org/licenses/>.
 //
+// Modified by Garth N. Wells, 2009-2011.
+//
+// First added:  2006-06-02
+// Last changed: 2011-04-07
+
 #ifndef __FACET_H
 #define __FACET_H
 
 #include <utility>
-#include <common/types.h>
+#include <dolfin/common/types.h>
 #include "Cell.h"
 #include "Mesh.h"
 #include "MeshEntity.h"

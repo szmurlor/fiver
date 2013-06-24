@@ -15,6 +15,12 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with DOLFIN. If not, see <http://www.gnu.org/licenses/>.
 //
+// Modified by Johan Hoffman 2006.
+// Modified by Andre Massing 2009.
+// Modified by Garth N. Wells 2010.
+//
+// First added:  2006-06-01
+// Last changed: 2011-10-26
 
 #ifndef __CELL_H
 #define __CELL_H

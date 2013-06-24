@@ -22,10 +22,12 @@ class FVBoxMeshFunction : public FVObject
 public:
         FVBoxMeshFunction(FVBoxMgr * manager, FVObject * parent, std::string name, int x = 0, int y = 0);
         virtual ~FVBoxMeshFunction();
-        virtual QString classType() { return QString("FVMeshDraw"); }
+        virtual QString classType() { return QString("FVBoxMeshFunction"); }
 
         virtual void paintGL();
     virtual void updateAttributes();
+        void setMeshFunction(dolfin::MeshFunction<int>* meshfun);
+        void setAtt(){setupAttributes(); setupMenu();};
 
 public slots:
         void slotDraw();
@@ -39,7 +41,7 @@ public slots:
 protected:
         FVObject *parent;
         dolfin::Mesh * mesh;
-        dolfin::MeshFunction<uint> * mf;
+        dolfin::MeshFunction<int> * mf;
         std::string name;
 
         QMap< int, QColor > subColors;
@@ -63,8 +65,8 @@ protected:
         void draw2();
         void draw2b();
         void drawSubdomainWireframe();
-        uint findMax();
-        uint findMin();
+        int findMax();
+        int findMin();
 
 };
 

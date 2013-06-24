@@ -15,20 +15,24 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with DOLFIN. If not, see <http://www.gnu.org/licenses/>.
 //
+// Modified by Kristoffer Selim, 2008.
+// Modified by Andre Massing, 2009-2010.
+//
+// First added:  2006-06-05
+// Last changed: 2011-03-17
 
 #ifndef __CELL_TYPE_H
 #define __CELL_TYPE_H
 
 #include <string>
-#include <common/types.h>
-#include "MeshEntity.h"
+#include <dolfin/common/types.h>
 
 namespace dolfin
 {
 
   class Cell;
   class MeshEditor;
-//  class MeshEntity;
+  class MeshEntity;
   template <typename T> class MeshFunction;
   class Point;
 

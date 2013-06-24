@@ -15,8 +15,13 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with DOLFIN. If not, see <http://www.gnu.org/licenses/>.
 //
+// Modified by Niclas Jansson 2008
+//
+// First added:  2008-05-19
+// Last changed: 2011-11-14
+
 #include <sstream>
-#include <common/utils.h>
+#include <dolfin/common/utils.h>
 #include "Mesh.h"
 #include "MeshEntity.h"
 #include "MeshFunction.h"
@@ -24,23 +29,14 @@
 
 using namespace dolfin;
 
-//typedef std::map<std::string, boost::shared_ptr<MeshFunction<unsigned int> > >
-//::iterator mf_iterator;
-typedef std::map<std::string, MeshFunction<unsigned int>* >
+typedef std::map<std::string, boost::shared_ptr<MeshFunction<unsigned int> > >
 ::iterator mf_iterator;
-
-//typedef std::map<std::string, boost::shared_ptr<MeshFunction<unsigned int> > >
-//::const_iterator mf_const_iterator;
-typedef std::map<std::string, MeshFunction<unsigned int>* >
+typedef std::map<std::string, boost::shared_ptr<MeshFunction<unsigned int> > >
 ::const_iterator mf_const_iterator;
 
-//typedef std::map<std::string, boost::shared_ptr<std::vector<dolfin::uint> > >
-//::iterator a_iterator;
-typedef std::map<std::string, std::vector<dolfin::uint>* >
+typedef std::map<std::string, boost::shared_ptr<std::vector<dolfin::uint> > >
 ::iterator a_iterator;
-//typedef std::map<std::string, boost::shared_ptr<std::vector<dolfin::uint> > >
-//::const_iterator a_const_iterator;
-typedef std::map<std::string, std::vector<dolfin::uint>* >
+typedef std::map<std::string, boost::shared_ptr<std::vector<dolfin::uint> > >
 ::const_iterator a_const_iterator;
 
 //-----------------------------------------------------------------------------
@@ -70,20 +66,16 @@ const MeshData& MeshData::operator= (const MeshData& data)
   for (mf_const_iterator it = data.mesh_functions.begin();
        it != data.mesh_functions.end(); ++it)
   {
-//    boost::shared_ptr<MeshFunction<unsigned int> >
-//      f = create_mesh_function(it->first, it->second->dim());
-	MeshFunction<unsigned int>*
-	        f = create_mesh_function(it->first, it->second->dim());
+    boost::shared_ptr<MeshFunction<unsigned int> >
+      f = create_mesh_function(it->first, it->second->dim());
     *f = *it->second;
   }
 
   // Copy arrays
   for (a_const_iterator it = data.arrays.begin(); it != data.arrays.end(); ++it)
   {
-//    boost::shared_ptr<std::vector<uint> >
-//      a = create_array( it->first, static_cast<uint>(it->second->size()) );
-    std::vector<uint>*
-          a = create_array( it->first, static_cast<uint>(it->second->size()) );
+    boost::shared_ptr<std::vector<uint> >
+      a = create_array( it->first, static_cast<uint>(it->second->size()) );
     *a = *it->second;
   }
 
@@ -96,15 +88,14 @@ void MeshData::clear()
   arrays.clear();
 }
 //-----------------------------------------------------------------------------
-//boost::shared_ptr<MeshFunction<unsigned int> >
-MeshFunction<unsigned int>*
+boost::shared_ptr<MeshFunction<unsigned int> >
 MeshData::create_mesh_function(std::string name)
 {
   // Check if data already exists
   mf_iterator it = mesh_functions.find(name);
   if (it != mesh_functions.end())
   {
-    printf("Mesh data named \"%s\" already exists.", name.c_str());
+    warning("Mesh data named \"%s\" already exists.", name.c_str());
     return it->second;
   }
 
@@ -112,9 +103,8 @@ MeshData::create_mesh_function(std::string name)
   check_deprecated(name);
 
   // Create new data
-//  boost::shared_ptr<MeshFunction<unsigned int> > f(new MeshFunction<uint>(mesh));
-  MeshFunction<unsigned int>* f(new MeshFunction<uint>(mesh));
-//  dolfin_assert(f);
+  boost::shared_ptr<MeshFunction<unsigned int> > f(new MeshFunction<uint>(mesh));
+  dolfin_assert(f);
 
   // Add to map
   mesh_functions[name] = f;
@@ -122,34 +112,29 @@ MeshData::create_mesh_function(std::string name)
   return f;
 }
 //-----------------------------------------------------------------------------
-//boost::shared_ptr<MeshFunction<unsigned int> >
-MeshFunction<unsigned int>*
+boost::shared_ptr<MeshFunction<unsigned int> >
 MeshData::create_mesh_function(std::string name, uint dim)
 {
-//  boost::shared_ptr<MeshFunction<unsigned int> > f = create_mesh_function(name);
-  MeshFunction<unsigned int>* f = create_mesh_function(name);
+  boost::shared_ptr<MeshFunction<unsigned int> > f = create_mesh_function(name);
   f->init(dim);
 
   return f;
 }
 //-----------------------------------------------------------------------------
-
-//boost::shared_ptr<std::vector<dolfin::uint> >
-std::vector<dolfin::uint>*
+boost::shared_ptr<std::vector<dolfin::uint> >
 MeshData::create_array(std::string name)
 {
   return create_array(name, 0);
 }
 //-----------------------------------------------------------------------------
-//boost::shared_ptr<std::vector<dolfin::uint> >
-std::vector<dolfin::uint>*
+boost::shared_ptr<std::vector<dolfin::uint> >
 MeshData::create_array(std::string name, uint size)
 {
   // Check if data already exists
   a_iterator it = arrays.find(name);
   if (it != arrays.end())
   {
-    printf("Mesh data named \"%s\" already exists.", name.c_str());
+    warning("Mesh data named \"%s\" already exists.", name.c_str());
     return it->second;
   }
 
@@ -157,8 +142,7 @@ MeshData::create_array(std::string name, uint size)
   check_deprecated(name);
 
   // Create new data
-//  boost::shared_ptr<std::vector<uint> > a(new std::vector<uint>(size));
-  std::vector<uint>* a(new std::vector<uint>(size));
+  boost::shared_ptr<std::vector<uint> > a(new std::vector<uint>(size));
   std::fill(a->begin(), a->end(), 0);
 
   // Add to map
@@ -167,35 +151,25 @@ MeshData::create_array(std::string name, uint size)
   return a;
 }
 //-----------------------------------------------------------------------------
-//boost::shared_ptr<MeshFunction<unsigned int> >
-MeshFunction<unsigned int>*
+boost::shared_ptr<MeshFunction<unsigned int> >
 MeshData::mesh_function(const std::string name) const
 {
   // Check if data exists
   mf_const_iterator it = mesh_functions.find(name);
-  if (it == mesh_functions.end()){
-//	  TODO tworzenie data.
-//          MeshFunction<unsigned int> newFunction = MeshFunction<unsigned int>();
-//          return &newFunction;
-
-          return NULL;
-//      return boost::shared_ptr<MeshFunction<unsigned int> >();
-  }
+  if (it == mesh_functions.end())
+    return boost::shared_ptr<MeshFunction<unsigned int> >();
 
   return it->second;
 }
 //-----------------------------------------------------------------------------
-//boost::shared_ptr<std::vector<dolfin::uint> >
-std::vector<dolfin::uint>*
+boost::shared_ptr<std::vector<dolfin::uint> >
 MeshData::array(const std::string name) const
 {
   // Check if data exists
   a_const_iterator it = arrays.find(name);
-  if (it == arrays.end()){
-	  std::vector<uint> newVector = std::vector<uint>();
-	  return &newVector;
-//    return boost::shared_ptr<std::vector<uint> >();
-  }
+  if (it == arrays.end())
+    return boost::shared_ptr<std::vector<uint> >();
+
   return it->second;
 }
 //-----------------------------------------------------------------------------
@@ -205,7 +179,7 @@ void MeshData::erase_mesh_function(const std::string name)
   if (it != mesh_functions.end())
     mesh_functions.erase(it);
   else
-    printf("Mesh data named \"%s\" does not exist.", name.c_str());
+    warning("Mesh data named \"%s\" does not exist.", name.c_str());
 }
 //-----------------------------------------------------------------------------
 void MeshData::erase_array(const std::string name)
@@ -214,7 +188,7 @@ void MeshData::erase_array(const std::string name)
   if (it != arrays.end())
     arrays.erase(it);
   else
-    printf("Mesh data named \"%s\" does not exist.", name.c_str());
+    warning("Mesh data named \"%s\" does not exist.", name.c_str());
 }
 //-----------------------------------------------------------------------------
 std::string MeshData::str(bool verbose) const
@@ -254,7 +228,10 @@ void MeshData::check_deprecated(std::string name) const
   {
     if (name == _deprecated_names[i])
     {
-      printf("MeshData.cpp: access mesh data. Mesh data named \"%s\" is no longer recognized by DOLFIN", name.c_str());
+      dolfin_error("MeshData.cpp",
+                   "access mesh data",
+                   "Mesh data named \"%s\" is no longer recognized by DOLFIN",
+                   name.c_str());
     }
   }
 }

@@ -46,10 +46,14 @@ public slots:
 protected:
         FVObject *parent;
         dolfin::Mesh * mesh;
+        dolfin::BoundaryMesh* exteriorBoundary;
+        double center[3];
+
         QMap< int, QColor > subColors;
         QMap< int, bool > subVisible;
 
         FVRequireGrid reqGrid;
+
 
         QColor getColor();
         int getVertexSize();
