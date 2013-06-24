@@ -664,7 +664,6 @@ void FVBoxMeshFunction::slotDraw( )
 
 void FVBoxMeshFunction::setMeshFunction(dolfin::MeshFunction<int>* meshfun)
 {
-    std::cout << "ustawianie funkcji siatki na: " << meshfun << std::endl;
     mf = meshfun;
 }
 

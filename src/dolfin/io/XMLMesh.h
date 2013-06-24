@@ -49,7 +49,7 @@ namespace dolfin
     /// Write mesh to XML
     static void write(const Mesh& mesh, pugi::xml_node mesh_node);
 
-  private:
+//  private:
 
     // Read mesh
     static void read_mesh(Mesh& mesh,
