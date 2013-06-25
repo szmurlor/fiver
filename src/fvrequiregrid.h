@@ -24,6 +24,7 @@
 #include <fvgridinterface.h>
 #include <grid.h>
 #include <dolfin/mesh/Mesh.h>
+#include <dolfin/mesh/BoundaryMesh.h>
 
 /**
 	@author Robert Szmurlo <robert@iem.pw.edu.pl>
@@ -35,6 +36,7 @@ public:
 
 	Grid * getGrid( FVObject * fvo, FVObject * alternateObject = 0 );
         dolfin::Mesh * getMesh( FVObject * fvo, FVObject * alternateObject = 0 );
+        dolfin::BoundaryMesh * getBoundaryMesh( FVObject * fvo, FVObject * alternateObject = 0 );
 };
 
 #endif

@@ -24,15 +24,23 @@ FVFieldDrawXml::FVFieldDrawXml(FVBoxMgr * manager, FVObject * boxField, int x, i
 
 
         minSub = 1;
-        dolfin::Mesh* m = reqGrid.getMesh(boxField);
-        if (m != 0){
-            dolfin::Function* f = reqField.getFunction(boxField);
-            if (f != 0){
-                dolfin::Array<double> a;
-                f->compute_vertex_values(a,*m);
+        mesh = reqGrid.getMesh(boxField);
+        if (mesh != 0){
+            field = reqField.getFunction(boxField);
+            if (field != 0){
+//                dolfin::Array<double> a;
+//                dolfin::Array<double> val;
+                time_t tstart, tend;
+                tstart = time(0);
+                qDebug() << "Field values calculations started..." << endl;
+                field->compute_vertex_values(val,*mesh);
+                tend = time(0);
+                qDebug() << "Values calculations took" << tend- tstart << " second(s)." << endl;
 
-                minValue= a.min();
-                maxValue= a.max();
+//                f->compute_vertex_values(a,*m);
+
+                minValue= val.min();
+                maxValue= val.max();
                 maxSub = 1;
             }
         } else {
@@ -92,42 +100,54 @@ void FVFieldDrawXml::fillValuesOfFace( int ie, const dolfin::Facet & facet, doub
         SET(e[1], mesh->geometry().point(verts[1]).coordinates());
         SET(e[2], mesh->geometry().point(verts[2]).coordinates());
 
-//        double tmpv = 0;
         if (((FVBoxFieldXml*)boxFieldXml)->isVector){
-//            if (val.size() == 3*mesh->num_vertices()) {
                 v[0] = 0;
                 v[1] = 0;
                 v[2] = 0;
                 for (int vi = 0; vi < 3; vi++ ){
                     v[0] += val[verts[0]+vi*val.size()/3] * val[verts[0]+vi*val.size()/3];
-//                    v[0] += val[3*verts[0]+vi] * val[3*verts[0]+vi];
                     v[1] += val[verts[1]+vi*val.size()/3] * val[verts[1]+vi*val.size()/3];
-//                    v[1] += val[3*verts[1]+vi] * val[3*verts[1]+vi];
                     v[2] += val[verts[2]+vi*val.size()/3] * val[verts[2]+vi*val.size()/3];
-//                    v[2] += val[3*verts[2]+vi] * val[3*verts[2]+vi];
                 }
                 v[0] = sqrt(v[0]);
                 v[1] = sqrt(v[1]);
                 v[2] = sqrt(v[2]);
-//            } else {
-//                for (int d = 0; d < 3; d++)
-//                    tmpv += val[3*ie+d] * val[3*ie+d];
-//                tmpv = sqrt(tmpv);
-//                v[0] = tmpv;
-//                v[1] = tmpv;
-//                v[2] = tmpv;
-//            }
         } else {
-//            if (val.size() == mesh->num_vertices()) {
                 v[0] = val[verts[0]];
                 v[1] = val[verts[1]];
                 v[2] = val[verts[2]];
-//            } else {
-//                tmpv = val[ie];
-//                v[0] = tmpv;
-//                v[1] = tmpv;
-//                v[2] = tmpv;
-//            }
+        }
+
+}
+
+void FVFieldDrawXml::fillValuesOfFace( uint* maps, const dolfin::Face & face, double e[3][3], double v[3], dolfin::Array<double> val )
+{
+        const uint* verts= face.entities(0);
+        SET(e[0], bmesh->geometry().point(verts[0]).coordinates());
+        SET(e[1], bmesh->geometry().point(verts[1]).coordinates());
+        SET(e[2], bmesh->geometry().point(verts[2]).coordinates());
+
+        uint mappedverts[3];
+        mappedverts[0] = maps[verts[0]];
+        mappedverts[1] = maps[verts[1]];
+        mappedverts[2] = maps[verts[2]];
+
+        if (((FVBoxFieldXml*)boxFieldXml)->isVector){
+                v[0] = 0;
+                v[1] = 0;
+                v[2] = 0;
+                for (int vi = 0; vi < 3; vi++ ){
+                    v[0] += val[mappedverts[0]+vi*val.size()/3] * val[mappedverts[0]+vi*val.size()/3];
+                    v[1] += val[mappedverts[1]+vi*val.size()/3] * val[mappedverts[1]+vi*val.size()/3];
+                    v[2] += val[mappedverts[2]+vi*val.size()/3] * val[mappedverts[2]+vi*val.size()/3];
+                }
+                v[0] = sqrt(v[0]);
+                v[1] = sqrt(v[1]);
+                v[2] = sqrt(v[2]);
+        } else {
+                v[0] = val[mappedverts[0]];
+                v[1] = val[mappedverts[1]];
+                v[2] = val[mappedverts[2]];
         }
 
 }
@@ -147,12 +167,50 @@ void FVFieldDrawXml::drawColormap( int ie, const dolfin::Facet & f, dolfin::Arra
     cm.drawTriangleGL(e,v);
 }
 
+void FVFieldDrawXml::drawColormap( uint* maps, const dolfin::Face & f, dolfin::Array<double> val )
+{
+    double e[3][3];
+    double v[3];
+
+    fillValuesOfFace(maps,f,e,v, val);
+
+    const uint* p = f.entities(0);
+    dolfin::Point points[3];
+    points[0] = bmesh->geometry().point(p[0]);
+    points[1] = bmesh->geometry().point(p[1]);
+    points[2] = bmesh->geometry().point(p[2]);
+
+    double norm[3];
+    double center[3];
+    FVHelpers::getCenter(bmesh,center);
+    FVHelpers::normalny4p(points[0].coordinates(), points[1].coordinates(), points[2].coordinates(),center, norm);
+    FVHelpers::normVec(points[0].coordinates(), points[1].coordinates(), points[2].coordinates(), norm);
+
+//    double* norm;
+//    dolfin::Point np = f.normal();
+//    norm = np.coordinates();
+
+    SET(cm.norm, norm);
+
+    cm.drawTriangleGL(e,v);
+}
+
 void FVFieldDrawXml::drawIsolines( int ie, const dolfin::Facet & f, dolfin::Array<double> val )
 {
         double e[3][3];
         double v[3];
 
         fillValuesOfFace(ie,f,e,v, val);
+
+        iso.drawTriangleGL(e,v);
+}
+
+void FVFieldDrawXml::drawIsolines( uint* maps, const dolfin::Face & f, dolfin::Array<double> val )
+{
+        double e[3][3];
+        double v[3];
+
+        fillValuesOfFace(maps,f,e,v, val);
 
         iso.drawTriangleGL(e,v);
 }
@@ -387,8 +445,10 @@ void FVFieldDrawXml::paintGL( )
         dstart = time(0);
         qDebug("FVFieldDrawXml::paintGL started");
 
-        field = reqField.getFunction(parentObject());
-        mesh = reqGrid.getMesh(parentObject());
+        if (field ==0)
+            field = reqField.getFunction(parentObject());
+        if (mesh == 0)
+            mesh = reqGrid.getMesh(parentObject());
 
         if (mesh == 0) {
                 qWarning() << "FVFieldDrawXml: Grid pointer for " << sName << " is NULL. Unable to draw field.";
@@ -437,31 +497,54 @@ void FVFieldDrawXml::paintGL( )
                 iso.setMinMax(minValue,maxValue,logScale);
                 glDisable(GL_LIGHTING);
         }
-        dolfin::Array<double> val;
-        time_t tstart, tend;
-        tstart = time(0);
-        qDebug() << "Field values calculations started..." << endl;
-        field->compute_vertex_values(val,*mesh);
-        tend = time(0);
-        qDebug() << "Values calculations took" << tend- tstart << " second(s)." << endl;
 
         if ( (drawMode == "colormap") || (drawMode == "isolines") ) {
-            int num_cells = mesh->num_cells();
-            int step = num_cells/10;
-            int i=0;
-            for (dolfin::CellIterator c(*mesh); !c.end(); ++c)
+            bmesh = reqGrid.getBoundaryMesh(parentObject());
+
+            //Rysowanie zewnętrznej siatki - zmodyfikowane
+            dolfin::MeshFunction<uint> cellmap = bmesh->cell_map();
+            uint* cellmaps = cellmap.values();
+            for (dolfin::FaceIterator f(*bmesh); !f.end(); ++f)
             {
-                if (i%step == 0)
-                    std::cout << "narysowano " << i/step*10 << "% siatki przez " << time(0)- dstart << "sekund" << std::endl;
-                i++;
-                for (dolfin::FacetIterator f(*c); !f.end(); ++f)
-                {
-                        if (drawMode == "colormap")
-                            drawColormap( (*c).index(), *f , val);
-                        if (drawMode == "isolines")
-                            drawIsolines( (*c).index(), *f, val );
-                }
+                uint mappedindex = cellmaps[(*f).index()];
+                dolfin::Facet facet (*mesh, mappedindex);
+
+                if (drawMode == "colormap")
+                    drawColormap( 1, facet , val);
+                if (drawMode == "isolines")
+                    drawIsolines( 1, facet, val );
             }
+
+//            //Rysowanie tylko zewnętrznej siatki
+//            dolfin::MeshFunction<uint> vermap = bmesh->vertex_map();
+//            uint* vermaps = vermap.values();
+
+//            for (dolfin::FaceIterator f(*bmesh); !f.end(); ++f)
+//            {
+//                if (drawMode == "colormap")
+//                    drawColormap( vermaps, *f , val);
+//                if (drawMode == "isolines")
+//                    drawIsolines( vermaps, *f, val );
+//            }
+
+//          //Rysowanie wszystkiego...
+//            int num_cells = mesh->num_cells();
+//            int step = num_cells/10;
+//            int i=0;
+
+//            for (dolfin::CellIterator c(*mesh); !c.end(); ++c)
+//            {
+//                if (i%step == 0)
+//                    std::cout << "narysowano " << i/step*10 << "% siatki przez " << time(0)- dstart << "sekund" << std::endl;
+//                i++;
+//                for (dolfin::FacetIterator f(*c); !f.end(); ++f)
+//                {
+//                        if (drawMode == "colormap")
+//                            drawColormap( (*c).index(), *f , val);
+//                        if (drawMode == "isolines")
+//                            drawIsolines( (*c).index(), *f, val );
+//                }
+//            }
         }
 
         if ( drawMode == "vectors" ) {
@@ -581,13 +664,15 @@ void FVFieldDrawXml::readAttributes( )
 }
 
 void FVFieldDrawXml::calculateMinMax( void ) {
-    field = reqField.getFunction(parentObject());
-    mesh = reqGrid.getMesh(parentObject());
+    if (field == 0)
+        field = reqField.getFunction(parentObject());
+    if (mesh ==0 )
+        mesh = reqGrid.getMesh(parentObject());
 
     if( field != 0 ) {
 //        if( visibleSub.length() == 0 ) {
-        dolfin::Array<double> val;
-        field->compute_vertex_values(val,*mesh);
+//        dolfin::Array<double> val;
+//        field->compute_vertex_values(val,*mesh);
 
             minValue= val.min( );
             maxValue= val.max( );

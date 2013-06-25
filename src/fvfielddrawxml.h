@@ -13,6 +13,7 @@
 #include <fvhelpers.h>
 #include <dolfin/mesh/Cell.h>
 #include <dolfin/mesh/Facet.h>
+#include <dolfin/mesh/Face.h>
 #include <dolfin/mesh/Vertex.h>
 
 
@@ -70,7 +71,9 @@ protected:
         bool showNode( int in );
 
         void drawColormap( int ie, const dolfin::Facet & facet , dolfin::Array<double> val );
+        void drawColormap( uint* maps, const dolfin::Face & face , dolfin::Array<double> val );
         void drawIsolines( int ie, const dolfin::Facet & facet , dolfin::Array<double> val);
+        void drawIsolines( uint* maps, const dolfin::Face & face , dolfin::Array<double> val);
         void drawVectorElem( int ie , dolfin::Array<double> val );
         void drawVectorNode( int in , dolfin::Array<double> val);
 
@@ -78,12 +81,15 @@ protected:
 
 private:
         dolfin::Mesh* mesh;
+        dolfin::BoundaryMesh* bmesh;
         dolfin::Function* field;
+        dolfin::Array<double> val;
         ColorMap cm;
         IsoLines iso;
         SetOfInt visSub;
 
         void fillValuesOfFace(int ie,const dolfin::Facet &facet, double e[3][3], double v[3], dolfin::Array<double> val);
+        void fillValuesOfFace(uint* maps ,const dolfin::Face &face, double e[3][3], double v[3], dolfin::Array<double> val);
 
         void calculateMinMax( void );
 

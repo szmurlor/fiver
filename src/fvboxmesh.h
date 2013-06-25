@@ -23,6 +23,7 @@
 #include <fvinteractiontranslation.h>
 #include <fvinteractionrotation.h>
 #include <dolfin/mesh/Mesh.h>
+#include <dolfin/mesh/BoundaryMesh.h>
 
 
 class FVBoxMesh : public FVObject
@@ -68,6 +69,7 @@ public slots:
     dolfin::Mesh* getMesh();
 protected:
     dolfin::Mesh * mesh;
+    dolfin::BoundaryMesh* bmesh;
 
 //    double P[3];
 //    double N[3];
@@ -81,6 +83,7 @@ protected:
 
 private:
     FVGridInterface * fvGridInterface;
+    FVGridInterface * fvBoundaryMeshInterface;
 };
 
 #endif // FVBOXMESH_H

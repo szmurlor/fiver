@@ -31,15 +31,18 @@ class FVGridInterface : public FVInterface {
 public:
 	FVGridInterface( Grid ** gridPtr);
         FVGridInterface( dolfin::Mesh * meshPtr);
-	virtual ~FVGridInterface();
+        FVGridInterface( dolfin::BoundaryMesh * bmeshPtr);
+        virtual ~FVGridInterface();
 	
 	virtual Grid * getGrid();
         virtual dolfin::Mesh * getMesh();
+        virtual dolfin::BoundaryMesh * getBoundaryMesh();
 
 private:
 	// Pointer to the pointer
 	Grid **gp;
   dolfin::Mesh * mp;
+  dolfin::BoundaryMesh* bmp;
 	
 };
 

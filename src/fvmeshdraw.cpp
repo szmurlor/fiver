@@ -15,6 +15,7 @@
 #include <dolfin/mesh/Point.h>
 #include <dolfin/mesh/BoundaryMesh.h>
 #include <dolfin/mesh/Face.h>
+#include <dolfin/mesh/Facet.h>
 #include <fvhelpers.h>
 
 FVMeshDraw::FVMeshDraw(FVBoxMgr * manager, FVObject * parent, int x, int y)
@@ -28,8 +29,6 @@ FVMeshDraw::FVMeshDraw(FVBoxMgr * manager, FVObject * parent, int x, int y)
 
 FVMeshDraw::~FVMeshDraw()
 {
-    if (exteriorBoundary != 0 )
-        delete exteriorBoundary;
 }
 
 void FVMeshDraw::updateAttributes( )
@@ -324,31 +323,60 @@ void FVMeshDraw::drawNormal(QString & paintMode, double dShrink)
               fTransparency);
 
     if( tdim == 3 ) {
-        if ( paintMode == "BoundaryWireframe" /*|| paintMode == "Solid"*/ ) {
+        if ( paintMode == "BoundaryWireframe" || paintMode == "Solid" ) {
             if (exteriorBoundary == 0){
-                std::cout << "BoundaryMesh computation started" << std::endl;
-                exteriorBoundary = new dolfin::BoundaryMesh(*mesh);
-                FVHelpers::getCenter(exteriorBoundary,center);
+                exteriorBoundary = reqGrid.getBoundaryMesh( parentObject(), parent );
+                if (exteriorBoundary == 0 ){
+                    glEnd();
+                    return;
+                }
             }
-            for (int i=0; i< exteriorBoundary->num_cells() ; i++){
-                dolfin::Face f(*exteriorBoundary,i);
+            //Rysowanie zewnętrznej siatki - zmodyfikowane
+            dolfin::MeshFunction<uint> cellmap = exteriorBoundary->cell_map();
+            uint* cellmaps = cellmap.values();
+            for (dolfin::FaceIterator f(*exteriorBoundary); !f.end(); ++f)
+            {
+                uint mappedindex = cellmaps[(*f).index()];
+                dolfin::Facet facet (*mesh, mappedindex);
 
-                const uint* p = f.entities(0);
+                const uint* p = facet.entities(0);
                 dolfin::Point points[3];
-                points[0] = exteriorBoundary->geometry().point(p[0]);
-                points[1] = exteriorBoundary->geometry().point(p[1]);
-                points[2] = exteriorBoundary->geometry().point(p[2]);
+                points[0] = mesh->geometry().point(p[0]);
+                points[1] = mesh->geometry().point(p[1]);
+                points[2] = mesh->geometry().point(p[2]);
 
-                double n[3];
-                FVHelpers::normVec(points[0].coordinates(), points[1].coordinates(), points[2].coordinates(), n);
-                FVHelpers::normalny4p(points[0].coordinates(), points[1].coordinates(), points[2].coordinates(), center, n);
-//                glNormal3f( n[0], n[1], n[2] );
+                dolfin::Point np = facet.normal();
+                double* norm;
+                norm = np.coordinates();
+                glNormal3f( norm[0], norm[1], norm[2] );
 
                 glVertex3f( points[0].x(), points[0].y(), points[0].z() );
                 glVertex3f( points[1].x(), points[1].y(), points[1].z() );
                 glVertex3f( points[2].x(), points[2].y(), points[2].z() );
-
             }
+
+
+            //Rysowanie zewnętrznej siatki - zwykłe
+//            FVHelpers::getCenter(exteriorBoundary,center);
+//            for (int i=0; i< exteriorBoundary->num_cells() ; i++){
+//                dolfin::Face f(*exteriorBoundary,i);
+
+//                const uint* p = f.entities(0);
+//                dolfin::Point points[3];
+//                points[0] = exteriorBoundary->geometry().point(p[0]);
+//                points[1] = exteriorBoundary->geometry().point(p[1]);
+//                points[2] = exteriorBoundary->geometry().point(p[2]);
+
+//                double n[3];
+////                FVHelpers::normVec(points[0].coordinates(), points[1].coordinates(), points[2].coordinates(), n);
+//                FVHelpers::normalny4p(points[0].coordinates(), points[1].coordinates(), points[2].coordinates(), center, n);
+//                glNormal3f( n[0], n[1], n[2] );
+
+//                glVertex3f( points[0].x(), points[0].y(), points[0].z() );
+//                glVertex3f( points[1].x(), points[1].y(), points[1].z() );
+//                glVertex3f( points[2].x(), points[2].y(), points[2].z() );
+
+//            }
 
         }else {
             for (i = 0; i < (int) con.size(); i+=4) {

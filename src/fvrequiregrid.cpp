@@ -61,3 +61,22 @@ dolfin::Mesh * FVRequireGrid::getMesh( FVObject * fvo, FVObject * alternateObjec
                 return 0;
         }
 }
+
+
+dolfin::BoundaryMesh * FVRequireGrid::getBoundaryMesh( FVObject * fvo, FVObject * alternateObject )
+{
+        FVGridInterface * fvi = 0;
+        if (fvo != 0)
+                fvi = (FVGridInterface*) fvo->getInterface( QString("FVBoundaryMeshInterface") );
+        else {
+                if (alternateObject != 0)
+                        fvi = (FVGridInterface*) alternateObject->getInterface( QString("FVBoundaryMeshInterface") );
+        }
+
+        if (fvi != 0)
+                return fvi->getBoundaryMesh();
+        else {
+                qDebug() << "FVRequireGrid: Unable to get boundary mesh from " << fvo->classType() << "!";
+                return 0;
+        }
+}
