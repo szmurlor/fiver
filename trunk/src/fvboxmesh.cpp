@@ -46,6 +46,14 @@ FVBoxMesh::FVBoxMesh( FVBoxMgr * manager,  dolfin::Mesh * m, int x, int y )
         fvGridInterface = new FVGridInterface( m);
         mesh = m;
 
+//        bmesh=0;
+        time_t tstart;
+        tstart = time(0);
+        std::cout << "Boundary mesh computation started..." << std::endl;
+        bmesh = new dolfin::BoundaryMesh(*mesh);
+        fvBoundaryMeshInterface = new FVGridInterface(bmesh);
+        std::cout << "Boundary mesh computation ended. Took " << time(0) - tstart << " seconds"<< std::endl;
+
         cColor = fvsettings.value( classType() + "_DefaultColor", FV_DEFAULT_BOX_COLOR_GRID ).value<QColor>();
 
         setupAttributes();
@@ -68,8 +76,12 @@ FVBoxMesh::FVBoxMesh( FVBoxMgr * manager,  dolfin::Mesh * m, int x, int y )
 
 FVBoxMesh::~FVBoxMesh()
 {
-        delete fvGridInterface;
-        delete mesh;
+    delete fvGridInterface;
+    if (bmesh != 0){
+        delete bmesh;
+        delete fvBoundaryMeshInterface;
+    }
+    delete mesh;
 }
 
 void FVBoxMesh::setupAttributes( )
@@ -338,7 +350,17 @@ FVInterface * FVBoxMesh::getInterface( QString interfaceName )
 {
         if (interfaceName == QString("FVGridInterface"))
                 return fvGridInterface;
-
+        if (interfaceName == QString("FVBoundaryMeshInterface")){
+            if  (bmesh == 0 ){
+                time_t tstart;
+                tstart = time(0);
+                std::cout << "Boundary mesh computation started..." << std::endl;
+                bmesh = new dolfin::BoundaryMesh(*mesh);
+                fvBoundaryMeshInterface = new FVGridInterface(bmesh);
+                std::cout << "Boundary mesh computation ended. Took " << time(0) - tstart << " seconds"<< std::endl;
+            }
+            return fvBoundaryMeshInterface;
+        }
         return parentInterface( interfaceName );
 }
 
