@@ -35,11 +35,11 @@ void FVBoxMeshFunction::updateAttributes( )
     manager->sendMessage(QString("update"), this, true );
 }
 
-int FVBoxMeshFunction::findMax( )
+uint FVBoxMeshFunction::findMax( )
 {
-    int max = -99999999;
+    uint max = 0;
     if ( mf != 0 ){
-        int* vals = mf->values();
+        uint* vals = mf->values();
         for (int i = 0; i < mf->size() ; i++ ){
             if ( vals[i] > max){
                 max = vals[i];
@@ -47,14 +47,14 @@ int FVBoxMeshFunction::findMax( )
         }
         return max;
     }
-    return 1;
+    return 0;
 }
 
-int FVBoxMeshFunction::findMin( )
+uint FVBoxMeshFunction::findMin( )
 {
-    int min = 99999999;
+    uint min = 99999999;
     if ( mf != 0 ){
-        int* vals = mf->values();
+        uint* vals = mf->values();
         for (int i = 0; i < mf->size() ; i++ ){
             if ( vals[i] < min){
                 min = vals[i];
@@ -260,10 +260,10 @@ void FVBoxMeshFunction::draw3(/*QString & paintMode, double dShrink*/)
     int i,j,k;
     GLfloat fTransparency = 0;
 
-    int min = findMin();
-    int max = findMax();
-    int value = 0;
-    int* vals = mf->values();
+    uint min = findMin();
+    uint max = findMax();
+    uint value = 0;
+    uint* vals = mf->values();
 
     fTransparency = getAttrValue( tr("Transparency Ratio") ).toFloat();
     SetOfInt visEle( getAttrValue(tr("Interesting Elements")), 1, mesh->num_entities(mf->dim()) );
@@ -346,10 +346,10 @@ void FVBoxMeshFunction::draw2( )
     int i,j,k;
     GLfloat fTransparency = 0;
 
-    int min = findMin();
-    int max = findMax();
-    int value = 0;
-    int* vals = mf->values();
+    uint min = findMin();
+    uint max = findMax();
+    uint value = 0;
+    uint* vals = mf->values();
 
     fTransparency = getAttrValue( tr("Transparency Ratio") ).toFloat();
     SetOfInt visEle( getAttrValue(tr("Interesting Elements")), 1, mesh->num_entities(mf->dim()) );
@@ -435,10 +435,10 @@ void FVBoxMeshFunction::draw2b( )
     int i,j,k;
     GLfloat fTransparency = 0;
 
-    int min = findMin();
-    int max = findMax();
-    int value = 0;
-    int* vals = mf->values();
+    uint min = findMin();
+    uint max = findMax();
+    uint value = 0;
+    uint* vals = mf->values();
 
     fTransparency = getAttrValue( tr("Transparency Ratio") ).toFloat();
     SetOfInt visEle( getAttrValue(tr("Interesting Elements")), 1, mesh->num_entities(mf->dim()) );
@@ -568,7 +568,7 @@ void FVBoxMeshFunction::setupAttributes( )
 {
         am->clear();
         mesh = reqGrid.getMesh(parentObject(), parent );
-//        mf = mesh->data().mesh_function(name).get();
+
 
         qDebug() << "Setting up attributes for " << classType();
         // Here add the attributes
@@ -662,10 +662,13 @@ void FVBoxMeshFunction::slotDraw( )
     //    std::cout << mf->str(true) << std::endl;
 }
 
-void FVBoxMeshFunction::setMeshFunction(dolfin::MeshFunction<int>* meshfun)
+void FVBoxMeshFunction::setMeshFunction(dolfin::MeshFunction<uint>* meshfun)
 {
     mf = meshfun;
 }
 
-
+void FVBoxMeshFunction::getMeshFunFromMesh(){
+    mf = mesh->data().mesh_function(name).get();
+    setAtt();
+}
 
