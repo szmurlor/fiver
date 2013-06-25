@@ -26,7 +26,8 @@ public:
 
         virtual void paintGL();
     virtual void updateAttributes();
-        void setMeshFunction(dolfin::MeshFunction<int>* meshfun);
+        void setMeshFunction(dolfin::MeshFunction<uint>* meshfun);
+        void getMeshFunFromMesh();
         void setAtt(){setupAttributes(); setupMenu();};
 
 public slots:
@@ -41,7 +42,7 @@ public slots:
 protected:
         FVObject *parent;
         dolfin::Mesh * mesh;
-        dolfin::MeshFunction<int> * mf;
+        dolfin::MeshFunction<uint> * mf;
         std::string name;
 
         QMap< int, QColor > subColors;
@@ -65,8 +66,8 @@ protected:
         void draw2();
         void draw2b();
         void drawSubdomainWireframe();
-        int findMax();
-        int findMin();
+        uint findMax();
+        uint findMin();
 
 };
 

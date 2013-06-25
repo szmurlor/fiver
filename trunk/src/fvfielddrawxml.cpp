@@ -446,8 +446,14 @@ void FVFieldDrawXml::paintGL( )
         qDebug() << "Values calculations took" << tend- tstart << " second(s)." << endl;
 
         if ( (drawMode == "colormap") || (drawMode == "isolines") ) {
+            int num_cells = mesh->num_cells();
+            int step = num_cells/10;
+            int i=0;
             for (dolfin::CellIterator c(*mesh); !c.end(); ++c)
             {
+                if (i%step == 0)
+                    std::cout << "narysowano " << i/step*10 << "% siatki przez " << time(0)- dstart << "sekund" << std::endl;
+                i++;
                 for (dolfin::FacetIterator f(*c); !f.end(); ++f)
                 {
                         if (drawMode == "colormap")
@@ -469,13 +475,25 @@ void FVFieldDrawXml::paintGL( )
             glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
             cm.init( colormapType );
             if ( val.size() == mesh->num_cells() ){
+                int i=0;
                 for (dolfin::CellIterator c(*mesh); !c.end(); ++c)
                 {
+                    int num_cells = mesh->num_cells();
+                    int step = num_cells/10;
+                    if (i%step == 0)
+                        std::cout << "narysowano " << i/step*10 << "% siatki przez " << time(0)- dstart << "sekund" << std::endl;
+                    i++;
                     drawVectorElem((*c).index(), val);
                 }
             } else {
+                int num_ver = mesh->num_vertices();
+                int step = num_ver/10;
+                int i=0;
                 for (dolfin::VertexIterator v(*mesh); !v.end(); ++v)
                 {
+                    if (i%step == 0)
+                        std::cout << "narysowano " << i/step*10 << "% siatki przez " << time(0)- dstart << "sekund" << std::endl;
+                    i++;
                     drawVectorNode((*v).index(), val);
                 }
             }

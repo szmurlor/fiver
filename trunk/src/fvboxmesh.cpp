@@ -59,6 +59,7 @@ FVBoxMesh::FVBoxMesh( FVBoxMgr * manager,  dolfin::Mesh * m, int x, int y )
         for (mf_const_iterator it = mf.begin(); it != mf.end(); ++it){
             std::cout << it->first << " (size = " << it->second->size() << ")" << std::endl;
             FVBoxMeshFunction * mf = new FVBoxMeshFunction( manager, this, it->first );
+            mf->getMeshFunFromMesh();
             addChild( mf );
             mf->update();
         }
@@ -482,7 +483,7 @@ void FVBoxMesh::createMeshFunction( QString& fname)
     std::string str = fname.toStdString();
     unsigned found = str.find_last_of("/\\");
     FVBoxMeshFunction * mf;
-    dolfin::MeshFunction<int>* newMF = new dolfin::MeshFunction<int>(*mesh);
+    dolfin::MeshFunction<uint>* newMF = new dolfin::MeshFunction<uint>(*mesh);
     dolfin::XMLFile xmlfile(fname.toStdString());
 
     pugi::xml_document xml_doc;
