@@ -74,7 +74,9 @@ protected:
         void drawColormap( uint* maps, const dolfin::Face & face , dolfin::Array<double> val );
         void drawIsolines( int ie, const dolfin::Facet & facet , dolfin::Array<double> val);
         void drawIsolines( uint* maps, const dolfin::Face & face , dolfin::Array<double> val);
-        void drawVectorElem( int ie , dolfin::Array<double> val );
+        void drawVectorElem(dolfin::Cell c , dolfin::Array<double> val );
+        void drawVectorElem(int ie , dolfin::Array<double> val );
+        void drawVectorNode( dolfin::Vertex v , dolfin::Array<double> val);
         void drawVectorNode( int in , dolfin::Array<double> val);
 
         void drawVector( double c[3], double v[3] );
