@@ -69,7 +69,7 @@ void FVFieldDrawXml::updateAttributes( )
         am->updateAttr( tr("Custom Max:"), tr("%1").arg(maxValue), QString("text"), tr("%1").arg(maxValue) );
     }
     FVObject::update();
-    manager->sendMessage(QString("update"), this, true );
+//    manager->sendMessage(QString("update"), this, true );
 }
 
 FVInterface * FVFieldDrawXml::getInterface( QString interfaceName )
@@ -291,10 +291,8 @@ void FVFieldDrawXml::drawVectorElem( int ie, dolfin::Array<double> val )
 {
     std::vector<double> c;
     double fscale;
-    //double scale;
     double r,g,b;
     double modv;
-//    Elem * el;
     double v[3];
 
     if ( maxValue > 0 )
@@ -312,23 +310,81 @@ void FVFieldDrawXml::drawVectorElem( int ie, dolfin::Array<double> val )
         glColor3f( r,g,b );
     }
 
-//    int de= grid->_elems.size() < 200 ? 1 : grid->_elems.size() / 400;
     int de= mesh->num_cells() < 200 ? 1 : mesh->num_cells() / 400;
     de = (int)( de / vectorsDensity);
 
-//    el = grid->_elems[ ie ];
-    dolfin::CellIterator ci(*mesh);
-    dolfin::Cell el = ci[ie];
-
+    dolfin::Cell el(*mesh, ie);
 
     c.assign(el.midpoint().coordinates(), el.midpoint().coordinates()+3);
     v[2] = 0;
     modv = 0;
 
-//    for (int i = 0; i < field->dim(); i++) {
-//        modv += field->val(i,ie) * field->val(i,ie);
-//        v[i] = field->val(i,ie );
-//    }
+    for (int i = 0; i < 3; i++) {
+        modv += val[ie+i*val.size()/3] * val[ie+i*val.size()/3];
+        v[i] = val[ie+i*val.size()/3];
+    }
+
+
+    modv = sqrt(modv);
+    VERSOR( v, v );
+    if( sameLength ) {
+        MULT( v, v, 0.05* modelBaseLength *baseLength );
+        //scale= 1.0;
+    } else {
+        if( logScale ) {
+            MULT( v, v, log(modv/minValue) * fscale );
+            //scale= log(modv/maxValue);
+        } else {
+            MULT( v, v, modv * fscale );
+            //scale= modv/maxValue;
+        }
+    }
+
+    cm.setMinMax(minValue,maxValue,logScale);
+
+    if( (dontMissBigV && modv > 0.95 * maxValue) || de < 2 || el.index() % de == 0 ) { // dont miss big vectors!
+        if( !sameColor ) {
+            cm.getRGBColor( modv, r, g, b);
+            glColor3f(r,g,b);
+        }
+
+        double c1[3];
+        SET(c1,c);
+        drawVector(c1,v);
+    }
+}
+
+void FVFieldDrawXml::drawVectorElem( dolfin::Cell el, dolfin::Array<double> val )
+{
+    std::vector<double> c;
+    double fscale;
+    double r,g,b;
+    double modv;
+    double v[3];
+    int ie = el.index();
+
+    if ( maxValue > 0 )
+        if( logScale )
+            fscale = 0.05 * modelBaseLength * baseLength / log(maxValue/minValue);
+    else
+        fscale = 0.05 * modelBaseLength *baseLength / maxValue;
+    else
+        fscale = 1;
+
+    if( sameColor ) {
+        r = (GLfloat) sameColorColor.red()/255;
+        g = (GLfloat) sameColorColor.green()/255;
+        b = (GLfloat) sameColorColor.blue()/255;
+        glColor3f( r,g,b );
+    }
+
+    int de= mesh->num_cells() < 200 ? 1 : mesh->num_cells() / 400;
+    de = (int)( de / vectorsDensity);
+
+    c.assign(el.midpoint().coordinates(), el.midpoint().coordinates()+3);
+    v[2] = 0;
+    modv = 0;
+
     for (int i = 0; i < 3; i++) {
         modv += val[ie+i*val.size()/3] * val[ie+i*val.size()/3];
         v[i] = val[ie+i*val.size()/3];
@@ -367,10 +423,8 @@ void FVFieldDrawXml::drawVectorElem( int ie, dolfin::Array<double> val )
 void FVFieldDrawXml::drawVectorNode( int in , dolfin::Array<double> val )
 {
     double fscale;
-    //double scale;
     double r,g,b;
     double modv;
-//    Node * n;
     double v[3];
 
     if ( maxValue > 0 )
@@ -388,18 +442,12 @@ void FVFieldDrawXml::drawVectorNode( int in , dolfin::Array<double> val )
         glColor3f( r,g,b );
     }
 
-//    int de= grid->_nodes.size() < 200 ? 1 : grid->_nodes.size() / 400;
     int de= mesh->num_vertices() < 200 ? 1 : mesh->num_vertices() / 400;
     de = (int)( de / vectorsDensity);
 
-//    n = &grid->_nodes[ in ];
     double* coords = mesh->geometry().x(in);
     v[2] = 0;
     modv = 0;
-//    for (int i = 0; i < field->dim(); i++) {
-//        modv += field->val(i,in) * field->val(i,in);
-//        v[i] = field->val(i,in );
-//    }
     for (int i = 0; i < 3; i++) {
         modv += val[in+i*val.size()/3] * val[in+i*val.size()/3];
         v[i] = val[in+i*val.size()/3];
@@ -417,6 +465,64 @@ void FVFieldDrawXml::drawVectorNode( int in , dolfin::Array<double> val )
         } else {
             MULT( v, v, modv * fscale );
             //scale= modv/maxValue;
+        }
+    }
+
+    cm.setMinMax(minValue,maxValue,logScale);
+
+    if( (dontMissBigV && modv > 0.95 * maxValue) || de < 2 || in % de == 0 ) { // dont miss big vectors!
+        if( !sameColor ) {
+            cm.getRGBColor( modv, r, g, b);
+            glColor3f(r,g,b);
+        }
+
+        drawVector(coords,v);
+    }
+}
+
+void FVFieldDrawXml::drawVectorNode( dolfin::Vertex vert , dolfin::Array<double> val )
+{
+    double fscale;
+    double r,g,b;
+    double modv;
+    double v[3];
+    int in = vert.index();
+
+    if ( maxValue > 0 )
+        if( logScale )
+            fscale = 0.05 * modelBaseLength * baseLength / log(maxValue/minValue);
+    else
+        fscale = 0.05 * modelBaseLength *baseLength / maxValue;
+    else
+        fscale = 1;
+
+    if( sameColor ) {
+        r= (GLfloat) sameColorColor.red()/255;
+        g= (GLfloat) sameColorColor.green()/255;
+        b= (GLfloat) sameColorColor.blue()/255;
+        glColor3f( r,g,b );
+    }
+
+    int de= mesh->num_vertices() < 200 ? 1 : mesh->num_vertices() / 400;
+    de = (int)( de / vectorsDensity);
+
+    double* coords = vert.point().coordinates();//mesh->geometry().x(in);
+    v[2] = 0;
+    modv = 0;
+    for (int i = 0; i < 3; i++) {
+        modv += val[in+i*val.size()/3] * val[in+i*val.size()/3];
+        v[i] = val[in+i*val.size()/3];
+    }
+
+    modv = sqrt(modv);
+    VERSOR( v, v );
+    if( sameLength ) {
+        MULT( v, v, 0.05* modelBaseLength *baseLength );
+    } else {
+        if( logScale ) {
+            MULT( v, v, log(modv/minValue) * fscale );
+        } else {
+            MULT( v, v, modv * fscale );
         }
     }
 
@@ -504,11 +610,15 @@ void FVFieldDrawXml::paintGL( )
             //Rysowanie zewnętrznej siatki - zmodyfikowane
             dolfin::MeshFunction<uint> cellmap = bmesh->cell_map();
             uint* cellmaps = cellmap.values();
+            int step = bmesh->num_cells()/10;
+            int i=0;
             for (dolfin::FaceIterator f(*bmesh); !f.end(); ++f)
             {
                 uint mappedindex = cellmaps[(*f).index()];
                 dolfin::Facet facet (*mesh, mappedindex);
-
+                if (i%step == 0)
+                    std::cout << "drawing progress " << i/step*10 << "% during " << time(0)- dstart << " seconds" << std::endl;
+                i++;
                 if (drawMode == "colormap")
                     drawColormap( 1, facet , val);
                 if (drawMode == "isolines")
@@ -559,23 +669,21 @@ void FVFieldDrawXml::paintGL( )
             cm.init( colormapType );
             if ( val.size() == mesh->num_cells() ){
                 int i=0;
+                int step = mesh->num_cells()/10;
                 for (dolfin::CellIterator c(*mesh); !c.end(); ++c)
                 {
-                    int num_cells = mesh->num_cells();
-                    int step = num_cells/10;
                     if (i%step == 0)
-                        std::cout << "narysowano " << i/step*10 << "% siatki przez " << time(0)- dstart << "sekund" << std::endl;
+                        std::cout << "drawing progress " << i/step*10 << "% during " << time(0)- dstart << " seconds" << std::endl;
                     i++;
-                    drawVectorElem((*c).index(), val);
+                    drawVectorElem((*c), val);
                 }
             } else {
-                int num_ver = mesh->num_vertices();
-                int step = num_ver/10;
+                int step = mesh->num_vertices()/10;
                 int i=0;
                 for (dolfin::VertexIterator v(*mesh); !v.end(); ++v)
                 {
                     if (i%step == 0)
-                        std::cout << "narysowano " << i/step*10 << "% siatki przez " << time(0)- dstart << "sekund" << std::endl;
+                        std::cout << "drawing progress " << i/step*10 << "% during " << time(0)- dstart << "seconds" << std::endl;
                     i++;
                     drawVectorNode((*v).index(), val);
                 }
