@@ -96,7 +96,8 @@ SOURCES += \
     mesh/MeshColoring.cpp \
     mesh/MeshOrdering.cpp \
     mesh/MeshRenumbering.cpp \
-    mesh/MeshSmoothing.cpp
+    mesh/MeshSmoothing.cpp \
+    intersection/PrimitiveIntersector.cpp
 
 HEADERS += \
     common/utils.h \
@@ -218,12 +219,15 @@ HEADERS += \
     mesh/MeshColoring.h \
     mesh/MeshOrdering.h \
     mesh/MeshRenumbering.h \
-    mesh/MeshSmoothing.h
+    mesh/MeshSmoothing.h \
+    intersection/PrimitiveIntersector.h
 
 !win32 {
     LIBS +=  -L/usr/lib -lboost_program_options -larmadillo -lxml2 -lboost_iostreams -lboost_system -lboost_filesystem 
     POST_TARGETDEPS += ../ufc-2.0.5/_ufc.so
 }
+
+
 
 
 
