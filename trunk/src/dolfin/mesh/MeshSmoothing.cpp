@@ -20,7 +20,7 @@
 // First added:  2008-07-16
 // Last changed: 2011-03-17
 
-#include <dolfin/ale/ALE.h>
+//#include <dolfin/ale/ALE.h>
 #include <dolfin/common/Array.h>
 #include <dolfin/common/constants.h>
 #include "Mesh.h"
