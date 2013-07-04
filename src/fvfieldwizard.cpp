@@ -105,13 +105,14 @@ dolfin::FunctionSpace * FVFunctionSpaceWizard::getFunctionSpace( dolfin::Mesh* m
     ufc::dofmap* dofmap;
     optionExists=false;
 
-//    std::cout << "Vals in wizard: \"" <<fieldType << "\" \"" << FEType<< "\" \"" << approxDeg << "\"" << std::endl;
+    std::cout << "Vals in wizard: \"" <<fieldType << "\" \"" << FEType<< "\" \"" << approxDeg << "\"" << std::endl;
 
     int FT = fieldType, FET=FEType, AD = approxDeg;
 
     for (int i=0; i < cr->map.size(); i++ ){
         vector<string> m = cr->map[i];
         if (cr->types[FT-1] == m[0] && cr->elems[FET-1] == m[1] && cr->approx[AD-1] == m[2] ){
+            std::cout << "Vals mpped to " << m[3] << std::endl;
             el =getElementByName(m[3]);
             dofmap = getDofByName(m[3]);
             optionExists=true;
@@ -119,14 +120,19 @@ dolfin::FunctionSpace * FVFunctionSpaceWizard::getFunctionSpace( dolfin::Mesh* m
         }
     }
 
+    std::cout << "got element & dofmap ? " << optionExists << std::endl;
+
     if (optionExists){
         dolfin::FiniteElement* elem = new dolfin::FiniteElement(boost::shared_ptr<ufc::finite_element>(el) );
+    std::cout << "elem created" << std::endl;
         dolfin::DofMap* dof = new dolfin::DofMap( boost::shared_ptr<ufc::dofmap>(dofmap) , *mesh );
+    std::cout << "dofmap created" << std::endl;
         dolfin::FunctionSpace* V = new dolfin::FunctionSpace(
                     boost::shared_ptr<dolfin::Mesh>(mesh),
                     boost::shared_ptr<dolfin::FiniteElement>(elem),
                     boost::shared_ptr<dolfin::DofMap>(dof)
                     );
+    std::cout << "FunctionSpace created" << std::endl;
         return V;
     } else {
         std::cout << "There is no configuration for options: \""<< cr->types[FT-1] << "\" \""<<
@@ -156,6 +162,7 @@ ufc::dofmap* FVFunctionSpaceWizard::getDofByName(std::string name)
     if (name == "tetrascalar0") {
         return new tetrascalar_dof0();
     } else if (name ==  "tetrascalar1" ) {
+	std::cout << "creating tetrascalar_dof1" << std::endl;
         return new tetrascalar_dof1();
     } else if (name ==  "tetravector0" ) {
         return new tetravector_dof0();

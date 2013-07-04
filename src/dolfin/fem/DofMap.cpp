@@ -43,6 +43,7 @@ DofMap::DofMap(boost::shared_ptr<const ufc::dofmap> ufc_dofmap,
                ufc_offset(0), _is_view(false),
                _distributed(MPI::num_processes() > 1)
 {
+  std::cout << "in DofMap constructor" << std::endl;
   dolfin_assert(_ufc_dofmap);
 
   // Check for dimensional consistency between the dofmap and mesh
@@ -68,15 +69,19 @@ DofMap::DofMap(boost::shared_ptr<const ufc::dofmap> ufc_dofmap,
         MeshPartitioning::number_entities(dolfin_mesh, d);
     }
   }
+  std::cout << "DofMap constructor: entities created" << std::endl;
 
   // Create the UFC mesh
   const UFCMesh ufc_mesh(dolfin_mesh);
+  std::cout << "DofMap constructor: UFCmesh created" << std::endl;
 
   // Initialize the UFC dofmap
   init_ufc_dofmap(*_ufc_dofmap, ufc_mesh, dolfin_mesh);
+  std::cout << "DofMap constructor: UFCmesh initialized" << std::endl;
 
   // Build dof map
   DofMapBuilder::build(*this, dolfin_mesh, ufc_mesh, _distributed);
+  std::cout << "DofMap constructor: finished" << std::endl;
 }
 //-----------------------------------------------------------------------------
 DofMap::DofMap(const DofMap& dofmap)

@@ -52,10 +52,14 @@ void DofMapBuilder::build(DofMap& dofmap, const Mesh& dolfin_mesh,
 
   dolfin_assert(dofmap._ufc_dofmap);
 
+  std::cout << "DofMapBuilder: initialized" << std::endl;
+
   // Build dofmap from ufc::dofmap
   dolfin::UFCCell ufc_cell(dolfin_mesh);
+  std::cout << "Processing cells: ";
   for (dolfin::CellIterator cell(dolfin_mesh); !cell.end(); ++cell)
   {
+    std::cout << cell->index() << ",";
     // Update UFC cell
     ufc_cell.update(*cell);
 
@@ -67,6 +71,8 @@ void DofMapBuilder::build(DofMap& dofmap, const Mesh& dolfin_mesh,
     dofmap._ufc_dofmap->tabulate_dofs(&dofmap._dofmap[cell->index()][0],
                                       ufc_mesh, ufc_cell);
   }
+  std::cout << std::endl;
+  std::cout << "DofMapBuilder: dofmap built" << std::endl;
 
   // Build (renumber) dofmap when running in parallel
   if (distributed)
