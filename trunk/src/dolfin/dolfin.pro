@@ -1,7 +1,7 @@
 TEMPLATE = lib
 TARGET = dolfin
 DEPENDPATH += .
-INCLUDEPATH += . .. /usr/include/libxml2 /usr/include/boost ../ufc-2.0.5
+INCLUDEPATH += . .. /usr/include/libxml2 /usr/include/boost ../ufc-2.0.5/src/ufc
 DESTDIR = ../bin
 
 target.path = $$INSTALL_ROOT/lib

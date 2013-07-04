@@ -185,17 +185,20 @@ void FVBoxMesh::slotLoadField()
 
 
     FVFunctionSpaceWizard wizard(cr);
+    std::cout << "executing wizard" << std::endl;
     wizard.exec();
+    std::cout << "wizard finished" << std::endl;
 
     if (wizard.isFinished){
-//        std::cout << "choosen vals: \n" << wizard.fieldType << " | "  << wizard.FEType << " | " << wizard.approxDeg << std::endl;
+        std::cout << "choosen vals: \n" << wizard.fieldType << " | "  << wizard.FEType << " | " << wizard.approxDeg << std::endl;
         dolfin::FunctionSpace* V = wizard.getFunctionSpace(mesh);
-
+        std::cout << "got function space" << std::endl;
         if (wizard.optionExists) {
                 FVOpener *opener = new FVOpenerXmlField();
                 fname = wizard.fname;
-                    FVObject* box = opener->open(manager, fname, 0);
-                    dolfin::Function* fun = new dolfin::Function( boost::shared_ptr<const dolfin::FunctionSpace>(V), fname.toStdString() );
+                FVObject* box = opener->open(manager, fname, 0);
+                dolfin::Function* fun = new dolfin::Function( boost::shared_ptr<const dolfin::FunctionSpace>(V), fname.toStdString() );
+		std::cout << "function created" << std::endl;
 
                     ////////////////////////////////////////////////////////////////////////
                     /////////////wypisywanie wartości///////////////////////////////////////
@@ -211,19 +214,19 @@ void FVBoxMesh::slotLoadField()
                     }
 #endif
                     ////////////////////////////////////////////////////////////////////////
-                    if (box != 0) {
-                        ((FVBoxFieldXml*) box)->setVector(wizard.isVector());
-                        ((FVBoxFieldXml*) box)->setMesh(mesh);
-                        ((FVBoxFieldXml*) box)->setField(fun);
-                        ((FVBoxFieldXml*) box)->setAtt();
+                if (box != 0) {
+                    ((FVBoxFieldXml*) box)->setVector(wizard.isVector());
+                    ((FVBoxFieldXml*) box)->setMesh(mesh);
+                    ((FVBoxFieldXml*) box)->setField(fun);
+                    ((FVBoxFieldXml*) box)->setAtt();
 
 
-                        manager->addCon(this, box, tr(""), tr(""));
-                        manager->autoArrangeChildren(this);
+                    manager->addCon(this, box, tr(""), tr(""));
+                    manager->autoArrangeChildren(this);
 
-                    } else {
-                        QMessageBox::warning(manager,"Loading field", tr("I have encountered an error processing text field from file: %1. See diagnostic messages to verify the problem.").arg(fname));
-                    }
+                } else {
+                    QMessageBox::warning(manager,"Loading field", tr("I have encountered an error processing text field from file: %1. See diagnostic messages to verify the problem.").arg(fname));
+                }
         }
         else {
             QMessageBox::warning(manager,"Loading xml field", tr("Choosen options are not supported."));
@@ -231,6 +234,7 @@ void FVBoxMesh::slotLoadField()
     }else {
         std::cout << "Loading field was cancelled" << std::endl;
     }
+    std::cout << "field " << wizard.fname.toStdString() << " loaded" << std::endl;
 }
 
 void FVBoxMesh::slotLoadMeshFunction()

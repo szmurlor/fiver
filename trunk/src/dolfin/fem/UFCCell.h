@@ -59,7 +59,9 @@ namespace dolfin
         use_global_indices(use_global_indices),
         num_vertices(0), num_higher_order_vertices(0)
     {
+      std::cout << "UFCCell constructor" << std::endl;
       CellIterator cell(mesh);
+      std::cout << "UFCCell constructor - CellIterator created, type=" << (*cell).type() << std::endl;
       init(*cell);
     }
 
@@ -70,6 +72,8 @@ namespace dolfin
     /// Initialize UFC cell data
     void init(const Cell& cell)
     {
+      std::cerr << "UFCCell::init" << std::endl;
+      std::cerr.flush();
       // Clear old data
       clear();
 
