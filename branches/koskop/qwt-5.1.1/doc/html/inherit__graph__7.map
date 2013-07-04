@@ -1,0 +1,5 @@
+base referer
+rect $class_qwt_dial_needle.html 7,55 119,79
+rect $class_qwt_compass_magnet_needle.html 168,7 355,31
+rect $class_qwt_compass_wind_arrow.html 178,55 346,79
+rect $class_qwt_dial_simple_needle.html 186,103 338,127

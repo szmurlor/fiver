@@ -1,0 +1,14 @@
+types:
+scalar
+vector
+elements:
+CG
+DG
+approx:
+0
+1
+map:
+scalar DG 0 tetrascalar0
+scalar CG 1 tetrascalar1
+vector DG 0 tetravector0
+vector CG 1 tetravector1
