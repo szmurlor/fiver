@@ -1,0 +1,23 @@
+Number of log entries: 18
+In file /home/poy/szmurlor/src/fiver/rsoft/cpp/boxmgr/boxbox.cpp at line 125 column 37: QValueList -> Q3ValueList
+In file /home/poy/szmurlor/src/fiver/rsoft/cpp/boxmgr/boxbox.cpp at line 134 column 45: QValueList -> Q3ValueList
+In file /home/poy/szmurlor/src/fiver/rsoft/cpp/boxmgr/boxbox.cpp: Added the following include directives:
+	#include <Q3ValueList> 
+No changes made to file /home/poy/szmurlor/src/fiver/rsoft/cpp/boxmgr/boxcon.cpp
+In file /home/poy/szmurlor/src/fiver/rsoft/cpp/boxmgr/boxmgr.cpp at line 9 column 7: QFrame -> Q3Frame
+In file /home/poy/szmurlor/src/fiver/rsoft/cpp/boxmgr/boxmgr.cpp: Added the following include directives:
+	#include <QContextMenuEvent> 	#include <QMouseEvent> 	#include <Q3Frame> 	#include <QPaintEvent> 
+In file /home/poy/szmurlor/src/fiver/rsoft/cpp/boxmgr/boxobj.cpp at line 26 column 14: QPopupMenu -> Q3PopupMenu
+In file /home/poy/szmurlor/src/fiver/rsoft/cpp/boxmgr/boxobj.cpp at line 26 column 44: QPopupMenu -> Q3PopupMenu
+In file /home/poy/szmurlor/src/fiver/rsoft/cpp/boxmgr/boxobj.cpp: Added the following include directives:
+	#include <QLabel> 	#include <Q3PopupMenu> 
+In file /home/poy/szmurlor/src/fiver/rsoft/cpp/boxmgr/boxbox.h at line 21 column 1: #include <qvaluelist.h> -> q3valuelist.h
+In file /home/poy/szmurlor/src/fiver/rsoft/cpp/boxmgr/boxbox.h at line 49 column 38: QValueList -> Q3ValueList
+In file /home/poy/szmurlor/src/fiver/rsoft/cpp/boxmgr/boxbox.h at line 51 column 46: QValueList -> Q3ValueList
+No changes made to file /home/poy/szmurlor/src/fiver/rsoft/cpp/boxmgr/boxcon.h
+In file /home/poy/szmurlor/src/fiver/rsoft/cpp/boxmgr/boxmgr.h at line 9 column 1: #include <qframe.h> -> q3frame.h
+In file /home/poy/szmurlor/src/fiver/rsoft/cpp/boxmgr/boxmgr.h at line 22 column 28: QFrame -> Q3Frame
+In file /home/poy/szmurlor/src/fiver/rsoft/cpp/boxmgr/boxmgr.h: Added the following include directives:
+	#include <QContextMenuEvent> 	#include <QMouseEvent> 	#include <QPaintEvent> 
+In file /home/poy/szmurlor/src/fiver/rsoft/cpp/boxmgr/boxobj.h at line 8 column 1: #include <qpopupmenu.h> -> q3popupmenu.h
+In file boxmgr.pro: Added entry QT +=  

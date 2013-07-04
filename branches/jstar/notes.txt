@@ -1,0 +1,8 @@
+ - fvlist może przechowywać identyfikator obiektu, który moze byc bardzo przydatny!
+ - jak chce zarzadzac:
+   1. Zalozmy ze wczytuje obiekt.
+   Jak struktura? Jak odseparowac logike od prezentacji?
+   Czy dziedziczenie?
+
+   Utworz nowy obiekt: czyli trzeba zastosowac wzorzec projektowy Factory.
+

@@ -1,0 +1,36 @@
+#!/bin/sh
+
+# just in case setup the Qt envirinment.
+qt
+
+rm Makefile src/Makefile src/boxmgr/Makefile src/attr/Makefile libQGLViewer-2.2.6-1/QGLViewer/Makefile 
+
+cd libQGLViewer-2.2.6-1/QGLViewer/
+qmake
+make clean
+make -j 2
+cd ../..
+
+cd qwt-5.1.1
+qmake
+make clean
+make -j 2
+cd ..
+
+cd src/coremesh2
+make clean
+make
+cd ../meshreader2
+make clean
+make
+cd ../tetgen
+make clean
+make tetlib
+cd ../meshjoiner
+qmake
+make clean
+make
+cd ../..
+qmake
+make clean
+make -j 4

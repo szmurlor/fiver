@@ -1,0 +1,22 @@
+Fiver Installation
+
+To build and run Fiver requires libQGLViewer which can be downloaded from sites:
+	- http://www.libqglviewer.com 
+	- https://build.opensuse.org/package/show?package=libQGLViewer&project=home%3Arumianom
+	- On Ubuntu you can install packages libqglviewer-qt4-2 & libqglviewer-dev-common via apt-get 
+
+To build and install Fiver type the following commands:
+$ qmake
+$ make
+$ make install
+
+By default Fiver is installed into /usr/bin, /usr/lib and examples into /usr/share/fiver/examples.
+You can specify other installation root via INSTALL_ROOT variable in the first step.
+$ qmake INSTALL_ROOT=/usr/local
+There exists also INSTALL_ROOT variable in the third step which is different and by default empty.
+
+By default Fiver is linked against libqglviewer-qt4 if your installation of libQGLViewer has other name specify it via QGLVIEWER_LIB="libQGLViewer2" in the first step.
+$ qmake QGLVIEWER_LIB="libQGLViewer2"
+
+To run Fiver without installation use start script.
+$ ./start

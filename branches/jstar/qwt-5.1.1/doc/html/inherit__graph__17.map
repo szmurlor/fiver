@@ -1,0 +1,3 @@
+base referer
+rect $class_qwt_magnifier.html 7,7 108,31
+rect $class_qwt_plot_magnifier.html 156,7 281,31
