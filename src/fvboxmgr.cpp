@@ -22,7 +22,6 @@
 #include <fvobject.h>
 #include <fvboxgrid.h>
 #include <fvboxfield.h>
-#include <fvboxfieldxml.h>
 #include <fvboxsimulation.h>
 #include <fvfielddraw.h>
 #include <fvfieldslice.h>
@@ -32,7 +31,6 @@
 #include <fvboxstl.h>
 #include <fvmeshjoiner.h>
 #include <fvgridtostlextractor.h>
-#include <fvboxXml.h>
 
 
 FVBoxMgr::FVBoxMgr(QWidget * parent)
@@ -116,26 +114,6 @@ FVBoxSTL * FVBoxMgr::addBoxSTL( FVObject * parent, Grid *g, QString filename, QS
         return bstl;
 }
 
-FVBoxXml * FVBoxMgr::addBoxXml( FVObject * parent, dolfin::Mesh *m, QString filename, QString type )
-{
-        FVBoxXml * bxml;
-        if ( parent != 0 )
-                bxml = new FVBoxXml(this, m, parent->childSuggestedX(),parent->childSuggestedY());
-        else
-                bxml = new FVBoxXml(this, m);
-
-        bxml->sName = getNameFor("bxml");
-        bxml->sType = type;
-        bxml->setAttrValue("Filename", filename);
-        bxml->setAttrValue("Type", type );
-
-        addObj( bxml );
-
-        if (parent != 0)
-                addCon( parent, bxml, QString(""), QString("") );
-
-        return bxml;
-}
 
 FVBoxCBlock * FVBoxMgr::addBoxCBlock(QString filename, QString type)
 {
@@ -236,22 +214,6 @@ FVBoxField * FVBoxMgr::addBoxField( Field * f, QString name, QString type )
 
 }
 
-FVBoxFieldXml * FVBoxMgr::addBoxFieldXml( dolfin::Function * f, QString name, QString type )
-{
-    FVBoxFieldXml * bf;
-    bf = new FVBoxFieldXml(this, f);
-
-    bf->sName = name;
-    bf->sType = type;
-    bf->setAttrValue("Name", name);
-    bf->setAttrValue("Type", type );
-
-    addObj( bf );
-
-    bf->update();
-
-    return bf;
-}
 
 FVBoxField * FVBoxMgr::addBoxField( FVObject* parent, Field * f, QString name, QString type )
 {

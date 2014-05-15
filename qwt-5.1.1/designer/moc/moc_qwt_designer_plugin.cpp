@@ -1,8 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'qwt_designer_plugin.h'
 **
-** Created: Fri Jan 13 12:03:20 2012
-**      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
+** Created by: The Qt Meta Object Compiler version 63 (Qt 4.8.6)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -10,8 +9,8 @@
 #include "../qwt_designer_plugin.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'qwt_designer_plugin.h' doesn't include <QObject>."
-#elif Q_MOC_OUTPUT_REVISION != 62
-#error "This file was generated using the moc from 4.7.4. It"
+#elif Q_MOC_OUTPUT_REVISION != 63
+#error "This file was generated using the moc from 4.8.6. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -20,7 +19,7 @@ QT_BEGIN_MOC_NAMESPACE
 static const uint qt_meta_data_QwtDesignerPlugin__CustomWidgetInterface[] = {
 
  // content:
-       5,       // revision
+       6,       // revision
        0,       // classname
        0,    0, // classinfo
        0,    0, // methods
@@ -37,9 +36,21 @@ static const char qt_meta_stringdata_QwtDesignerPlugin__CustomWidgetInterface[] 
     "QwtDesignerPlugin::CustomWidgetInterface\0"
 };
 
+void QwtDesignerPlugin::CustomWidgetInterface::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    Q_UNUSED(_o);
+    Q_UNUSED(_id);
+    Q_UNUSED(_c);
+    Q_UNUSED(_a);
+}
+
+const QMetaObjectExtraData QwtDesignerPlugin::CustomWidgetInterface::staticMetaObjectExtraData = {
+    0,  qt_static_metacall 
+};
+
 const QMetaObject QwtDesignerPlugin::CustomWidgetInterface::staticMetaObject = {
     { &QObject::staticMetaObject, qt_meta_stringdata_QwtDesignerPlugin__CustomWidgetInterface,
-      qt_meta_data_QwtDesignerPlugin__CustomWidgetInterface, 0 }
+      qt_meta_data_QwtDesignerPlugin__CustomWidgetInterface, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
@@ -73,7 +84,7 @@ int QwtDesignerPlugin::CustomWidgetInterface::qt_metacall(QMetaObject::Call _c, 
 static const uint qt_meta_data_QwtDesignerPlugin__CustomWidgetCollectionInterface[] = {
 
  // content:
-       5,       // revision
+       6,       // revision
        0,       // classname
        0,    0, // classinfo
        0,    0, // methods
@@ -90,9 +101,21 @@ static const char qt_meta_stringdata_QwtDesignerPlugin__CustomWidgetCollectionIn
     "QwtDesignerPlugin::CustomWidgetCollectionInterface\0"
 };
 
+void QwtDesignerPlugin::CustomWidgetCollectionInterface::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    Q_UNUSED(_o);
+    Q_UNUSED(_id);
+    Q_UNUSED(_c);
+    Q_UNUSED(_a);
+}
+
+const QMetaObjectExtraData QwtDesignerPlugin::CustomWidgetCollectionInterface::staticMetaObjectExtraData = {
+    0,  qt_static_metacall 
+};
+
 const QMetaObject QwtDesignerPlugin::CustomWidgetCollectionInterface::staticMetaObject = {
     { &QObject::staticMetaObject, qt_meta_stringdata_QwtDesignerPlugin__CustomWidgetCollectionInterface,
-      qt_meta_data_QwtDesignerPlugin__CustomWidgetCollectionInterface, 0 }
+      qt_meta_data_QwtDesignerPlugin__CustomWidgetCollectionInterface, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
@@ -126,7 +149,7 @@ int QwtDesignerPlugin::CustomWidgetCollectionInterface::qt_metacall(QMetaObject:
 static const uint qt_meta_data_QwtDesignerPlugin__PlotInterface[] = {
 
  // content:
-       5,       // revision
+       6,       // revision
        0,       // classname
        0,    0, // classinfo
        0,    0, // methods
@@ -143,9 +166,21 @@ static const char qt_meta_stringdata_QwtDesignerPlugin__PlotInterface[] = {
     "QwtDesignerPlugin::PlotInterface\0"
 };
 
+void QwtDesignerPlugin::PlotInterface::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    Q_UNUSED(_o);
+    Q_UNUSED(_id);
+    Q_UNUSED(_c);
+    Q_UNUSED(_a);
+}
+
+const QMetaObjectExtraData QwtDesignerPlugin::PlotInterface::staticMetaObjectExtraData = {
+    0,  qt_static_metacall 
+};
+
 const QMetaObject QwtDesignerPlugin::PlotInterface::staticMetaObject = {
     { &CustomWidgetInterface::staticMetaObject, qt_meta_stringdata_QwtDesignerPlugin__PlotInterface,
-      qt_meta_data_QwtDesignerPlugin__PlotInterface, 0 }
+      qt_meta_data_QwtDesignerPlugin__PlotInterface, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
@@ -177,7 +212,7 @@ int QwtDesignerPlugin::PlotInterface::qt_metacall(QMetaObject::Call _c, int _id,
 static const uint qt_meta_data_QwtDesignerPlugin__AnalogClockInterface[] = {
 
  // content:
-       5,       // revision
+       6,       // revision
        0,       // classname
        0,    0, // classinfo
        0,    0, // methods
@@ -194,9 +229,21 @@ static const char qt_meta_stringdata_QwtDesignerPlugin__AnalogClockInterface[] =
     "QwtDesignerPlugin::AnalogClockInterface\0"
 };
 
+void QwtDesignerPlugin::AnalogClockInterface::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    Q_UNUSED(_o);
+    Q_UNUSED(_id);
+    Q_UNUSED(_c);
+    Q_UNUSED(_a);
+}
+
+const QMetaObjectExtraData QwtDesignerPlugin::AnalogClockInterface::staticMetaObjectExtraData = {
+    0,  qt_static_metacall 
+};
+
 const QMetaObject QwtDesignerPlugin::AnalogClockInterface::staticMetaObject = {
     { &CustomWidgetInterface::staticMetaObject, qt_meta_stringdata_QwtDesignerPlugin__AnalogClockInterface,
-      qt_meta_data_QwtDesignerPlugin__AnalogClockInterface, 0 }
+      qt_meta_data_QwtDesignerPlugin__AnalogClockInterface, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
@@ -228,7 +275,7 @@ int QwtDesignerPlugin::AnalogClockInterface::qt_metacall(QMetaObject::Call _c, i
 static const uint qt_meta_data_QwtDesignerPlugin__CompassInterface[] = {
 
  // content:
-       5,       // revision
+       6,       // revision
        0,       // classname
        0,    0, // classinfo
        0,    0, // methods
@@ -245,9 +292,21 @@ static const char qt_meta_stringdata_QwtDesignerPlugin__CompassInterface[] = {
     "QwtDesignerPlugin::CompassInterface\0"
 };
 
+void QwtDesignerPlugin::CompassInterface::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    Q_UNUSED(_o);
+    Q_UNUSED(_id);
+    Q_UNUSED(_c);
+    Q_UNUSED(_a);
+}
+
+const QMetaObjectExtraData QwtDesignerPlugin::CompassInterface::staticMetaObjectExtraData = {
+    0,  qt_static_metacall 
+};
+
 const QMetaObject QwtDesignerPlugin::CompassInterface::staticMetaObject = {
     { &CustomWidgetInterface::staticMetaObject, qt_meta_stringdata_QwtDesignerPlugin__CompassInterface,
-      qt_meta_data_QwtDesignerPlugin__CompassInterface, 0 }
+      qt_meta_data_QwtDesignerPlugin__CompassInterface, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
@@ -279,7 +338,7 @@ int QwtDesignerPlugin::CompassInterface::qt_metacall(QMetaObject::Call _c, int _
 static const uint qt_meta_data_QwtDesignerPlugin__CounterInterface[] = {
 
  // content:
-       5,       // revision
+       6,       // revision
        0,       // classname
        0,    0, // classinfo
        0,    0, // methods
@@ -296,9 +355,21 @@ static const char qt_meta_stringdata_QwtDesignerPlugin__CounterInterface[] = {
     "QwtDesignerPlugin::CounterInterface\0"
 };
 
+void QwtDesignerPlugin::CounterInterface::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    Q_UNUSED(_o);
+    Q_UNUSED(_id);
+    Q_UNUSED(_c);
+    Q_UNUSED(_a);
+}
+
+const QMetaObjectExtraData QwtDesignerPlugin::CounterInterface::staticMetaObjectExtraData = {
+    0,  qt_static_metacall 
+};
+
 const QMetaObject QwtDesignerPlugin::CounterInterface::staticMetaObject = {
     { &CustomWidgetInterface::staticMetaObject, qt_meta_stringdata_QwtDesignerPlugin__CounterInterface,
-      qt_meta_data_QwtDesignerPlugin__CounterInterface, 0 }
+      qt_meta_data_QwtDesignerPlugin__CounterInterface, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
@@ -330,7 +401,7 @@ int QwtDesignerPlugin::CounterInterface::qt_metacall(QMetaObject::Call _c, int _
 static const uint qt_meta_data_QwtDesignerPlugin__DialInterface[] = {
 
  // content:
-       5,       // revision
+       6,       // revision
        0,       // classname
        0,    0, // classinfo
        0,    0, // methods
@@ -347,9 +418,21 @@ static const char qt_meta_stringdata_QwtDesignerPlugin__DialInterface[] = {
     "QwtDesignerPlugin::DialInterface\0"
 };
 
+void QwtDesignerPlugin::DialInterface::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    Q_UNUSED(_o);
+    Q_UNUSED(_id);
+    Q_UNUSED(_c);
+    Q_UNUSED(_a);
+}
+
+const QMetaObjectExtraData QwtDesignerPlugin::DialInterface::staticMetaObjectExtraData = {
+    0,  qt_static_metacall 
+};
+
 const QMetaObject QwtDesignerPlugin::DialInterface::staticMetaObject = {
     { &CustomWidgetInterface::staticMetaObject, qt_meta_stringdata_QwtDesignerPlugin__DialInterface,
-      qt_meta_data_QwtDesignerPlugin__DialInterface, 0 }
+      qt_meta_data_QwtDesignerPlugin__DialInterface, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
@@ -381,7 +464,7 @@ int QwtDesignerPlugin::DialInterface::qt_metacall(QMetaObject::Call _c, int _id,
 static const uint qt_meta_data_QwtDesignerPlugin__KnobInterface[] = {
 
  // content:
-       5,       // revision
+       6,       // revision
        0,       // classname
        0,    0, // classinfo
        0,    0, // methods
@@ -398,9 +481,21 @@ static const char qt_meta_stringdata_QwtDesignerPlugin__KnobInterface[] = {
     "QwtDesignerPlugin::KnobInterface\0"
 };
 
+void QwtDesignerPlugin::KnobInterface::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    Q_UNUSED(_o);
+    Q_UNUSED(_id);
+    Q_UNUSED(_c);
+    Q_UNUSED(_a);
+}
+
+const QMetaObjectExtraData QwtDesignerPlugin::KnobInterface::staticMetaObjectExtraData = {
+    0,  qt_static_metacall 
+};
+
 const QMetaObject QwtDesignerPlugin::KnobInterface::staticMetaObject = {
     { &CustomWidgetInterface::staticMetaObject, qt_meta_stringdata_QwtDesignerPlugin__KnobInterface,
-      qt_meta_data_QwtDesignerPlugin__KnobInterface, 0 }
+      qt_meta_data_QwtDesignerPlugin__KnobInterface, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
@@ -432,7 +527,7 @@ int QwtDesignerPlugin::KnobInterface::qt_metacall(QMetaObject::Call _c, int _id,
 static const uint qt_meta_data_QwtDesignerPlugin__ScaleWidgetInterface[] = {
 
  // content:
-       5,       // revision
+       6,       // revision
        0,       // classname
        0,    0, // classinfo
        0,    0, // methods
@@ -449,9 +544,21 @@ static const char qt_meta_stringdata_QwtDesignerPlugin__ScaleWidgetInterface[] =
     "QwtDesignerPlugin::ScaleWidgetInterface\0"
 };
 
+void QwtDesignerPlugin::ScaleWidgetInterface::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    Q_UNUSED(_o);
+    Q_UNUSED(_id);
+    Q_UNUSED(_c);
+    Q_UNUSED(_a);
+}
+
+const QMetaObjectExtraData QwtDesignerPlugin::ScaleWidgetInterface::staticMetaObjectExtraData = {
+    0,  qt_static_metacall 
+};
+
 const QMetaObject QwtDesignerPlugin::ScaleWidgetInterface::staticMetaObject = {
     { &CustomWidgetInterface::staticMetaObject, qt_meta_stringdata_QwtDesignerPlugin__ScaleWidgetInterface,
-      qt_meta_data_QwtDesignerPlugin__ScaleWidgetInterface, 0 }
+      qt_meta_data_QwtDesignerPlugin__ScaleWidgetInterface, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
@@ -483,7 +590,7 @@ int QwtDesignerPlugin::ScaleWidgetInterface::qt_metacall(QMetaObject::Call _c, i
 static const uint qt_meta_data_QwtDesignerPlugin__SliderInterface[] = {
 
  // content:
-       5,       // revision
+       6,       // revision
        0,       // classname
        0,    0, // classinfo
        0,    0, // methods
@@ -500,9 +607,21 @@ static const char qt_meta_stringdata_QwtDesignerPlugin__SliderInterface[] = {
     "QwtDesignerPlugin::SliderInterface\0"
 };
 
+void QwtDesignerPlugin::SliderInterface::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    Q_UNUSED(_o);
+    Q_UNUSED(_id);
+    Q_UNUSED(_c);
+    Q_UNUSED(_a);
+}
+
+const QMetaObjectExtraData QwtDesignerPlugin::SliderInterface::staticMetaObjectExtraData = {
+    0,  qt_static_metacall 
+};
+
 const QMetaObject QwtDesignerPlugin::SliderInterface::staticMetaObject = {
     { &CustomWidgetInterface::staticMetaObject, qt_meta_stringdata_QwtDesignerPlugin__SliderInterface,
-      qt_meta_data_QwtDesignerPlugin__SliderInterface, 0 }
+      qt_meta_data_QwtDesignerPlugin__SliderInterface, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
@@ -534,7 +653,7 @@ int QwtDesignerPlugin::SliderInterface::qt_metacall(QMetaObject::Call _c, int _i
 static const uint qt_meta_data_QwtDesignerPlugin__TextLabelInterface[] = {
 
  // content:
-       5,       // revision
+       6,       // revision
        0,       // classname
        0,    0, // classinfo
        0,    0, // methods
@@ -551,9 +670,21 @@ static const char qt_meta_stringdata_QwtDesignerPlugin__TextLabelInterface[] = {
     "QwtDesignerPlugin::TextLabelInterface\0"
 };
 
+void QwtDesignerPlugin::TextLabelInterface::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    Q_UNUSED(_o);
+    Q_UNUSED(_id);
+    Q_UNUSED(_c);
+    Q_UNUSED(_a);
+}
+
+const QMetaObjectExtraData QwtDesignerPlugin::TextLabelInterface::staticMetaObjectExtraData = {
+    0,  qt_static_metacall 
+};
+
 const QMetaObject QwtDesignerPlugin::TextLabelInterface::staticMetaObject = {
     { &CustomWidgetInterface::staticMetaObject, qt_meta_stringdata_QwtDesignerPlugin__TextLabelInterface,
-      qt_meta_data_QwtDesignerPlugin__TextLabelInterface, 0 }
+      qt_meta_data_QwtDesignerPlugin__TextLabelInterface, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
@@ -585,7 +716,7 @@ int QwtDesignerPlugin::TextLabelInterface::qt_metacall(QMetaObject::Call _c, int
 static const uint qt_meta_data_QwtDesignerPlugin__ThermoInterface[] = {
 
  // content:
-       5,       // revision
+       6,       // revision
        0,       // classname
        0,    0, // classinfo
        0,    0, // methods
@@ -602,9 +733,21 @@ static const char qt_meta_stringdata_QwtDesignerPlugin__ThermoInterface[] = {
     "QwtDesignerPlugin::ThermoInterface\0"
 };
 
+void QwtDesignerPlugin::ThermoInterface::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    Q_UNUSED(_o);
+    Q_UNUSED(_id);
+    Q_UNUSED(_c);
+    Q_UNUSED(_a);
+}
+
+const QMetaObjectExtraData QwtDesignerPlugin::ThermoInterface::staticMetaObjectExtraData = {
+    0,  qt_static_metacall 
+};
+
 const QMetaObject QwtDesignerPlugin::ThermoInterface::staticMetaObject = {
     { &CustomWidgetInterface::staticMetaObject, qt_meta_stringdata_QwtDesignerPlugin__ThermoInterface,
-      qt_meta_data_QwtDesignerPlugin__ThermoInterface, 0 }
+      qt_meta_data_QwtDesignerPlugin__ThermoInterface, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
@@ -636,7 +779,7 @@ int QwtDesignerPlugin::ThermoInterface::qt_metacall(QMetaObject::Call _c, int _i
 static const uint qt_meta_data_QwtDesignerPlugin__WheelInterface[] = {
 
  // content:
-       5,       // revision
+       6,       // revision
        0,       // classname
        0,    0, // classinfo
        0,    0, // methods
@@ -653,9 +796,21 @@ static const char qt_meta_stringdata_QwtDesignerPlugin__WheelInterface[] = {
     "QwtDesignerPlugin::WheelInterface\0"
 };
 
+void QwtDesignerPlugin::WheelInterface::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    Q_UNUSED(_o);
+    Q_UNUSED(_id);
+    Q_UNUSED(_c);
+    Q_UNUSED(_a);
+}
+
+const QMetaObjectExtraData QwtDesignerPlugin::WheelInterface::staticMetaObjectExtraData = {
+    0,  qt_static_metacall 
+};
+
 const QMetaObject QwtDesignerPlugin::WheelInterface::staticMetaObject = {
     { &CustomWidgetInterface::staticMetaObject, qt_meta_stringdata_QwtDesignerPlugin__WheelInterface,
-      qt_meta_data_QwtDesignerPlugin__WheelInterface, 0 }
+      qt_meta_data_QwtDesignerPlugin__WheelInterface, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
@@ -687,7 +842,7 @@ int QwtDesignerPlugin::WheelInterface::qt_metacall(QMetaObject::Call _c, int _id
 static const uint qt_meta_data_QwtDesignerPlugin__TaskMenuFactory[] = {
 
  // content:
-       5,       // revision
+       6,       // revision
        0,       // classname
        0,    0, // classinfo
        0,    0, // methods
@@ -704,9 +859,21 @@ static const char qt_meta_stringdata_QwtDesignerPlugin__TaskMenuFactory[] = {
     "QwtDesignerPlugin::TaskMenuFactory\0"
 };
 
+void QwtDesignerPlugin::TaskMenuFactory::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    Q_UNUSED(_o);
+    Q_UNUSED(_id);
+    Q_UNUSED(_c);
+    Q_UNUSED(_a);
+}
+
+const QMetaObjectExtraData QwtDesignerPlugin::TaskMenuFactory::staticMetaObjectExtraData = {
+    0,  qt_static_metacall 
+};
+
 const QMetaObject QwtDesignerPlugin::TaskMenuFactory::staticMetaObject = {
     { &QExtensionFactory::staticMetaObject, qt_meta_stringdata_QwtDesignerPlugin__TaskMenuFactory,
-      qt_meta_data_QwtDesignerPlugin__TaskMenuFactory, 0 }
+      qt_meta_data_QwtDesignerPlugin__TaskMenuFactory, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
@@ -736,7 +903,7 @@ int QwtDesignerPlugin::TaskMenuFactory::qt_metacall(QMetaObject::Call _c, int _i
 static const uint qt_meta_data_QwtDesignerPlugin__TaskMenuExtension[] = {
 
  // content:
-       5,       // revision
+       6,       // revision
        0,       // classname
        0,    0, // classinfo
        2,   14, // methods
@@ -758,9 +925,26 @@ static const char qt_meta_stringdata_QwtDesignerPlugin__TaskMenuExtension[] = {
     "\0editProperties()\0applyProperties(QString)\0"
 };
 
+void QwtDesignerPlugin::TaskMenuExtension::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        Q_ASSERT(staticMetaObject.cast(_o));
+        TaskMenuExtension *_t = static_cast<TaskMenuExtension *>(_o);
+        switch (_id) {
+        case 0: _t->editProperties(); break;
+        case 1: _t->applyProperties((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        default: ;
+        }
+    }
+}
+
+const QMetaObjectExtraData QwtDesignerPlugin::TaskMenuExtension::staticMetaObjectExtraData = {
+    0,  qt_static_metacall 
+};
+
 const QMetaObject QwtDesignerPlugin::TaskMenuExtension::staticMetaObject = {
     { &QObject::staticMetaObject, qt_meta_stringdata_QwtDesignerPlugin__TaskMenuExtension,
-      qt_meta_data_QwtDesignerPlugin__TaskMenuExtension, 0 }
+      qt_meta_data_QwtDesignerPlugin__TaskMenuExtension, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
@@ -790,11 +974,8 @@ int QwtDesignerPlugin::TaskMenuExtension::qt_metacall(QMetaObject::Call _c, int 
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        switch (_id) {
-        case 0: editProperties(); break;
-        case 1: applyProperties((*reinterpret_cast< const QString(*)>(_a[1]))); break;
-        default: ;
-        }
+        if (_id < 2)
+            qt_static_metacall(this, _c, _id, _a);
         _id -= 2;
     }
     return _id;

@@ -77,7 +77,7 @@ bool FVBoxCBlock::loadFromFile(QString fname)
 	grid->addSubdomain(1);
 	grid->addBoundary(1);
         Node *n;
-	Elem *e;
+        Elem *e;
 	std::ifstream file( fname.toAscii().data() );
 	
         file.ignore( 256, '>');

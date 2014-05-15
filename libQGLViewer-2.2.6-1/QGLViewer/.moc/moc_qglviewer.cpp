@@ -1,8 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'qglviewer.h'
 **
-** Created: Fri Jan 13 12:03:15 2012
-**      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
+** Created by: The Qt Meta Object Compiler version 63 (Qt 4.8.6)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -10,8 +9,8 @@
 #include "../qglviewer.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'qglviewer.h' doesn't include <QObject>."
-#elif Q_MOC_OUTPUT_REVISION != 62
-#error "This file was generated using the moc from 4.7.4. It"
+#elif Q_MOC_OUTPUT_REVISION != 63
+#error "This file was generated using the moc from 4.8.6. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -20,7 +19,7 @@ QT_BEGIN_MOC_NAMESPACE
 static const uint qt_meta_data_QGLViewer[] = {
 
  // content:
-       5,       // revision
+       6,       // revision
        0,       // classname
        0,    0, // classinfo
      104,   14, // methods
@@ -238,9 +237,132 @@ static const char qt_meta_stringdata_QGLViewer[] = {
     "delayedFullScreen()\0hideMessage()\0"
 };
 
+void QGLViewer::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        Q_ASSERT(staticMetaObject.cast(_o));
+        QGLViewer *_t = static_cast<QGLViewer *>(_o);
+        switch (_id) {
+        case 0: _t->viewerInitialized(); break;
+        case 1: _t->drawNeeded(); break;
+        case 2: _t->drawFinished((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 3: _t->animateNeeded(); break;
+        case 4: _t->helpRequired(); break;
+        case 5: _t->axisIsDrawnChanged((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 6: _t->gridIsDrawnChanged((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 7: _t->FPSIsDisplayedChanged((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 8: _t->textIsEnabledChanged((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 9: _t->cameraIsEditedChanged((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 10: _t->stereoChanged((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 11: _t->pointSelected((*reinterpret_cast< const QMouseEvent*(*)>(_a[1]))); break;
+        case 12: _t->mouseGrabberChanged((*reinterpret_cast< qglviewer::MouseGrabber*(*)>(_a[1]))); break;
+        case 13: _t->setAxisIsDrawn((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 14: _t->setAxisIsDrawn(); break;
+        case 15: _t->setGridIsDrawn((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 16: _t->setGridIsDrawn(); break;
+        case 17: _t->setFPSIsDisplayed((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 18: _t->setFPSIsDisplayed(); break;
+        case 19: _t->setTextIsEnabled((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 20: _t->setTextIsEnabled(); break;
+        case 21: _t->setCameraIsEdited((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 22: _t->setCameraIsEdited(); break;
+        case 23: _t->toggleAxisIsDrawn(); break;
+        case 24: _t->toggleGridIsDrawn(); break;
+        case 25: _t->toggleFPSIsDisplayed(); break;
+        case 26: _t->toggleTextIsEnabled(); break;
+        case 27: _t->toggleCameraIsEdited(); break;
+        case 28: _t->setBackgroundColor((*reinterpret_cast< const QColor(*)>(_a[1]))); break;
+        case 29: _t->setForegroundColor((*reinterpret_cast< const QColor(*)>(_a[1]))); break;
+        case 30: _t->setSceneRadius((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 31: _t->setSceneCenter((*reinterpret_cast< const qglviewer::Vec(*)>(_a[1]))); break;
+        case 32: _t->setSceneBoundingBox((*reinterpret_cast< const qglviewer::Vec(*)>(_a[1])),(*reinterpret_cast< const qglviewer::Vec(*)>(_a[2]))); break;
+        case 33: _t->showEntireScene(); break;
+        case 34: _t->setCamera((*reinterpret_cast< qglviewer::Camera*const(*)>(_a[1]))); break;
+        case 35: _t->setManipulatedFrame((*reinterpret_cast< qglviewer::ManipulatedFrame*(*)>(_a[1]))); break;
+        case 36: _t->setMouseGrabber((*reinterpret_cast< qglviewer::MouseGrabber*(*)>(_a[1]))); break;
+        case 37: _t->setFullScreen((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 38: _t->setFullScreen(); break;
+        case 39: _t->setStereoDisplay((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 40: _t->setStereoDisplay(); break;
+        case 41: _t->toggleFullScreen(); break;
+        case 42: _t->toggleStereoDisplay(); break;
+        case 43: _t->toggleCameraMode(); break;
+        case 44: _t->saveSnapshot((*reinterpret_cast< bool(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
+        case 45: _t->saveSnapshot((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 46: _t->saveSnapshot(); break;
+        case 47: _t->saveSnapshot((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
+        case 48: _t->saveSnapshot((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 49: _t->setSnapshotFileName((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 50: _t->setSnapshotFormat((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 51: _t->setSnapshotCounter((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 52: _t->setSnapshotQuality((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 53: { bool _r = _t->openSnapshotFormatDialog();
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
+        case 54: _t->copyBufferToTexture((*reinterpret_cast< GLint(*)>(_a[1])),(*reinterpret_cast< GLenum(*)>(_a[2]))); break;
+        case 55: _t->copyBufferToTexture((*reinterpret_cast< GLint(*)>(_a[1]))); break;
+        case 56: _t->setAnimationPeriod((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 57: _t->startAnimation(); break;
+        case 58: _t->stopAnimation(); break;
+        case 59: _t->animate(); break;
+        case 60: _t->toggleAnimation(); break;
+        case 61: _t->help(); break;
+        case 62: _t->aboutQGLViewer(); break;
+        case 63: _t->select((*reinterpret_cast< const QMouseEvent*(*)>(_a[1]))); break;
+        case 64: _t->select((*reinterpret_cast< const QPoint(*)>(_a[1]))); break;
+        case 65: _t->setSelectBufferSize((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 66: _t->setSelectRegionWidth((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 67: _t->setSelectRegionHeight((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 68: _t->setSelectedName((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 69: _t->setShortcut((*reinterpret_cast< KeyboardAction(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 70: _t->setKeyboardAccelerator((*reinterpret_cast< KeyboardAction(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 71: _t->setKeyDescription((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
+        case 72: _t->setKeyFrameKey((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 73: _t->setPlayKeyFramePathStateKey((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 74: _t->setPlayPathStateKey((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 75: _t->setAddKeyFrameStateKey((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 76: _t->setPathKey((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 77: _t->setPathKey((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 78: _t->setPlayPathKeyboardModifiers((*reinterpret_cast< QtKeyboardModifiers(*)>(_a[1]))); break;
+        case 79: _t->setAddKeyFrameKeyboardModifiers((*reinterpret_cast< QtKeyboardModifiers(*)>(_a[1]))); break;
+        case 80: _t->setMouseBinding((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< MouseHandler(*)>(_a[2])),(*reinterpret_cast< MouseAction(*)>(_a[3])),(*reinterpret_cast< bool(*)>(_a[4]))); break;
+        case 81: _t->setMouseBinding((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< MouseHandler(*)>(_a[2])),(*reinterpret_cast< MouseAction(*)>(_a[3]))); break;
+        case 82: _t->setMouseBinding((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< ClickAction(*)>(_a[2])),(*reinterpret_cast< bool(*)>(_a[3])),(*reinterpret_cast< QtMouseButtons(*)>(_a[4]))); break;
+        case 83: _t->setMouseBinding((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< ClickAction(*)>(_a[2])),(*reinterpret_cast< bool(*)>(_a[3]))); break;
+        case 84: _t->setMouseBinding((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< ClickAction(*)>(_a[2]))); break;
+        case 85: _t->setMouseBindingDescription((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< bool(*)>(_a[3])),(*reinterpret_cast< QtMouseButtons(*)>(_a[4]))); break;
+        case 86: _t->setMouseBindingDescription((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< bool(*)>(_a[3]))); break;
+        case 87: _t->setMouseBindingDescription((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
+        case 88: _t->setWheelBinding((*reinterpret_cast< QtKeyboardModifiers(*)>(_a[1])),(*reinterpret_cast< MouseHandler(*)>(_a[2])),(*reinterpret_cast< MouseAction(*)>(_a[3])),(*reinterpret_cast< bool(*)>(_a[4]))); break;
+        case 89: _t->setWheelBinding((*reinterpret_cast< QtKeyboardModifiers(*)>(_a[1])),(*reinterpret_cast< MouseHandler(*)>(_a[2])),(*reinterpret_cast< MouseAction(*)>(_a[3]))); break;
+        case 90: _t->setHandlerKeyboardModifiers((*reinterpret_cast< MouseHandler(*)>(_a[1])),(*reinterpret_cast< QtKeyboardModifiers(*)>(_a[2]))); break;
+        case 91: _t->setHandlerStateKey((*reinterpret_cast< MouseHandler(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 92: _t->setMouseStateKey((*reinterpret_cast< MouseHandler(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 93: _t->initFromDOMElement((*reinterpret_cast< const QDomElement(*)>(_a[1]))); break;
+        case 94: _t->saveStateToFile(); break;
+        case 95: { bool _r = _t->restoreStateFromFile();
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
+        case 96: _t->setStateFileName((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 97: _t->saveToFile((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 98: _t->saveToFile(); break;
+        case 99: { bool _r = _t->restoreFromFile((*reinterpret_cast< const QString(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
+        case 100: { bool _r = _t->restoreFromFile();
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
+        case 101: _t->resetVisualHints(); break;
+        case 102: _t->delayedFullScreen(); break;
+        case 103: _t->hideMessage(); break;
+        default: ;
+        }
+    }
+}
+
+const QMetaObjectExtraData QGLViewer::staticMetaObjectExtraData = {
+    0,  qt_static_metacall 
+};
+
 const QMetaObject QGLViewer::staticMetaObject = {
     { &QGLWidget::staticMetaObject, qt_meta_stringdata_QGLViewer,
-      qt_meta_data_QGLViewer, 0 }
+      qt_meta_data_QGLViewer, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
@@ -266,117 +388,8 @@ int QGLViewer::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        switch (_id) {
-        case 0: viewerInitialized(); break;
-        case 1: drawNeeded(); break;
-        case 2: drawFinished((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 3: animateNeeded(); break;
-        case 4: helpRequired(); break;
-        case 5: axisIsDrawnChanged((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 6: gridIsDrawnChanged((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 7: FPSIsDisplayedChanged((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 8: textIsEnabledChanged((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 9: cameraIsEditedChanged((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 10: stereoChanged((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 11: pointSelected((*reinterpret_cast< const QMouseEvent*(*)>(_a[1]))); break;
-        case 12: mouseGrabberChanged((*reinterpret_cast< qglviewer::MouseGrabber*(*)>(_a[1]))); break;
-        case 13: setAxisIsDrawn((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 14: setAxisIsDrawn(); break;
-        case 15: setGridIsDrawn((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 16: setGridIsDrawn(); break;
-        case 17: setFPSIsDisplayed((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 18: setFPSIsDisplayed(); break;
-        case 19: setTextIsEnabled((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 20: setTextIsEnabled(); break;
-        case 21: setCameraIsEdited((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 22: setCameraIsEdited(); break;
-        case 23: toggleAxisIsDrawn(); break;
-        case 24: toggleGridIsDrawn(); break;
-        case 25: toggleFPSIsDisplayed(); break;
-        case 26: toggleTextIsEnabled(); break;
-        case 27: toggleCameraIsEdited(); break;
-        case 28: setBackgroundColor((*reinterpret_cast< const QColor(*)>(_a[1]))); break;
-        case 29: setForegroundColor((*reinterpret_cast< const QColor(*)>(_a[1]))); break;
-        case 30: setSceneRadius((*reinterpret_cast< float(*)>(_a[1]))); break;
-        case 31: setSceneCenter((*reinterpret_cast< const qglviewer::Vec(*)>(_a[1]))); break;
-        case 32: setSceneBoundingBox((*reinterpret_cast< const qglviewer::Vec(*)>(_a[1])),(*reinterpret_cast< const qglviewer::Vec(*)>(_a[2]))); break;
-        case 33: showEntireScene(); break;
-        case 34: setCamera((*reinterpret_cast< qglviewer::Camera*const(*)>(_a[1]))); break;
-        case 35: setManipulatedFrame((*reinterpret_cast< qglviewer::ManipulatedFrame*(*)>(_a[1]))); break;
-        case 36: setMouseGrabber((*reinterpret_cast< qglviewer::MouseGrabber*(*)>(_a[1]))); break;
-        case 37: setFullScreen((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 38: setFullScreen(); break;
-        case 39: setStereoDisplay((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 40: setStereoDisplay(); break;
-        case 41: toggleFullScreen(); break;
-        case 42: toggleStereoDisplay(); break;
-        case 43: toggleCameraMode(); break;
-        case 44: saveSnapshot((*reinterpret_cast< bool(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
-        case 45: saveSnapshot((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 46: saveSnapshot(); break;
-        case 47: saveSnapshot((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
-        case 48: saveSnapshot((*reinterpret_cast< const QString(*)>(_a[1]))); break;
-        case 49: setSnapshotFileName((*reinterpret_cast< const QString(*)>(_a[1]))); break;
-        case 50: setSnapshotFormat((*reinterpret_cast< const QString(*)>(_a[1]))); break;
-        case 51: setSnapshotCounter((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 52: setSnapshotQuality((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 53: { bool _r = openSnapshotFormatDialog();
-            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
-        case 54: copyBufferToTexture((*reinterpret_cast< GLint(*)>(_a[1])),(*reinterpret_cast< GLenum(*)>(_a[2]))); break;
-        case 55: copyBufferToTexture((*reinterpret_cast< GLint(*)>(_a[1]))); break;
-        case 56: setAnimationPeriod((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 57: startAnimation(); break;
-        case 58: stopAnimation(); break;
-        case 59: animate(); break;
-        case 60: toggleAnimation(); break;
-        case 61: help(); break;
-        case 62: aboutQGLViewer(); break;
-        case 63: select((*reinterpret_cast< const QMouseEvent*(*)>(_a[1]))); break;
-        case 64: select((*reinterpret_cast< const QPoint(*)>(_a[1]))); break;
-        case 65: setSelectBufferSize((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 66: setSelectRegionWidth((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 67: setSelectRegionHeight((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 68: setSelectedName((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 69: setShortcut((*reinterpret_cast< KeyboardAction(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 70: setKeyboardAccelerator((*reinterpret_cast< KeyboardAction(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 71: setKeyDescription((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
-        case 72: setKeyFrameKey((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 73: setPlayKeyFramePathStateKey((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 74: setPlayPathStateKey((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 75: setAddKeyFrameStateKey((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 76: setPathKey((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 77: setPathKey((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 78: setPlayPathKeyboardModifiers((*reinterpret_cast< QtKeyboardModifiers(*)>(_a[1]))); break;
-        case 79: setAddKeyFrameKeyboardModifiers((*reinterpret_cast< QtKeyboardModifiers(*)>(_a[1]))); break;
-        case 80: setMouseBinding((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< MouseHandler(*)>(_a[2])),(*reinterpret_cast< MouseAction(*)>(_a[3])),(*reinterpret_cast< bool(*)>(_a[4]))); break;
-        case 81: setMouseBinding((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< MouseHandler(*)>(_a[2])),(*reinterpret_cast< MouseAction(*)>(_a[3]))); break;
-        case 82: setMouseBinding((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< ClickAction(*)>(_a[2])),(*reinterpret_cast< bool(*)>(_a[3])),(*reinterpret_cast< QtMouseButtons(*)>(_a[4]))); break;
-        case 83: setMouseBinding((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< ClickAction(*)>(_a[2])),(*reinterpret_cast< bool(*)>(_a[3]))); break;
-        case 84: setMouseBinding((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< ClickAction(*)>(_a[2]))); break;
-        case 85: setMouseBindingDescription((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< bool(*)>(_a[3])),(*reinterpret_cast< QtMouseButtons(*)>(_a[4]))); break;
-        case 86: setMouseBindingDescription((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< bool(*)>(_a[3]))); break;
-        case 87: setMouseBindingDescription((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
-        case 88: setWheelBinding((*reinterpret_cast< QtKeyboardModifiers(*)>(_a[1])),(*reinterpret_cast< MouseHandler(*)>(_a[2])),(*reinterpret_cast< MouseAction(*)>(_a[3])),(*reinterpret_cast< bool(*)>(_a[4]))); break;
-        case 89: setWheelBinding((*reinterpret_cast< QtKeyboardModifiers(*)>(_a[1])),(*reinterpret_cast< MouseHandler(*)>(_a[2])),(*reinterpret_cast< MouseAction(*)>(_a[3]))); break;
-        case 90: setHandlerKeyboardModifiers((*reinterpret_cast< MouseHandler(*)>(_a[1])),(*reinterpret_cast< QtKeyboardModifiers(*)>(_a[2]))); break;
-        case 91: setHandlerStateKey((*reinterpret_cast< MouseHandler(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 92: setMouseStateKey((*reinterpret_cast< MouseHandler(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 93: initFromDOMElement((*reinterpret_cast< const QDomElement(*)>(_a[1]))); break;
-        case 94: saveStateToFile(); break;
-        case 95: { bool _r = restoreStateFromFile();
-            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
-        case 96: setStateFileName((*reinterpret_cast< const QString(*)>(_a[1]))); break;
-        case 97: saveToFile((*reinterpret_cast< const QString(*)>(_a[1]))); break;
-        case 98: saveToFile(); break;
-        case 99: { bool _r = restoreFromFile((*reinterpret_cast< const QString(*)>(_a[1])));
-            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
-        case 100: { bool _r = restoreFromFile();
-            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
-        case 101: resetVisualHints(); break;
-        case 102: delayedFullScreen(); break;
-        case 103: hideMessage(); break;
-        default: ;
-        }
+        if (_id < 104)
+            qt_static_metacall(this, _c, _id, _a);
         _id -= 104;
     }
     return _id;

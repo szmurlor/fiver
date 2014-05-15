@@ -27,7 +27,6 @@
 #include <main.h>
 #include <fvopenerObjFile.h>
 #include <fvopenerFiverProj.h>
-#include <fvopenerXmlFile.h>
 
 
 
@@ -39,7 +38,6 @@
 #define COIL "6 - Coil (*.cl)"
 #define OBJFILE "7 - Obj file (*.obj)"
 #define FIVERPROJ "8 - Fiver project (*.fvp)"
-#define XML "9 - Dolphin grid file (*.xml)"
 
 #define FIVERPROJSAVE "1 - Fiver project (*.fvp)"
 
@@ -55,7 +53,6 @@ FVOpen::FVOpen(QObject * parent)
     filters[tr(COIL)] = new FVOpenerCoil();
     filters[tr(OBJFILE)] = new FVOpenerObjFile();
     filters[tr(FIVERPROJ)] = new FVOpenerFiverProj();
-    filters[tr(XML)] = new FVOpenerXmlFile();
 
     saveFilters[tr(FIVERPROJSAVE)] = new FVOpenerFiverProj(true);
 }

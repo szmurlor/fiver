@@ -49,6 +49,7 @@ int FiverApp::exec( )
             fm->show();
             QByteArray geom = fvsettings.value("/RSoft/FViewer/FiverMainGeometry","").toByteArray();
             fm->restoreGeometry(geom);
+                        qDebug() << "Akuku!";
 
             connect( this, SIGNAL(lastWindowClosed()), this, SLOT(quit()) );
 

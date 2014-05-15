@@ -8,7 +8,7 @@ PRE_TARGETDEPS += src/ufc-2.0.5/_ufc.so
 
 #Check for QGLViewer
 isEmpty(QGLVIEWER_LIB){
-    QGLVIEWER_LIB=qglviewer-qt4
+    QGLVIEWER_LIB=qglviewer
 } else {
     win32 { error("Unsupported variable QGLVIEWER_LIB") }
 }

@@ -22,7 +22,6 @@
 
 #include <grid.h>
 #include <fvinterface.h>
-#include <dolfin/mesh/Mesh.h>
 
 /**
 	@author Robert Szmurlo <robert@iem.pw.edu.pl>
@@ -30,19 +29,15 @@
 class FVGridInterface : public FVInterface {
 public:
 	FVGridInterface( Grid ** gridPtr);
-        FVGridInterface( dolfin::Mesh * meshPtr);
-        FVGridInterface( dolfin::BoundaryMesh * bmeshPtr);
-        virtual ~FVGridInterface();
+
+    virtual ~FVGridInterface();
 	
 	virtual Grid * getGrid();
-        virtual dolfin::Mesh * getMesh();
-        virtual dolfin::BoundaryMesh * getBoundaryMesh();
 
 private:
 	// Pointer to the pointer
 	Grid **gp;
-  dolfin::Mesh * mp;
-  dolfin::BoundaryMesh* bmp;
+
 	
 };
 
