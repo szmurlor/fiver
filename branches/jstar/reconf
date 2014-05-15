@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # just in case setup the Qt envirinment.
-qt
+#qt
 
 rm Makefile src/Makefile src/boxmgr/Makefile src/attr/Makefile libQGLViewer-2.2.6-1/QGLViewer/Makefile 
 
@@ -19,10 +19,13 @@ cd ..
 
 cd src/coremesh2
 make clean
-make
+make -j 2
 cd ../meshreader2
 make clean
-make
+make -j 2
+
+echo "Aqp4"
+
 cd ../tetgen
 make clean
 make tetlib

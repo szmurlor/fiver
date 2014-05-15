@@ -1,8 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'manipulatedFrame.h'
 **
-** Created: Fri Jan 13 12:03:15 2012
-**      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
+** Created by: The Qt Meta Object Compiler version 63 (Qt 4.8.6)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -10,8 +9,8 @@
 #include "../manipulatedFrame.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'manipulatedFrame.h' doesn't include <QObject>."
-#elif Q_MOC_OUTPUT_REVISION != 62
-#error "This file was generated using the moc from 4.7.4. It"
+#elif Q_MOC_OUTPUT_REVISION != 63
+#error "This file was generated using the moc from 4.8.6. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -20,7 +19,7 @@ QT_BEGIN_MOC_NAMESPACE
 static const uint qt_meta_data_qglviewer__ManipulatedFrame[] = {
 
  // content:
-       5,       // revision
+       6,       // revision
        0,       // classname
        0,    0, // classinfo
       12,   14, // methods
@@ -61,9 +60,36 @@ static const char qt_meta_stringdata_qglviewer__ManipulatedFrame[] = {
     "element\0initFromDOMElement(QDomElement)\0"
 };
 
+void qglviewer::ManipulatedFrame::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        Q_ASSERT(staticMetaObject.cast(_o));
+        ManipulatedFrame *_t = static_cast<ManipulatedFrame *>(_o);
+        switch (_id) {
+        case 0: _t->manipulated(); break;
+        case 1: _t->spun(); break;
+        case 2: _t->setRotationSensitivity((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 3: _t->setTranslationSensitivity((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 4: _t->setSpinningSensitivity((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 5: _t->setWheelSensitivity((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 6: _t->setSpinningQuaternion((*reinterpret_cast< const Quaternion(*)>(_a[1]))); break;
+        case 7: _t->startSpinning((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 8: _t->stopSpinning(); break;
+        case 9: _t->spin(); break;
+        case 10: _t->spinUpdate(); break;
+        case 11: _t->initFromDOMElement((*reinterpret_cast< const QDomElement(*)>(_a[1]))); break;
+        default: ;
+        }
+    }
+}
+
+const QMetaObjectExtraData qglviewer::ManipulatedFrame::staticMetaObjectExtraData = {
+    0,  qt_static_metacall 
+};
+
 const QMetaObject qglviewer::ManipulatedFrame::staticMetaObject = {
     { &Frame::staticMetaObject, qt_meta_stringdata_qglviewer__ManipulatedFrame,
-      qt_meta_data_qglviewer__ManipulatedFrame, 0 }
+      qt_meta_data_qglviewer__ManipulatedFrame, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
@@ -91,21 +117,8 @@ int qglviewer::ManipulatedFrame::qt_metacall(QMetaObject::Call _c, int _id, void
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        switch (_id) {
-        case 0: manipulated(); break;
-        case 1: spun(); break;
-        case 2: setRotationSensitivity((*reinterpret_cast< float(*)>(_a[1]))); break;
-        case 3: setTranslationSensitivity((*reinterpret_cast< float(*)>(_a[1]))); break;
-        case 4: setSpinningSensitivity((*reinterpret_cast< float(*)>(_a[1]))); break;
-        case 5: setWheelSensitivity((*reinterpret_cast< float(*)>(_a[1]))); break;
-        case 6: setSpinningQuaternion((*reinterpret_cast< const Quaternion(*)>(_a[1]))); break;
-        case 7: startSpinning((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 8: stopSpinning(); break;
-        case 9: spin(); break;
-        case 10: spinUpdate(); break;
-        case 11: initFromDOMElement((*reinterpret_cast< const QDomElement(*)>(_a[1]))); break;
-        default: ;
-        }
+        if (_id < 12)
+            qt_static_metacall(this, _c, _id, _a);
         _id -= 12;
     }
     return _id;

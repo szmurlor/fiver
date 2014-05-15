@@ -99,7 +99,7 @@ void FViewer::drawWithNames( )
  */
 void FViewer::draw()
 {
-	
+    qDebug() << "Jestesmy w draw";
     QColor c = QColor::fromRgb(200,200,200,0);
     if ( fvsettings.contains(QString("/RSoft/FViewer/ViewerBackground")) ) {
         QVariant cVar = fvsettings.value( QString("/RSoft/FViewer/ViewerBackground") , QString("(255,255,255)" ) );
@@ -125,6 +125,7 @@ void FViewer::draw()
                     fvinteraction->paintGL();
             }
     }
+    qDebug() << "Wychodzimy z draw";
 }
 
 void FViewer::add(FVList * fl)

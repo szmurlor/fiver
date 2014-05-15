@@ -1,8 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'camera.h'
 **
-** Created: Fri Jan 13 12:03:15 2012
-**      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
+** Created by: The Qt Meta Object Compiler version 63 (Qt 4.8.6)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -10,8 +9,8 @@
 #include "../camera.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'camera.h' doesn't include <QObject>."
-#elif Q_MOC_OUTPUT_REVISION != 62
-#error "This file was generated using the moc from 4.7.4. It"
+#elif Q_MOC_OUTPUT_REVISION != 63
+#error "This file was generated using the moc from 4.8.6. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -20,7 +19,7 @@ QT_BEGIN_MOC_NAMESPACE
 static const uint qt_meta_data_qglviewer__Camera[] = {
 
  // content:
-       5,       // revision
+       6,       // revision
        0,       // classname
        0,    0, // classinfo
       42,   14, // methods
@@ -116,9 +115,68 @@ static const char qt_meta_stringdata_qglviewer__Camera[] = {
     "initFromDOMElement(QDomElement)\0"
 };
 
+void qglviewer::Camera::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        Q_ASSERT(staticMetaObject.cast(_o));
+        Camera *_t = static_cast<Camera *>(_o);
+        switch (_id) {
+        case 0: _t->setPosition((*reinterpret_cast< const Vec(*)>(_a[1]))); break;
+        case 1: _t->setOrientation((*reinterpret_cast< const Quaternion(*)>(_a[1]))); break;
+        case 2: _t->setOrientation((*reinterpret_cast< float(*)>(_a[1])),(*reinterpret_cast< float(*)>(_a[2]))); break;
+        case 3: _t->setUpVector((*reinterpret_cast< const Vec(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
+        case 4: _t->setUpVector((*reinterpret_cast< const Vec(*)>(_a[1]))); break;
+        case 5: _t->setViewDirection((*reinterpret_cast< const Vec(*)>(_a[1]))); break;
+        case 6: _t->lookAt((*reinterpret_cast< const Vec(*)>(_a[1]))); break;
+        case 7: _t->showEntireScene(); break;
+        case 8: _t->fitSphere((*reinterpret_cast< const Vec(*)>(_a[1])),(*reinterpret_cast< float(*)>(_a[2]))); break;
+        case 9: _t->fitBoundingBox((*reinterpret_cast< const Vec(*)>(_a[1])),(*reinterpret_cast< const Vec(*)>(_a[2]))); break;
+        case 10: _t->fitScreenRegion((*reinterpret_cast< const QRect(*)>(_a[1]))); break;
+        case 11: _t->centerScene(); break;
+        case 12: _t->interpolateToZoomOnPixel((*reinterpret_cast< const QPoint(*)>(_a[1]))); break;
+        case 13: _t->interpolateToFitScene(); break;
+        case 14: _t->interpolateTo((*reinterpret_cast< const Frame(*)>(_a[1])),(*reinterpret_cast< float(*)>(_a[2]))); break;
+        case 15: _t->setType((*reinterpret_cast< Type(*)>(_a[1]))); break;
+        case 16: _t->setFieldOfView((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 17: _t->setHorizontalFieldOfView((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 18: _t->setFOVToFitScene(); break;
+        case 19: _t->setAspectRatio((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 20: _t->setScreenWidthAndHeight((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 21: _t->setZNearCoefficient((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 22: _t->setZClippingCoefficient((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 23: _t->setSceneRadius((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 24: _t->setSceneCenter((*reinterpret_cast< const Vec(*)>(_a[1]))); break;
+        case 25: { bool _r = _t->setSceneCenterFromPixel((*reinterpret_cast< const QPoint(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
+        case 26: _t->setSceneBoundingBox((*reinterpret_cast< const Vec(*)>(_a[1])),(*reinterpret_cast< const Vec(*)>(_a[2]))); break;
+        case 27: _t->setRevolveAroundPoint((*reinterpret_cast< const Vec(*)>(_a[1]))); break;
+        case 28: { bool _r = _t->setRevolveAroundPointFromPixel((*reinterpret_cast< const QPoint(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
+        case 29: _t->setFrame((*reinterpret_cast< ManipulatedCameraFrame*const(*)>(_a[1]))); break;
+        case 30: _t->setKeyFrameInterpolator((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< KeyFrameInterpolator*const(*)>(_a[2]))); break;
+        case 31: _t->addKeyFrameToPath((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 32: _t->playPath((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 33: _t->deletePath((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 34: _t->resetPath((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 35: _t->drawAllPaths(); break;
+        case 36: _t->setFlySpeed((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 37: _t->setIODistance((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 38: _t->setPhysicalDistanceToScreen((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 39: _t->setPhysicalScreenWidth((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 40: _t->setFocusDistance((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 41: _t->initFromDOMElement((*reinterpret_cast< const QDomElement(*)>(_a[1]))); break;
+        default: ;
+        }
+    }
+}
+
+const QMetaObjectExtraData qglviewer::Camera::staticMetaObjectExtraData = {
+    0,  qt_static_metacall 
+};
+
 const QMetaObject qglviewer::Camera::staticMetaObject = {
     { &QObject::staticMetaObject, qt_meta_stringdata_qglviewer__Camera,
-      qt_meta_data_qglviewer__Camera, 0 }
+      qt_meta_data_qglviewer__Camera, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
@@ -144,53 +202,8 @@ int qglviewer::Camera::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        switch (_id) {
-        case 0: setPosition((*reinterpret_cast< const Vec(*)>(_a[1]))); break;
-        case 1: setOrientation((*reinterpret_cast< const Quaternion(*)>(_a[1]))); break;
-        case 2: setOrientation((*reinterpret_cast< float(*)>(_a[1])),(*reinterpret_cast< float(*)>(_a[2]))); break;
-        case 3: setUpVector((*reinterpret_cast< const Vec(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
-        case 4: setUpVector((*reinterpret_cast< const Vec(*)>(_a[1]))); break;
-        case 5: setViewDirection((*reinterpret_cast< const Vec(*)>(_a[1]))); break;
-        case 6: lookAt((*reinterpret_cast< const Vec(*)>(_a[1]))); break;
-        case 7: showEntireScene(); break;
-        case 8: fitSphere((*reinterpret_cast< const Vec(*)>(_a[1])),(*reinterpret_cast< float(*)>(_a[2]))); break;
-        case 9: fitBoundingBox((*reinterpret_cast< const Vec(*)>(_a[1])),(*reinterpret_cast< const Vec(*)>(_a[2]))); break;
-        case 10: fitScreenRegion((*reinterpret_cast< const QRect(*)>(_a[1]))); break;
-        case 11: centerScene(); break;
-        case 12: interpolateToZoomOnPixel((*reinterpret_cast< const QPoint(*)>(_a[1]))); break;
-        case 13: interpolateToFitScene(); break;
-        case 14: interpolateTo((*reinterpret_cast< const Frame(*)>(_a[1])),(*reinterpret_cast< float(*)>(_a[2]))); break;
-        case 15: setType((*reinterpret_cast< Type(*)>(_a[1]))); break;
-        case 16: setFieldOfView((*reinterpret_cast< float(*)>(_a[1]))); break;
-        case 17: setHorizontalFieldOfView((*reinterpret_cast< float(*)>(_a[1]))); break;
-        case 18: setFOVToFitScene(); break;
-        case 19: setAspectRatio((*reinterpret_cast< float(*)>(_a[1]))); break;
-        case 20: setScreenWidthAndHeight((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 21: setZNearCoefficient((*reinterpret_cast< float(*)>(_a[1]))); break;
-        case 22: setZClippingCoefficient((*reinterpret_cast< float(*)>(_a[1]))); break;
-        case 23: setSceneRadius((*reinterpret_cast< float(*)>(_a[1]))); break;
-        case 24: setSceneCenter((*reinterpret_cast< const Vec(*)>(_a[1]))); break;
-        case 25: { bool _r = setSceneCenterFromPixel((*reinterpret_cast< const QPoint(*)>(_a[1])));
-            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
-        case 26: setSceneBoundingBox((*reinterpret_cast< const Vec(*)>(_a[1])),(*reinterpret_cast< const Vec(*)>(_a[2]))); break;
-        case 27: setRevolveAroundPoint((*reinterpret_cast< const Vec(*)>(_a[1]))); break;
-        case 28: { bool _r = setRevolveAroundPointFromPixel((*reinterpret_cast< const QPoint(*)>(_a[1])));
-            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
-        case 29: setFrame((*reinterpret_cast< ManipulatedCameraFrame*const(*)>(_a[1]))); break;
-        case 30: setKeyFrameInterpolator((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< KeyFrameInterpolator*const(*)>(_a[2]))); break;
-        case 31: addKeyFrameToPath((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 32: playPath((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 33: deletePath((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 34: resetPath((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 35: drawAllPaths(); break;
-        case 36: setFlySpeed((*reinterpret_cast< float(*)>(_a[1]))); break;
-        case 37: setIODistance((*reinterpret_cast< float(*)>(_a[1]))); break;
-        case 38: setPhysicalDistanceToScreen((*reinterpret_cast< float(*)>(_a[1]))); break;
-        case 39: setPhysicalScreenWidth((*reinterpret_cast< float(*)>(_a[1]))); break;
-        case 40: setFocusDistance((*reinterpret_cast< float(*)>(_a[1]))); break;
-        case 41: initFromDOMElement((*reinterpret_cast< const QDomElement(*)>(_a[1]))); break;
-        default: ;
-        }
+        if (_id < 42)
+            qt_static_metacall(this, _c, _id, _a);
         _id -= 42;
     }
     return _id;

@@ -65,18 +65,8 @@ HEADERS += fviewer.h \
     fvopenerFiverProj.h \
     fvBoxExporter.h \
     fvBoxImporter.h \
-    fvopenerXmlFile.h \
-    fvboxXml.h \
-    fvboxmesh.h \
-    fvmeshdraw.h \
-    fvboxmeshfunction.h \
-    fvopenerxmlfield.h \
-    fvboxfieldxml.h \
-    fvfieldinterfacexml.h \
-    fvfieldwizard.h \
-    configreader.h \
-    fvfielddrawxml.h \
-    fvfieldslicexml.h
+    configreader.h
+
 SOURCES += main.cpp \
            fviewer.cpp \
            fvlist.cpp \
@@ -133,23 +123,11 @@ SOURCES += main.cpp \
     fvopenerFiverProj.cpp \
     fvBoxExporter.cpp \
     fvBoxImporter.cpp \
-    fvopenerXmlFile.cpp \
-    fvboxXml.cpp \
-    fvboxmesh.cpp \
-    fvmeshdraw.cpp \
-    fvboxmeshfunction.cpp \
-    fvopenerxmlfield.cpp \
-    fvboxfieldxml.cpp \
-    fvfieldinterfacexml.cpp \
-    fvfieldwizard.cpp \
-    configreader.cpp \
-    fvfielddrawxml.cpp \
-    fvfieldslicexml.cpp
-INCLUDEPATH += . ./boxmgr ./attr ./coremesh2/src ./meshreader2 ./meshjoiner ./fiverinjector ./tetgen ./dolfin ./ufc-2.0.5/src/ufc \
+    configreader.cpp
+
+INCLUDEPATH += . ./boxmgr ./attr ./coremesh2/src ./meshreader2 ./meshjoiner ./fiverinjector ./tetgen  \
         ../QConsole/QConsole \
-        ../QConsole/Console \
-        /usr/include/python2.6 \
-        /usr/include/boost \
+        ../QConsole/Console
 
 CONFIG(debug) {
     win32 { LIBS += -ldQGLViewer2 -lboxmgr -lfvattr -lcoremesh2 -lmeshreader2 -L./bin }
@@ -157,7 +135,7 @@ CONFIG(debug) {
     win32 { LIBS += -lQGLViewer2 -lboxmgr -lfvattr -lcoremesh2 -lmeshreader2 -L./bin }
 }
 !win32 {
-    LIBS += -l$$QGLVIEWER_LIB -lboxmgr -Lboxmgr -lfvattr -Lattr -lcoremesh2 -lmeshreader2 -ltrivlog -L./bin -lmeshjoiner -L./tetgen -ltet -lGLU -ldolfin 
+    LIBS += -lQGLViewer -lboxmgr -Lboxmgr -lfvattr -Lattr -lcoremesh2 -lmeshreader2 -ltrivlog -L./bin -lmeshjoiner -L./tetgen -ltet -lGLU
 #            -lQConsole -L../QConsole/QConsole \
 #            -lConsole -L../QConsole/Console \
 #            -lfiverinjector
@@ -168,8 +146,8 @@ TEMPLATE = app
 CONFIG += \
 warn_on \
 thread \
-qt #\
-#debug
+qt \
+debug
 
 TARGET = fivermain
 DESTDIR=bin
@@ -179,60 +157,3 @@ target.path = $$INSTALL_ROOT/bin
 
 OTHER_FILES += \
     config.txt
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

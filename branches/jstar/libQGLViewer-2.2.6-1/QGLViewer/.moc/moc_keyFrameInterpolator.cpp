@@ -1,8 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'keyFrameInterpolator.h'
 **
-** Created: Fri Jan 13 12:03:15 2012
-**      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
+** Created by: The Qt Meta Object Compiler version 63 (Qt 4.8.6)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -10,8 +9,8 @@
 #include "../keyFrameInterpolator.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'keyFrameInterpolator.h' doesn't include <QObject>."
-#elif Q_MOC_OUTPUT_REVISION != 62
-#error "This file was generated using the moc from 4.7.4. It"
+#elif Q_MOC_OUTPUT_REVISION != 63
+#error "This file was generated using the moc from 4.8.6. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -20,7 +19,7 @@ QT_BEGIN_MOC_NAMESPACE
 static const uint qt_meta_data_qglviewer__KeyFrameInterpolator[] = {
 
  // content:
-       5,       // revision
+       6,       // revision
        0,       // classname
        0,    0, // classinfo
       23,   14, // methods
@@ -80,9 +79,47 @@ static const char qt_meta_stringdata_qglviewer__KeyFrameInterpolator[] = {
     "update()\0invalidateValues()\0"
 };
 
+void qglviewer::KeyFrameInterpolator::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        Q_ASSERT(staticMetaObject.cast(_o));
+        KeyFrameInterpolator *_t = static_cast<KeyFrameInterpolator *>(_o);
+        switch (_id) {
+        case 0: _t->interpolated(); break;
+        case 1: _t->endReached(); break;
+        case 2: _t->addKeyFrame((*reinterpret_cast< const Frame(*)>(_a[1]))); break;
+        case 3: _t->addKeyFrame((*reinterpret_cast< const Frame(*)>(_a[1])),(*reinterpret_cast< float(*)>(_a[2]))); break;
+        case 4: _t->addKeyFrame((*reinterpret_cast< const Frame*const(*)>(_a[1]))); break;
+        case 5: _t->addKeyFrame((*reinterpret_cast< const Frame*const(*)>(_a[1])),(*reinterpret_cast< float(*)>(_a[2]))); break;
+        case 6: _t->deletePath(); break;
+        case 7: _t->setFrame((*reinterpret_cast< Frame*const(*)>(_a[1]))); break;
+        case 8: _t->setInterpolationTime((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 9: _t->setInterpolationSpeed((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 10: _t->setInterpolationPeriod((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 11: _t->setLoopInterpolation((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 12: _t->setLoopInterpolation(); break;
+        case 13: _t->setClosedPath((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 14: _t->setClosedPath(); break;
+        case 15: _t->startInterpolation((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 16: _t->startInterpolation(); break;
+        case 17: _t->stopInterpolation(); break;
+        case 18: _t->resetInterpolation(); break;
+        case 19: _t->toggleInterpolation(); break;
+        case 20: _t->interpolateAtTime((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 21: _t->update(); break;
+        case 22: _t->invalidateValues(); break;
+        default: ;
+        }
+    }
+}
+
+const QMetaObjectExtraData qglviewer::KeyFrameInterpolator::staticMetaObjectExtraData = {
+    0,  qt_static_metacall 
+};
+
 const QMetaObject qglviewer::KeyFrameInterpolator::staticMetaObject = {
     { &QObject::staticMetaObject, qt_meta_stringdata_qglviewer__KeyFrameInterpolator,
-      qt_meta_data_qglviewer__KeyFrameInterpolator, 0 }
+      qt_meta_data_qglviewer__KeyFrameInterpolator, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
@@ -108,32 +145,8 @@ int qglviewer::KeyFrameInterpolator::qt_metacall(QMetaObject::Call _c, int _id, 
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        switch (_id) {
-        case 0: interpolated(); break;
-        case 1: endReached(); break;
-        case 2: addKeyFrame((*reinterpret_cast< const Frame(*)>(_a[1]))); break;
-        case 3: addKeyFrame((*reinterpret_cast< const Frame(*)>(_a[1])),(*reinterpret_cast< float(*)>(_a[2]))); break;
-        case 4: addKeyFrame((*reinterpret_cast< const Frame*const(*)>(_a[1]))); break;
-        case 5: addKeyFrame((*reinterpret_cast< const Frame*const(*)>(_a[1])),(*reinterpret_cast< float(*)>(_a[2]))); break;
-        case 6: deletePath(); break;
-        case 7: setFrame((*reinterpret_cast< Frame*const(*)>(_a[1]))); break;
-        case 8: setInterpolationTime((*reinterpret_cast< float(*)>(_a[1]))); break;
-        case 9: setInterpolationSpeed((*reinterpret_cast< float(*)>(_a[1]))); break;
-        case 10: setInterpolationPeriod((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 11: setLoopInterpolation((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 12: setLoopInterpolation(); break;
-        case 13: setClosedPath((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 14: setClosedPath(); break;
-        case 15: startInterpolation((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 16: startInterpolation(); break;
-        case 17: stopInterpolation(); break;
-        case 18: resetInterpolation(); break;
-        case 19: toggleInterpolation(); break;
-        case 20: interpolateAtTime((*reinterpret_cast< float(*)>(_a[1]))); break;
-        case 21: update(); break;
-        case 22: invalidateValues(); break;
-        default: ;
-        }
+        if (_id < 23)
+            qt_static_metacall(this, _c, _id, _a);
         _id -= 23;
     }
     return _id;

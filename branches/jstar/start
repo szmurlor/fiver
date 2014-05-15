@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export FIVERDIR=/usr/local/fiver
+export FIVERDIR=`pwd`
 export FIVER_XML_FIELD_CONFIG=$FIVERDIR/src/config.txt
 
 export LD_LIBRARY_PATH=$FIVERDIR/src/boxmgr:$FIVERDIR/src/attr:$FIVERDIR/src/coremesh2/lib:$FIVERDIR/src/meshreader2/lib:$FIVERDIR/QConsole/QConsole:$FIVERDIR/QConsole/Console:$FIVERDIR/src/bin

@@ -1,8 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'qwt_abstract_slider.h'
 **
-** Created: Fri Jan 13 12:03:47 2012
-**      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
+** Created by: The Qt Meta Object Compiler version 63 (Qt 4.8.6)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -10,8 +9,8 @@
 #include "../qwt_abstract_slider.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'qwt_abstract_slider.h' doesn't include <QObject>."
-#elif Q_MOC_OUTPUT_REVISION != 62
-#error "This file was generated using the moc from 4.7.4. It"
+#elif Q_MOC_OUTPUT_REVISION != 63
+#error "This file was generated using the moc from 4.8.6. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -20,7 +19,7 @@ QT_BEGIN_MOC_NAMESPACE
 static const uint qt_meta_data_QwtAbstractSlider[] = {
 
  // content:
-       5,       // revision
+       6,       // revision
        0,       // classname
        0,    0, // classinfo
        8,   14, // methods
@@ -60,9 +59,32 @@ static const char qt_meta_stringdata_QwtAbstractSlider[] = {
     "double\0mass\0Qt::Orientation\0orientation\0"
 };
 
+void QwtAbstractSlider::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        Q_ASSERT(staticMetaObject.cast(_o));
+        QwtAbstractSlider *_t = static_cast<QwtAbstractSlider *>(_o);
+        switch (_id) {
+        case 0: _t->valueChanged((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 1: _t->sliderPressed(); break;
+        case 2: _t->sliderReleased(); break;
+        case 3: _t->sliderMoved((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 4: _t->setValue((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 5: _t->fitValue((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 6: _t->incValue((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 7: _t->setReadOnly((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        default: ;
+        }
+    }
+}
+
+const QMetaObjectExtraData QwtAbstractSlider::staticMetaObjectExtraData = {
+    0,  qt_static_metacall 
+};
+
 const QMetaObject QwtAbstractSlider::staticMetaObject = {
     { &QWidget::staticMetaObject, qt_meta_stringdata_QwtAbstractSlider,
-      qt_meta_data_QwtAbstractSlider, 0 }
+      qt_meta_data_QwtAbstractSlider, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
@@ -90,17 +112,8 @@ int QwtAbstractSlider::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        switch (_id) {
-        case 0: valueChanged((*reinterpret_cast< double(*)>(_a[1]))); break;
-        case 1: sliderPressed(); break;
-        case 2: sliderReleased(); break;
-        case 3: sliderMoved((*reinterpret_cast< double(*)>(_a[1]))); break;
-        case 4: setValue((*reinterpret_cast< double(*)>(_a[1]))); break;
-        case 5: fitValue((*reinterpret_cast< double(*)>(_a[1]))); break;
-        case 6: incValue((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 7: setReadOnly((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        default: ;
-        }
+        if (_id < 8)
+            qt_static_metacall(this, _c, _id, _a);
         _id -= 8;
     }
 #ifndef QT_NO_PROPERTIES

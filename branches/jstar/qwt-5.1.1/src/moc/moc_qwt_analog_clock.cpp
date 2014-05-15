@@ -1,8 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'qwt_analog_clock.h'
 **
-** Created: Fri Jan 13 12:03:47 2012
-**      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
+** Created by: The Qt Meta Object Compiler version 63 (Qt 4.8.6)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -10,8 +9,8 @@
 #include "../qwt_analog_clock.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'qwt_analog_clock.h' doesn't include <QObject>."
-#elif Q_MOC_OUTPUT_REVISION != 62
-#error "This file was generated using the moc from 4.7.4. It"
+#elif Q_MOC_OUTPUT_REVISION != 63
+#error "This file was generated using the moc from 4.8.6. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -20,7 +19,7 @@ QT_BEGIN_MOC_NAMESPACE
 static const uint qt_meta_data_QwtAnalogClock[] = {
 
  // content:
-       5,       // revision
+       6,       // revision
        0,       // classname
        0,    0, // classinfo
        3,   14, // methods
@@ -43,9 +42,27 @@ static const char qt_meta_stringdata_QwtAnalogClock[] = {
     "setTime(QTime)\0setTime()\0"
 };
 
+void QwtAnalogClock::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        Q_ASSERT(staticMetaObject.cast(_o));
+        QwtAnalogClock *_t = static_cast<QwtAnalogClock *>(_o);
+        switch (_id) {
+        case 0: _t->setCurrentTime(); break;
+        case 1: _t->setTime((*reinterpret_cast< const QTime(*)>(_a[1]))); break;
+        case 2: _t->setTime(); break;
+        default: ;
+        }
+    }
+}
+
+const QMetaObjectExtraData QwtAnalogClock::staticMetaObjectExtraData = {
+    0,  qt_static_metacall 
+};
+
 const QMetaObject QwtAnalogClock::staticMetaObject = {
     { &QwtDial::staticMetaObject, qt_meta_stringdata_QwtAnalogClock,
-      qt_meta_data_QwtAnalogClock, 0 }
+      qt_meta_data_QwtAnalogClock, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
@@ -71,12 +88,8 @@ int QwtAnalogClock::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        switch (_id) {
-        case 0: setCurrentTime(); break;
-        case 1: setTime((*reinterpret_cast< const QTime(*)>(_a[1]))); break;
-        case 2: setTime(); break;
-        default: ;
-        }
+        if (_id < 3)
+            qt_static_metacall(this, _c, _id, _a);
         _id -= 3;
     }
     return _id;
