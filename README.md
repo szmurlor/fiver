@@ -2,7 +2,6 @@ The goal of the project is to develop an easy to install and use, and powerful a
 
 The project is internally developed by the Division of Theory of Electrical Engineering and Information Systems at the Warsaw University of Technology, Poland.
 
-
 ## Short build instructions ##
 
 1. Requirements
@@ -24,3 +23,10 @@ Files: README, INSTALL contain detailed instructions.
   * for Fedora 16 instead of qmake use commands:
     * `sudo yum install LIBQGLViewer-devel`
     * `QGLVIEWER_LIB=QGLViewer qmake`
+
+                         
+## Contact ##
+
+    * The Author: Robert Szmurlo <robert.szmurlo@ee.pw.edu.pl>
+    * Packaging & Building: Maciej Rumianowski <rumianom@ee.pw.edu.pl>
+    * Fiver project page: http://github.com/szmurlor/fiver/
